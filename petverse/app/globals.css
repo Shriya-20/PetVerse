@@ -19,3 +19,17 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer components {
+  .sidebar-list li {
+    @apply m-1 rounded hover:bg-slate-200 p-2;
+  }
+
+  .sidebar-list li:last-child {
+    @apply mt-auto;
+  }
+
+  .sidebar-link {
+    @apply text-xl text-black block w-full;
+  }
+}
