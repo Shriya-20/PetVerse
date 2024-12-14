@@ -25,6 +25,10 @@ body {
     @apply m-1 rounded hover:bg-slate-200 p-2;
   }
 
+  .sidebar-logo {
+    @apply h-6 w-6 mx-auto md:mr-2 inline-block;
+  }
+
   .sidebar-list li:last-child {
     @apply mt-auto;
   }

@@ -10,7 +10,7 @@ export default function Login() {
   }
   return (
     <>
-      <div className="p-2 mx-16 my-6 w-2/3 h-2/3 justify-center border-neutral-400 border rounded">
+      <div className="p-2 mx-16 my-4 w-2/3 h-3/4 justify-center border-neutral-400 rounded">
         <h2 className="text-5xl font-bold text-customTeal mb-3 mt-5 text-center">
           PETverse
         </h2>
