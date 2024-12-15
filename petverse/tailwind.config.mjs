@@ -11,6 +11,7 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         customTeal: "#03c1b4",
+        customBg: "#f3f4f6",
       },
     },
   },
