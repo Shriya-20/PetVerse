@@ -22,7 +22,7 @@ body {
 
 @layer components {
   .sidebar-list li {
-    @apply m-1 rounded hover:bg-slate-200 p-2;
+    @apply m-1 rounded hover:bg-slate-100 p-2;
   }
 
   .sidebar-logo {
@@ -34,6 +34,6 @@ body {
   }
 
   .sidebar-link {
-    @apply text-xl text-black block w-full;
+    @apply text-xl text-black block w-full hover:text-customTeal;
   }
 }

@@ -8,12 +8,6 @@ export default function Signup() {
 
   return (
     <>
-      <h2 class="text-2xl font-semibold text-center text-gray-700 dark:text-white">
-        Welcome
-      </h2>
-      <p class="mt-2 text-xl text-center text-gray-600 dark:text-gray-200">
-        Join the <span class="text-primary">PETverse</span> community
-      </p>
       <div className="mt-4 space-y-3 sm:flex sm:items-center sm:space-x-4 sm:space-y-0">
         {/* Sign Up with Google */}
         <Link
