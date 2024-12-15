@@ -40,8 +40,8 @@ const links = [
 export default function Sidebar() {
   return (
     <div
-      className="h-5/6 sticky flex flex-col bg-white 
-                  w-[52] lg:w-[240] my-5 mx-5 rounded-2xl"
+      className="h-full sticky flex flex-col bg-white 
+                  w-[52] lg:w-[240]"
     >
       <div className="flex items-center p-4">
         <Image src={logo} alt="app logo" width={40} className="" />
