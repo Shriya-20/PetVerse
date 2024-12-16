@@ -3,11 +3,13 @@ import Sidebar from "../components/Sidebar";
 export default function Dashboard({ children }) {
   return (
     <>
-      <div className="flex h-screen bg-customBg">
-        <div className="lg:w-[245] w-[55] h-screen sticky">
+      <div className="fixed inset-0 flex h-screen bg-customBg">
+        <div className="lg:w-[245px] w-[55px] sticky top-0">
           <Sidebar />
         </div>
-        <div className="flex-grow h-full p-0 mr-2">{children}</div>
+        <div className="flex-grow overflow-auto max-h-screen p-0 mr-2 pt-2">
+          {children}
+        </div>
       </div>
     </>
   );
