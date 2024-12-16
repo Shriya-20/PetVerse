@@ -5,9 +5,11 @@ import Sidebar from "../components/Sidebar";
 import { usePathname } from "next/navigation";
 
 export default function Dashboard({ children }) {
+
   const pathname = usePathname();
 
   const isMessagesPage = pathname === "/petverse/messages";
+
   return (
     <>
       <div className="fixed inset-0 flex h-screen bg-customBg">
