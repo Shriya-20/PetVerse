@@ -189,50 +189,57 @@ export default function Messages() {
     chats.find((chat) => chat.id === activeChat)?.messages || [];
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 overflow-y-hidden">
       {/* For larger screens */}
       {screenSize >= 768 && (
         <>
+          {/* User List */}
           <div
             className={`
-        md:w-1/4 bg-white border-r overflow-y-auto`}
+        md:w-2/6 bg-white border-r flex flex-col`}
           >
             <div className="p-4 sticky top-0 bg-white border-b-2">
               <h1 className="text-xl font-bold text-gray-800 z-50 bg-white">
                 Messages
               </h1>
             </div>
-            <div className="divide-y">
-              {chats.map((chat) => (
-                <div
-                  key={chat.id}
-                  className={`flex items-center p-4 cursor-pointer ${
-                    chat.id === activeChat ? "bg-blue-100" : "hover:bg-gray-200"
-                  }`}
-                  onClick={() => {
-                    setActiveChat(chat.id);
-                  }}
-                >
-                  <div className="flex-1">
-                    <h2 className="font-semibold text-gray-800">{chat.name}</h2>
-                    <p className="text-sm text-gray-600 truncate">
-                      {chat.lastMessage}
-                    </p>
+            <div className="flex-1 overflow-y-auto overflow-x-hidden">
+              <div className="divide-y">
+                {chats.map((chat) => (
+                  <div
+                    key={chat.id}
+                    className={`flex items-center p-4 cursor-pointer ${
+                      chat.id === activeChat
+                        ? "bg-blue-100"
+                        : "hover:bg-gray-200"
+                    }`}
+                    onClick={() => {
+                      setActiveChat(chat.id);
+                    }}
+                  >
+                    <div className="flex-1">
+                      <h2 className="font-semibold text-gray-800">
+                        {chat.name}
+                      </h2>
+                      <p className="text-sm text-gray-600 truncate">
+                        {chat.lastMessage}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-500">{chat.timestamp}</p>
+                      {chat.unread > 0 && (
+                        <span className="text-xs bg-customTeal text-white rounded-full px-2 py-1">
+                          {chat.unread}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xs text-gray-500">{chat.timestamp}</p>
-                    {chat.unread > 0 && (
-                      <span className="text-xs bg-customTeal text-white rounded-full px-2 py-1">
-                        {chat.unread}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
           <div
-            className={`md:w-3/4 md:block flex flex-grow flex-col overflow-y-auto bottom-0`}
+            className={`md:w-3/4  flex  flex-col overflow-y-hidden bottom-0`}
           >
             <div className="sticky top-0 flex items-center justify-between bg-white p-4 border-b  z-50">
               <h2 className="font-bold text-gray-800">
@@ -301,44 +308,48 @@ export default function Messages() {
       {screenSize < 768 && (
         <>
           {!chatOpen && (
-            <div className={` w-full bg-white border-r overflow-y-auto`}>
+            <div className={` w-full bg-white border-r flex flex-col`}>
               <div className="p-4 sticky top-0 bg-white border-b-2">
                 <h1 className="text-xl font-bold text-gray-800 z-50 bg-white">
                   Messages
                 </h1>
               </div>
-              <div className="divide-y">
-                {chats.map((chat) => (
-                  <div
-                    key={chat.id}
-                    className={`flex items-center p-4 cursor-pointer ${
-                      chat.id === activeChat
-                        ? "bg-blue-100"
-                        : "hover:bg-gray-200"
-                    }`}
-                    onClick={() => {
-                      setActiveChat(chat.id);
-                      setChatOpen(true);
-                    }}
-                  >
-                    <div className="flex-1">
-                      <h2 className="font-semibold text-gray-800">
-                        {chat.name}
-                      </h2>
-                      <p className="text-sm text-gray-600 truncate">
-                        {chat.lastMessage}
-                      </p>
+              <div className="flex-1 overflow-y-auto overflow-x-hidden">
+                <div className="divide-y">
+                  {chats.map((chat) => (
+                    <div
+                      key={chat.id}
+                      className={`flex items-center p-4 cursor-pointer ${
+                        chat.id === activeChat
+                          ? "bg-blue-100"
+                          : "hover:bg-gray-200"
+                      }`}
+                      onClick={() => {
+                        setActiveChat(chat.id);
+                        setChatOpen(true);
+                      }}
+                    >
+                      <div className="flex-1">
+                        <h2 className="font-semibold text-gray-800">
+                          {chat.name}
+                        </h2>
+                        <p className="text-sm text-gray-600 truncate">
+                          {chat.lastMessage}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-500">
+                          {chat.timestamp}
+                        </p>
+                        {chat.unread > 0 && (
+                          <span className="text-xs bg-customTeal text-white rounded-full px-2 py-1">
+                            {chat.unread}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs text-gray-500">{chat.timestamp}</p>
-                      {chat.unread > 0 && (
-                        <span className="text-xs bg-customTeal text-white rounded-full px-2 py-1">
-                          {chat.unread}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           )}
