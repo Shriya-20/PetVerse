@@ -1,22 +1,66 @@
+"use client";
+
 import loginDoggy from "@/public/logindoggy.jpg";
 import Image from "next/image";
 import Link from "next/link";
+import PetComponent from "@/app/components/PetComponent";
 
 export default function Profile() {
+  const pets = [
+    {
+      id: 19,
+      owner: "sathvik",
+      name: "kenchi",
+      speice: "cat",
+      breed: "persian",
+      profilepic:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
+    },
+    {
+      id: 15,
+      owner: "sathvik",
+      name: "kencha",
+      speice: "dog",
+      breed: "labrodor",
+      profilepic:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
+    },
+    {
+      id: 13,
+      owner: "sathvik",
+      name: "kenchi",
+      speice: "cat",
+      breed: "persian",
+      profilepic:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
+    },
+    {
+      id: 12,
+      owner: "sathvik",
+      name: "kencha",
+      speice: "dog",
+      breed: "labrodor",
+      profilepic:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
+    },
+    {
+      id: 29,
+      owner: "sathvik",
+      name: "kenchi",
+      speice: "cat",
+      breed: "persian",
+      profilepic:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
+    },
+  ];
   return (
-    <>    
+    <>
       {/* Hero Section */}
-      <section className="relative block h-[500px]">
-        <div
-          className="absolute top-0 w-full h-full bg-center bg-cover"
-          style={{
-            backgroundImage:
-              'url("https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2710&q=80")',
-          }}
-        >
+      <section className="relative block h-[300px]">
+        <div className="absolute top-0 w-full h-full bg-center bg-customTeal">
           <span
             id="blackOverlay"
-            className="w-full h-full absolute opacity-50 bg-black"
+            className="w-full h-full absolute opacity-50"
           />
         </div>
         <div
@@ -51,14 +95,14 @@ export default function Profile() {
                   <div className="relative h-[150px] w-[150px] -m-16 -ml-20 lg:-ml-16">
                     <Image
                       alt="profile-pic"
-                      src={loginDoggy} // Ensure this is properly imported
+                      src={loginDoggy}
                       layout="fill"
-                      objectFit="cover" // Ensures the image scales properly without distortion
+                      objectFit="cover"
                       className="shadow-xl rounded-full border-4 border-white"
                     />
                   </div>
                 </div>
-                {/* Connect Button */}
+                {/* Message Button */}
                 <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                   <div className="py-6 px-3 mt-32 sm:mt-0">
                     <button
@@ -69,33 +113,8 @@ export default function Profile() {
                     </button>
                   </div>
                 </div>
-                {/* Stats */}
-                {/* Remove the below div before adding the stats part */}
+
                 <div className="w-full lg:w-4/12 px-4 lg:order-1"></div>
-                {/* <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                  <div className="flex justify-center py-4 lg:pt-4 pt-8">
-                    <div className="mr-4 p-3 text-center">
-                      <span className="text-xl font-bold block uppercase tracking-wide text-gray-600">
-                        22
-                      </span>
-                      <span className="text-sm text-gray-400">Friends</span>
-                    </div>
-                    <div className="mr-4 p-3 text-center">
-                      <span className="text-xl font-bold block uppercase tracking-wide text-gray-600">
-                        10
-                      </span>
-                      <span className="text-sm text-gray-400">Photos</span>
-                    </div>
-                    <div className="lg:mr-4 p-3 text-center">
-                      <span className="text-xl font-bold block uppercase tracking-wide text-gray-600">
-                        89
-                      </span>
-                      <span className="text-sm text-gray-400">
-                        Comments
-                      </span>
-                    </div>
-                  </div>
-                </div> */}
               </div>
               {/* Profile Details */}
               <div className="text-center mt-12">
@@ -106,31 +125,21 @@ export default function Profile() {
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-400" />
                   Herga, Karnataka
                 </div>
-                {/* <div className="mb-2 text-gray-600 mt-10">
-                  <i className="fas fa-briefcase mr-2 text-lg text-gray-400" />
-                  Solution Manager - Creative Tim Officer
-                </div>
-                <div className="mb-2 text-gray-600">
-                  <i className="fas fa-university mr-2 text-lg text-gray-400" />
-                  University of Computer Science
-                </div> */}
               </div>
-              {/* About Section */}
-              {/* <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                <div className="flex flex-wrap justify-center">
-                  <div className="w-full lg:w-9/12 px-4">
-                    <p className="mb-4 text-lg leading-relaxed text-gray-700">
-                      An artist of considerable range, Jenna the name taken by
-                      Melbourne-raised, Brooklyn-based Nick Murphy writes,
-                      performs and records all of his own music, giving it a
-                      warm, intimate feel with a solid groove structure.
-                    </p>
-                    <Link href="#pablo" className="font-normal text-cu">
-                      Show more
-                    </Link>
-                  </div>
+              {/* User pets display */}
+              <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
+                <div className="grid grid-cols-4 gap-6 justify-center">
+                  {pets.map((pet) => (
+                    <div key={pet.id} className="flex flex-col items-center">
+                      <PetComponent image={loginDoggy} />
+                      <div className="mt-4 text-gray-700">
+                        <p className="font-bold">{pet.name}</p>
+                        <p className="text-sm">{pet.speice}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
