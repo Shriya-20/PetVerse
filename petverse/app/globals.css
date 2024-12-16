@@ -38,10 +38,18 @@ body {
   }
 
   .settings-accordian {
-    @apply bg-white hover:bg-slate-100 m-1 shadow-md rounded-[12];
+    @apply bg-white m-1 shadow-md rounded-[12];
   }
 
   .settings-accordian-heading {
-    @apply text-xl font-semibold p-3;
+    @apply text-xl font-thin !font-thin p-3 hover:bg-slate-100;
+  }
+
+  .settings-accordian-body {
+    @apply h-auto;
+  }
+
+  .custom-button {
+    @apply bg-customTeal text-white hover:bg-teal-600
   }
 }
