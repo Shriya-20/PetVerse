@@ -9,7 +9,6 @@ export default function PetComponent({ image }) {
         alt="profile-pic"
         src={image}
         layout="fill"
-        objectFit="cover"
         className="shadow-xl rounded-full border-4 border-white"
       />
     </div>

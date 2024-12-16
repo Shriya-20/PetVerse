@@ -111,7 +111,7 @@ export default function Profile() {
                     />
                   </div>
                 </div>
-                {/* Message Button */}
+                {/* Edit Button */}
                 <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                   <div className="py-6 px-3 mt-32 sm:mt-0">
                     <button
@@ -137,7 +137,7 @@ export default function Profile() {
               </div>
               {/* User pets display */}
               <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                <div className="grid grid-cols-4 gap-6 justify-center">
+                <div className="grid grid-cols-5 gap-6 justify-center">
                   {pets.map((pet) => (
                     <div
                       key={pet.id}
