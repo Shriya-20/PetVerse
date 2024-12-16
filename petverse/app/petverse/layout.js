@@ -5,7 +5,6 @@ import Sidebar from "../components/Sidebar";
 import { usePathname } from "next/navigation";
 
 export default function Dashboard({ children }) {
-
   const pathname = usePathname();
 
   const isMessagesPage = pathname === "/petverse/messages";
@@ -18,7 +17,7 @@ export default function Dashboard({ children }) {
         </div>
         <div
           className={clsx(
-            "flex-grow overflow-hidden max-h-screen p-0 mr-2 pt-2",
+            "flex-grow overflow-auto max-h-screen p-0 mr-2 pt-2",
             {
               "flex-grow overflow-hidden max-h-screen p-0 mr-2 pt-2":
                 isMessagesPage,
