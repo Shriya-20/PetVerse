@@ -74,25 +74,23 @@ export default function Settings() {
         </div>
         <div className="">
           {settingsList.map((setting) => (
-            <>
-              <div key={setting.id}>
-                <Accordion
-                  open={open === setting.id}
-                  icon={<Icon id={setting.id} open={open} />}
-                  className="settings-accordian"
+            <div key={setting.id}>
+              <Accordion
+                open={open === setting.id}
+                icon={<Icon id={setting.id} open={open} />}
+                className="settings-accordian"
+              >
+                <AccordionHeader
+                  onClick={() => handleOpen(setting.id)}
+                  className="settings-accordian-heading"
                 >
-                  <AccordionHeader
-                    onClick={() => handleOpen(setting.id)}
-                    className="settings-accordian-heading"
-                  >
-                    {setting.heading}
-                  </AccordionHeader>
-                  <AccordionBody>
-                    <setting.body />
-                  </AccordionBody>
-                </Accordion>
-              </div>
-            </>
+                  {setting.heading}
+                </AccordionHeader>
+                <AccordionBody className="settings-accordian-body">
+                  <setting.body key={setting.id} />
+                </AccordionBody>
+              </Accordion>
+            </div>
           ))}
         </div>
       </div>
