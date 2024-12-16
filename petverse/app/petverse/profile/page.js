@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Profile() {
   return (
-    <>
+    <>    
       {/* Hero Section */}
       <section className="relative block h-[500px]">
         <div
