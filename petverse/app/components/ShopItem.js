@@ -13,7 +13,7 @@ export default function ShopItem(props) {
   }
   return (
     <>
-      <div className="max-w-[384px] mx-auto">
+      <div className="max-w-[384px] mx-auto hover:shadow-sm">
         {/* Product image */}
         <div className="relative w-full max-w-sm aspect-square">
           <Image
@@ -38,7 +38,7 @@ export default function ShopItem(props) {
           {/* Seller profile */}
           <button
             onClick={handleClick}
-            className="p-1 min-[400px]:p-1 rounded-full bg-white border border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-400 hover:bg-gray-50"
+            className="p-1 min-[400px]:p-1 rounded-full bg-white border border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-400 hover:bg-gray-50 hover:scale-90"
           >
             <ProfileIcon profile_pic={props.user_profile_pic} />
           </button>
