@@ -4,7 +4,7 @@ import Searchbar from "@/app/components/Searchbar";
 import ShopItem from "@/app/components/ShopItem";
 import LoginDoggy from "@/public/logindoggy.jpg";
 import LoginDoggy2 from "@/public/loginDoggies.jpg";
-import profilepic from "@/public/profile_bg.avif";
+import profilepic from "@/public/profile_bg.jpg";
 
 const shopItems = [
   {
