@@ -4,7 +4,7 @@ import loginDoggy from "@/public/logindoggy.jpg";
 import Image from "next/image";
 import Link from "next/link";
 import PetComponent from "@/app/components/PetComponent";
-
+import addImage from "@/public/add.png";
 export default function Profile() {
   const pets = [
     {
@@ -118,7 +118,7 @@ export default function Profile() {
                       className="bg-customTeal/80 hover:bg-customTeal/70 active:bg-customTeal/80 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                       type="button"
                     >
-                      Message
+                      Edit
                     </button>
                   </div>
                 </div>
@@ -139,7 +139,10 @@ export default function Profile() {
               <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                 <div className="grid grid-cols-4 gap-6 justify-center">
                   {pets.map((pet) => (
-                    <div key={pet.id} className="flex flex-col items-center">
+                    <div
+                      key={pet.id}
+                      className="flex flex-col items-center hover:bg-slate-100 rounded-2xl pt-2 pb-1"
+                    >
                       <PetComponent image={loginDoggy} />
                       <div className="mt-4 text-gray-700">
                         <p className="font-bold">{pet.name}</p>
@@ -147,6 +150,20 @@ export default function Profile() {
                       </div>
                     </div>
                   ))}
+                  <div className="flex flex-col items-center rounded-2xl pt-2">
+                    <div className="relative h-[150px] w-[150px]">
+                      <Image
+                        alt="profile-pic"
+                        src={addImage}
+                        layout="fill"
+                        objectFit="cover"
+                        className="shadow-xl rounded-full border-4 border-white opacity-10 hover:opacity-20"
+                      />
+                    </div>
+                    <div className="mt-4 text-gray-700">
+                      <p className="font-bold">Add pet</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

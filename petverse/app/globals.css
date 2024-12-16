@@ -36,4 +36,12 @@ body {
   .sidebar-link {
     @apply text-xl text-black block w-full hover:text-customTeal;
   }
+
+  .settings-accordian {
+    @apply bg-white hover:bg-slate-100 m-1 shadow-md rounded-[12];
+  }
+
+  .settings-accordian-heading {
+    @apply text-xl font-semibold p-3;
+  }
 }
