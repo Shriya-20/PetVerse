@@ -4,8 +4,21 @@ import loginDoggy from "@/public/logindoggy.jpg";
 import Image from "next/image";
 import Link from "next/link";
 import PetComponent from "@/app/components/PetComponent";
+import Modal from "@/app/components/Modal";
 import addImage from "@/public/add.png";
+import ProfileIcon from "@/app/components/ProfileIcon";
+import { useState } from "react";
+
 export default function Profile() {
+  const [isModalOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
+
+  const handleAddPet = () => {
+    return;
+  };
+
   const pets = [
     {
       id: 19,
@@ -158,11 +171,39 @@ export default function Profile() {
                         layout="fill"
                         objectFit="cover"
                         className="shadow-xl rounded-full border-4 border-white opacity-10 hover:opacity-20"
+                        onClick={openModal}
                       />
                     </div>
                     <div className="mt-4 text-gray-700">
                       <p className="font-bold">Add pet</p>
                     </div>
+                    {/* Add pet Section */}
+                    <Modal isOpen={isModalOpen} onClose={closeModal}>
+                      <div className="md:grid md:grid-cols-3 md:justify-center">
+                        <div className="relative h-[150px] w-[150px] md:col-span-1">
+                          <Image
+                            alt="profile-pic"
+                            src={addImage}
+                            layout="fill"
+                            objectFit="cover"
+                            className="shadow-xl rounded-full border-4 border-white opacity-10 hover:opacity-20"
+                          />
+                        </div>
+                        <form className="md:col-span-2 add-pet mr-6">
+                          <input name="name" placeholder="Enter name" />
+                          <input name="type" placeholder="Enter animal" />
+                          <input name="breed" placeholder="Enter breed" />
+                          <input name="location" placeholder="Enter location" />
+                          <button
+                            type="submit"
+                            onClick={handleAddPet}
+                            className="custom-button p-2 rounded m-2 w-full"
+                          >
+                            create profile
+                          </button>
+                        </form>
+                      </div>
+                    </Modal>
                   </div>
                 </div>
               </div>

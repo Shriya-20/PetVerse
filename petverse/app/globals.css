@@ -60,4 +60,8 @@ body {
   .edit-profile button {
     @apply custom-button px-6 py-2 rounded-md md:w-1/3 w-full;
   }
+
+  .add-pet input {
+    @apply w-full hover:bg-slate-100 m-2 p-2 rounded;
+  }
 }
