@@ -15,7 +15,6 @@ export default function Profile() {
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
-
   const handleAddPet = () => {
     return;
   };
@@ -156,16 +155,14 @@ export default function Profile() {
                   ))}
 
                   {/* Add Pet */}
-                  <div
-                    className="flex flex-col items-center justify-center cursor-pointer rounded-2xl transition-all duration-200"
-                    onClick={openModal}
-                  >
+                  <div className="flex flex-col items-center justify-center cursor-pointer rounded-2xl transition-all duration-200">
                     <div className="relative h-[80px] w-[80px] opacity-30 hover:opacity-50 transition-all">
                       <Image
                         alt="add-pet"
                         src={addImage}
                         layout="fill"
                         objectFit="cover"
+                        onClick={openModal}
                         className="rounded-full border-2 border-gray-300 shadow-md"
                       />
                     </div>
