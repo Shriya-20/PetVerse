@@ -8,6 +8,7 @@ import Modal from "@/app/components/Modal";
 import addImage from "@/public/add.png";
 import ProfileIcon from "@/app/components/ProfileIcon";
 import { useState } from "react";
+import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
@@ -85,109 +86,109 @@ export default function Profile() {
             className="w-full h-full absolute opacity-50"
           />
         </div>
-        <div
-          className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-[70px]"
-          style={{ transform: "translateZ(0px)" }}
-        >
-          <svg
-            className="absolute bottom-0 overflow-hidden"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="none"
-            version="1.1"
-            viewBox="0 0 2560 100"
-            x={0}
-            y={0}
-          >
-            <polygon
-              className="text-gray-200 fill-current"
-              points="2560 0 2560 100 0 100"
-            />
-          </svg>
-        </div>
       </section>
 
       {/* Profile Section */}
-      <section className="relative py-16 bg-blueGray-200">
+      <section className="relative py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+          <div className="relative flex flex-col min-w-0 break-words bg-white shadow-xl w-full mb-6 rounded-lg z-10 -mt-64">
             <div className="px-6">
-              <div className="flex flex-wrap justify-center">
+              {/* Profile Header */}
+              <div className="flex justify-center">
                 {/* Profile Image */}
-                <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
-                  <div className="relative h-[150px] w-[150px] -m-16 -ml-20 lg:-ml-16">
-                    <Image
-                      alt="profile-pic"
-                      src={loginDoggy}
-                      layout="fill"
-                      objectFit="cover"
-                      className="shadow-xl rounded-full border-4 border-white"
-                    />
-                  </div>
+                <div className="relative h-[150px] w-[150px] -mt-20">
+                  <Image
+                    alt="profile-pic"
+                    src={loginDoggy}
+                    layout="fill"
+                    objectFit="cover"
+                    className="shadow-xl rounded-full border-4 border-white mx-auto"
+                  />
                 </div>
-                {/* Edit Button */}
-                <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                  <div className="py-6 px-3 mt-32 sm:mt-0">
-                    <button
-                      className="bg-customTeal/80 hover:bg-customTeal/70 active:bg-customTeal/80 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </div>
-
-                <div className="w-full lg:w-4/12 px-4 lg:order-1"></div>
               </div>
+
+              {/* Edit Button */}
+              <div className="text-center mt-6">
+                <button
+                  className="bg-customTeal/80 hover:bg-customTeal/70 text-white font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
+                  type="button"
+                >
+                  Edit
+                </button>
+              </div>
+
               {/* Profile Details */}
-              <div className="text-center mt-12">
+              <div className="text-center mt-6">
                 <h3 className="text-4xl font-semibold leading-normal mb-2 text-gray-700">
                   Pluto
                 </h3>
-                <div className="text-sm leading-normal mt-0 mb-2 text-gray-400 font-bold uppercase">
+                <div className="text-sm leading-normal text-gray-400 font-bold uppercase flex items-center justify-center">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-400" />
                   Herga, Karnataka
                 </div>
               </div>
-              {/* User pets display */}
-              <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                <div className="grid grid-cols-5 gap-6 justify-center">
+
+              {/* Pets Display */}
+              <div className="mt-10 py-10 border-t border-blueGray-200">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 justify-center">
                   {pets.map((pet) => (
                     <div
                       key={pet.id}
-                      className="flex flex-col items-center hover:bg-slate-100 rounded-2xl pt-2 pb-1"
+                      className="flex flex-col items-center p-2 hover:bg-slate-100 rounded-2xl transition-all duration-200"
                     >
-                      <PetComponent image={loginDoggy} />
-                      <div className="mt-4 text-gray-700">
-                        <p className="font-bold">{pet.name}</p>
-                        <p className="text-sm">{pet.speice}</p>
+                      {/* Smaller Image */}
+                      <div className="relative h-[80px] w-[80px]">
+                        <Image
+                          alt="pet-pic"
+                          src={loginDoggy}
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-full border-2 border-gray-300 shadow-md"
+                        />
+                      </div>
+                      <div className="mt-2 text-center">
+                        <p className="font-bold text-gray-700 text-sm">
+                          {pet.name}
+                        </p>
+                        <p className="text-xs text-gray-500">{pet.speice}</p>
                       </div>
                     </div>
                   ))}
-                  <div className="flex flex-col items-center rounded-2xl pt-2">
-                    <div className="relative h-[150px] w-[150px]">
+
+                  {/* Add Pet */}
+                  <div
+                    className="flex flex-col items-center justify-center cursor-pointer rounded-2xl transition-all duration-200"
+                    onClick={openModal}
+                  >
+                    <div className="relative h-[80px] w-[80px] opacity-30 hover:opacity-50 transition-all">
                       <Image
-                        alt="profile-pic"
+                        alt="add-pet"
                         src={addImage}
                         layout="fill"
                         objectFit="cover"
-                        className="shadow-xl rounded-full border-4 border-white opacity-10 hover:opacity-20"
-                        onClick={openModal}
+                        className="rounded-full border-2 border-gray-300 shadow-md"
                       />
                     </div>
-                    <div className="mt-4 text-gray-700">
-                      <p className="font-bold">Add pet</p>
+                    <div className="mt-2 text-center">
+                      <p className="font-bold text-gray-700 text-sm">Add pet</p>
                     </div>
                     {/* Add pet Section */}
                     <Modal isOpen={isModalOpen} onClose={closeModal}>
                       <div className="md:grid md:grid-cols-3 md:justify-center">
-                        <div className="relative h-[150px] w-[150px] md:col-span-1">
-                          <Image
-                            alt="profile-pic"
-                            src={addImage}
-                            layout="fill"
-                            objectFit="cover"
-                            className="shadow-xl rounded-full border-4 border-white opacity-10 hover:opacity-20"
-                          />
+                        <div className="md:flex md:flex-col items-center justify-center justify-items-center col-span-1 mb-4 relative">
+                          <div className="relative">
+                            {" "}
+                            <ProfileIcon
+                              profile_pic={default_pet_profile_pic}
+                              width="w-[170px]"
+                              height="h-[170px]"
+                              className="border-2 border-white mb-4"
+                            ></ProfileIcon>
+                            {/* Edit Button */}
+                            <button className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-white rounded-full hover:bg-teal-600">
+                              ✎
+                            </button>
+                          </div>
                         </div>
                         <form className="md:col-span-2 add-pet mr-6">
                           <input name="name" placeholder="Enter name" />
