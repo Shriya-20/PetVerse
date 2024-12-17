@@ -68,7 +68,7 @@ export default function Settings() {
 
   return (
     <>
-      <div className="mx-10 mt-10">
+      <div className="mx-10 mt-10  h-screen">
         <div className="mb-4">
           <p className="text-3xl">Settings</p>
         </div>
