@@ -50,6 +50,14 @@ body {
   }
 
   .custom-button {
-    @apply bg-customTeal text-white hover:bg-teal-600
+    @apply bg-customTeal text-white hover:bg-teal-600;
+  }
+
+  .edit-profile input {
+    @apply flex-grow p-2 border border-gray-300 rounded-md block md:flex-grow w-full md:w-2/3;
+  }
+
+  .edit-profile button {
+    @apply custom-button px-6 py-2 rounded-md md:w-1/3 w-full;
   }
 }
