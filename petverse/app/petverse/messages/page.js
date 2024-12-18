@@ -1,205 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import useScreenSize from "@/app/components/Screensize";
-import loginDoggy from "@/public/logindoggy.jpg";
-import Image from "next/image";
+import chats from "@/test_data/chats";
+import ChatWindow from "@/app/components/ChatWindow";
+import ChatList from "@/app/components/ChatList";
 
 export default function Messages() {
   const [activeChat, setActiveChat] = useState(1);
   const [chatOpen, setChatOpen] = useState(false);
   const screenSize = useScreenSize();
-
-  const chats = [
-    {
-      id: 199,
-      name: "X_AE_A-13b",
-      lastMessage: "Hey man!",
-      timestamp: "12:25",
-      unread: 12,
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          content: "Hey man!",
-          timestamp: "10:25",
-          type: "text",
-        },
-        {
-          id: 2,
-          sender: "me",
-          content:
-            "Hey, what's up? How are you doing, my friend? It's been a while 😄dfklasdjkflasdflajsdlfjaskldflasdlfjlsdjfkljasdljflsfjasdljfkjsdlfasdjkfjlasdkflalsdjkfjalsdjlfkjsljfksdlfjskljlkflsdjkflasdjkfljkasdkljflsd;fkjasdlfjkasdljfjasdlfjklsdfjklasdjflkajsdlfjlsdjl",
-          timestamp: "11:25",
-          type: "text",
-        },
-        {
-          id: 3,
-          sender: "them",
-          content: "Have you seen the latest holographic display technology?",
-          timestamp: "12:25",
-          type: "video",
-          videoUrl:
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        },
-        {
-          id: 4,
-          sender: "them",
-          content:
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore. ldddddddddddddddddddddddddddddddddddddddfkslfsdkfjlsdjfksdlflsdjkfjlsdjfksdlfjkljsk",
-          timestamp: "02:25",
-          type: "text",
-        },
-        {
-          id: 5,
-          sender: "me",
-          content: "External Link Title",
-          link: "https://www.externallink.com",
-          timestamp: "03:25",
-          type: "link",
-        },
-      ],
-    },
-    {
-      id: 10,
-      name: "X_AE_A-13b",
-      lastMessage: "Hey man!",
-      timestamp: "12:25",
-      unread: 12,
-      messages: [
-        { id: 1, sender: "them", content: "Hey man!", timestamp: "10:25" },
-        {
-          id: 2,
-          sender: "me",
-          content:
-            "Hey, what's up? How are you doing, my friend? It's been a while 😄",
-          timestamp: "11:25",
-        },
-        {
-          id: 3,
-          sender: "them",
-          content: "Have you seen the latest holographic display technology?",
-          timestamp: "12:25",
-          type: "video",
-          videoUrl:
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        },
-        {
-          id: 4,
-          sender: "them",
-          content:
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
-          timestamp: "02:25",
-        },
-        {
-          id: 5,
-          sender: "me",
-          content: "External Link Title",
-          link: "https://www.externallink.com",
-          timestamp: "03:25",
-        },
-      ],
-    },
-    {
-      id: 9,
-      name: "X_AE_A-13b",
-      lastMessage: "Hey man!",
-      timestamp: "12:25",
-      unread: 12,
-      messages: [
-        { id: 1, sender: "them", content: "Hey man!", timestamp: "10:25" },
-        {
-          id: 2,
-          sender: "me",
-          content:
-            "Hey, what's up? How are you doing, my friend? It's been a while dfs sdfsd sf sdf sdf sdf sdf sd fsdf sdf sdf sd fsd fsd fs sdf 😄",
-          timestamp: "11:25",
-        },
-        {
-          id: 3,
-          sender: "them",
-          content: "Have you seen the latest holographic display technology?",
-          timestamp: "12:25",
-          type: "video",
-          videoUrl:
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
-        },
-        {
-          id: 4,
-          sender: "them",
-          content:
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
-          timestamp: "02:25",
-          type: "image",
-          imageURl: loginDoggy,
-        },
-        {
-          id: 5,
-          sender: "me",
-          content: "External Link Title",
-          link: "https://www.externallink.com",
-          timestamp: "03:25",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Jerome White fsdkflajsdklfjasdljfklasdjlfjal",
-      lastMessage: "Enter your message description here...",
-      timestamp: "12:25",
-      unread: 0,
-    },
-    {
-      id: 73,
-      name: "Madagascar Silver",
-      lastMessage: "Enter your message description here...",
-      timestamp: "12:25",
-      unread: 999,
-    },
-    {
-      id: 62,
-      name: "Jerome White",
-      lastMessage: "Enter your message description here...",
-      timestamp: "12:25",
-      unread: 0,
-    },
-    {
-      id: 443,
-      name: "Madagascar Silver",
-      lastMessage: "Enter your message description here...",
-      timestamp: "12:25",
-      unread: 999,
-    },
-    {
-      id: 42,
-      name: "Jerome White",
-      lastMessage: "Enter your message description here...",
-      timestamp: "12:25",
-      unread: 0,
-    },
-    {
-      id: 33,
-      name: "Madagascar Silver",
-      lastMessage: "Enter your message description here...",
-      timestamp: "12:25",
-      unread: 999,
-    },
-    {
-      id: 22,
-      name: "Jerome White",
-      lastMessage: "Enter your message description here...",
-      timestamp: "12:25",
-      unread: 0,
-    },
-    {
-      id: 13,
-      name: "Madagascar Silver",
-      lastMessage: "Enter your message description here...",
-      timestamp: "12:25",
-      unread: 999,
-    },
-  ];
 
   const activeMessages =
     chats.find((chat) => chat.id === activeChat)?.messages || [];
@@ -210,257 +20,53 @@ export default function Messages() {
       {screenSize >= 768 && (
         <>
           {/* User List */}
-          <div
-            className={`
-        md:w-2/6 bg-white border-r flex flex-col`}
-          >
-            <div className="p-4 sticky top-0 bg-white border-b-2">
-              <h1 className="text-xl font-bold text-gray-800 z-50 bg-white">
-                Messages
-              </h1>
-            </div>
-            <div className="flex-1 overflow-y-auto overflow-x-hidden">
-              <div className="divide-y">
-                {chats.map((chat) => (
-                  <div
-                    key={chat.id}
-                    className={`flex items-center p-4 cursor-pointer ${
-                      chat.id === activeChat
-                        ? "bg-blue-100"
-                        : "hover:bg-gray-200"
-                    }`}
-                    onClick={() => {
-                      setActiveChat(chat.id);
-                    }}
-                  >
-                    <div className="flex-1">
-                      <h2 className="font-semibold text-gray-800">
-                        {chat.name}
-                      </h2>
-                      <p className="text-sm text-gray-600 truncate">
-                        {chat.lastMessage}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-gray-500">{chat.timestamp}</p>
-                      {chat.unread > 0 && (
-                        <span className="text-xs bg-customTeal text-white rounded-full px-2 py-1">
-                          {chat.unread}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="md:w-2/6 bg-white border-r flex flex-col">
+            <ChatList
+              chats={chats}
+              activeChat={activeChat}
+              setActiveChat={setActiveChat}
+            />
           </div>
-          <div className={`flex basis-2/3 flex-col overflow-y-hidden bottom-0`}>
-            <div className="sticky top-0 flex items-center justify-between bg-white p-4 border-b  z-50">
-              <h2 className="font-bold text-gray-800">
-                {chats.find((chat) => chat.id === activeChat)?.name ||
-                  "Select a chat"}
-              </h2>
-              <p className="text-sm text-gray-500">Last seen 7h ago</p>
-            </div>
-
-            <div className="flex-1  overflow-y-auto p-4 bg-gray-50">
-              {activeMessages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`mb-4 ${
-                    message.sender === "me" ? "text-right" : "text-left"
-                  }`}
-                >
-                  <div
-                    className={`inline-block p-3 rounded-lg break-words ${
-                      message.sender === "me"
-                        ? "bg-customTeal text-white "
-                        : "bg-gray-200 text-gray-800 "
-                    }`}
-                    style={{ maxWidth: "75%" }}
-                  >
-                    {message.type === "video" ? (
-                      <div>
-                        <video
-                          controls
-                          className="rounded-md border border-gray-300 w-full max-w-xs"
-                        >
-                          <source src={message.videoUrl} type="video/mp4" />
-                          Your browser does not support videos.
-                        </video>
-                      </div>
-                    ) : message.type === "image" ? (
-                      <div>
-                        <Image
-                          src={loginDoggy}
-                          alt="Message image"
-                          height={150}
-                          width={150}
-                          className="rounded-md border border-gray-300 w-full max-w-sm"
-                        />
-                      </div>
-                    ) : message.link ? (
-                      <a
-                        href={message.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-300 underline"
-                      >
-                        {message.content}
-                      </a>
-                    ) : (
-                      <p className="w-full overflow-wrap break-words text-left">
-                        {message.content}
-                      </p>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {message.timestamp}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-4 bg-white border-t z-50 sticky bottom-0">
-              <input
-                type="text"
-                placeholder="Type a message..."
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:bg-white"
-              />
-            </div>
+          {/* Chat Window */}
+          <div className="flex basis-2/3 flex-col overflow-y-hidden bottom-0">
+            <ChatWindow
+              chats={chats}
+              activeChat={activeChat}
+              activeMessages={activeMessages}
+            />
           </div>
         </>
       )}
 
+      {/* For smaller screens */}
       {screenSize < 768 && (
         <>
+          {/* User List */}
           {!chatOpen && (
             <div className={` w-full bg-white border-r flex flex-col`}>
-              <div className="p-4 sticky top-0 bg-white border-b-2">
-                <h1 className="text-xl font-bold text-gray-800 z-50 bg-white">
-                  Messages
-                </h1>
-              </div>
-              <div className="flex-1 overflow-y-auto overflow-x-hidden">
-                <div className="divide-y">
-                  {chats.map((chat) => (
-                    <div
-                      key={chat.id}
-                      className={`flex items-center p-4 cursor-pointer ${
-                        chat.id === activeChat
-                          ? "bg-blue-100"
-                          : "hover:bg-gray-200"
-                      }`}
-                      onClick={() => {
-                        setActiveChat(chat.id);
-                        setChatOpen(true);
-                      }}
-                    >
-                      <div className="flex-1">
-                        <h2 className="font-semibold text-gray-800">
-                          {chat.name}
-                        </h2>
-                        <p className="text-sm text-gray-600 truncate">
-                          {chat.lastMessage}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-gray-500">
-                          {chat.timestamp}
-                        </p>
-                        {chat.unread > 0 && (
-                          <span className="text-xs bg-customTeal text-white rounded-full px-2 py-1">
-                            {chat.unread}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <ChatList
+                chats={chats}
+                activeChat={activeChat}
+                setActiveChat={setActiveChat}
+                setChatOpen={setChatOpen}
+                isSmallScreen={true}
+              />
             </div>
           )}
 
+          {/* Chat Window */}
           {chatOpen && (
             <div
               className={` w-full flex flex-grow flex-col overflow-y-auto bottom-0`}
             >
-              <div className="sticky top-0 flex items-center justify-between bg-white p-4 border-b  z-50">
-                <ArrowLeftIcon
-                  className="w-5 hover:bg-slate-50 rounded-full hover:text-customTeal"
-                  onClick={() => setChatOpen(false)}
-                />
-                <h2 className="font-bold text-gray-800">
-                  {chats.find((chat) => chat.id === activeChat)?.name ||
-                    "Select a chat"}
-                </h2>
-                <p className="text-sm text-gray-500">Last seen 7h ago</p>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-                {activeMessages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`mb-4 ${
-                      message.sender === "me" ? "text-right" : "text-left"
-                    }`}
-                  >
-                    <div
-                      className={`inline-block p-3 rounded-lg  ${
-                        message.sender === "me"
-                          ? "bg-customTeal text-white"
-                          : "bg-gray-200 text-gray-800"
-                      }`}
-                    >
-                      {message.type === "video" ? (
-                        <div>
-                          <video
-                            controls
-                            className="rounded-md border border-gray-300 w-full max-w-xs"
-                          >
-                            <source src={message.videoUrl} type="video/mp4" />
-                            Your browser does not support videos.
-                          </video>
-                        </div>
-                      ) : message.type === "image" ? (
-                        <div>
-                          <Image
-                            src={loginDoggy}
-                            alt="Message image"
-                            height={150}
-                            width={150}
-                            className="rounded-md border border-gray-300 w-full max-w-sm"
-                          />
-                        </div>
-                      ) : message.link ? (
-                        <a
-                          href={message.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-300 underline"
-                        >
-                          {message.content}
-                        </a>
-                      ) : (
-                        <p className="break-words text-left">
-                          {message.content}
-                        </p>
-                      )}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {message.timestamp}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="p-4 bg-white border-t z-50 sticky bottom-0">
-                <input
-                  type="text"
-                  placeholder="Type a message..."
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:bg-white"
-                />
-              </div>
+              <ChatWindow
+                chats={chats}
+                activeChat={activeChat}
+                activeMessages={activeMessages}
+                chatOpen={chatOpen}
+                isSmallScreen={true}
+                setChatOpen={setChatOpen}
+              />
             </div>
           )}
         </>
