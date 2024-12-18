@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
   function handleLogin() {
     return 1;
   }
@@ -114,12 +118,25 @@ export default function Login() {
           <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
             Password
           </label>{" "}
-          <input
-            type="password"
-            name="password"
-            required="required"
-            className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              required="required"
+              className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-3 flex items-center"
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+              ) : (
+                <EyeIcon className="w-5 h-5 text-gray-400" />
+              )}
+            </button>
+          </div>
         </div>{" "}
         {/* Remember me */}
         <div className="flex justify-between mt-4">
@@ -130,7 +147,8 @@ export default function Login() {
                 name="remember"
                 id="remember"
                 className="border-gray-200 rounded shadow-sm text-primary dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
-              />{" "}
+              />
+
               <label
                 htmlFor="remember"
                 className="ml-2 text-gray-700 dark:text-gray-300"
