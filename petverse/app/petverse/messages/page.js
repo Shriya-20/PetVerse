@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import useScreenSize from "@/app/components/Screensize";
+import loginDoggy from "@/public/logindoggy.jpg";
+import Image from "next/image";
 
 export default function Messages() {
   const [activeChat, setActiveChat] = useState(1);
@@ -17,13 +19,20 @@ export default function Messages() {
       timestamp: "12:25",
       unread: 12,
       messages: [
-        { id: 1, sender: "them", content: "Hey man!", timestamp: "10:25" },
+        {
+          id: 1,
+          sender: "them",
+          content: "Hey man!",
+          timestamp: "10:25",
+          type: "text",
+        },
         {
           id: 2,
           sender: "me",
           content:
-            "Hey, what's up? How are you doing, my friend? It's been a while 😄",
+            "Hey, what's up? How are you doing, my friend? It's been a while 😄dfklasdjkflasdflajsdlfjaskldflasdlfjlsdjfkljasdljflsfjasdljfkjsdlfasdjkfjlasdkflalsdjkfjalsdjlfkjsljfksdlfjskljlkflsdjkflasdjkfljkasdkljflsd;fkjasdlfjkasdljfjasdlfjklsdfjklasdjflkajsdlfjlsdjl",
           timestamp: "11:25",
+          type: "text",
         },
         {
           id: 3,
@@ -31,14 +40,16 @@ export default function Messages() {
           content: "Have you seen the latest holographic display technology?",
           timestamp: "12:25",
           type: "video",
-          videoUrl: "https://via.placeholder.com/400x200",
+          videoUrl:
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         },
         {
           id: 4,
           sender: "them",
           content:
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore. ldddddddddddddddddddddddddddddddddddddddfkslfsdkfjlsdjfksdlflsdjkfjlsdjfksdlfjkljsk",
           timestamp: "02:25",
+          type: "text",
         },
         {
           id: 5,
@@ -46,6 +57,7 @@ export default function Messages() {
           content: "External Link Title",
           link: "https://www.externallink.com",
           timestamp: "03:25",
+          type: "link",
         },
       ],
     },
@@ -70,7 +82,8 @@ export default function Messages() {
           content: "Have you seen the latest holographic display technology?",
           timestamp: "12:25",
           type: "video",
-          videoUrl: "https://via.placeholder.com/400x200",
+          videoUrl:
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         },
         {
           id: 4,
@@ -100,7 +113,7 @@ export default function Messages() {
           id: 2,
           sender: "me",
           content:
-            "Hey, what's up? How are you doing, my friend? It's been a while 😄",
+            "Hey, what's up? How are you doing, my friend? It's been a while dfs sdfsd sf sdf sdf sdf sdf sd fsdf sdf sdf sd fsd fsd fs sdf 😄",
           timestamp: "11:25",
         },
         {
@@ -109,7 +122,8 @@ export default function Messages() {
           content: "Have you seen the latest holographic display technology?",
           timestamp: "12:25",
           type: "video",
-          videoUrl: "https://via.placeholder.com/400x200",
+          videoUrl:
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
         },
         {
           id: 4,
@@ -117,6 +131,8 @@ export default function Messages() {
           content:
             "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
           timestamp: "02:25",
+          type: "image",
+          imageURl: loginDoggy,
         },
         {
           id: 5,
@@ -129,7 +145,7 @@ export default function Messages() {
     },
     {
       id: 2,
-      name: "Jerome White",
+      name: "Jerome White fsdkflajsdklfjasdljfklasdjlfjal",
       lastMessage: "Enter your message description here...",
       timestamp: "12:25",
       unread: 0,
@@ -189,7 +205,7 @@ export default function Messages() {
     chats.find((chat) => chat.id === activeChat)?.messages || [];
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-y-hidden">
+    <div className="flex  h-screen bg-gray-100 overflow-y-hidden">
       {/* For larger screens */}
       {screenSize >= 768 && (
         <>
@@ -238,9 +254,7 @@ export default function Messages() {
               </div>
             </div>
           </div>
-          <div
-            className={`md:w-3/4  flex  flex-col overflow-y-hidden bottom-0`}
-          >
+          <div className={`flex basis-2/3 flex-col overflow-y-hidden bottom-0`}>
             <div className="sticky top-0 flex items-center justify-between bg-white p-4 border-b  z-50">
               <h2 className="font-bold text-gray-800">
                 {chats.find((chat) => chat.id === activeChat)?.name ||
@@ -249,7 +263,7 @@ export default function Messages() {
               <p className="text-sm text-gray-500">Last seen 7h ago</p>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+            <div className="flex-1  overflow-y-auto p-4 bg-gray-50">
               {activeMessages.map((message) => (
                 <div
                   key={message.id}
@@ -258,11 +272,12 @@ export default function Messages() {
                   }`}
                 >
                   <div
-                    className={`inline-block p-3 rounded-lg  ${
+                    className={`inline-block p-3 rounded-lg break-words ${
                       message.sender === "me"
-                        ? "bg-customTeal text-white"
-                        : "bg-gray-200 text-gray-800"
+                        ? "bg-customTeal text-white "
+                        : "bg-gray-200 text-gray-800 "
                     }`}
+                    style={{ maxWidth: "75%" }}
                   >
                     {message.type === "video" ? (
                       <div>
@@ -274,6 +289,16 @@ export default function Messages() {
                           Your browser does not support videos.
                         </video>
                       </div>
+                    ) : message.type === "image" ? (
+                      <div>
+                        <Image
+                          src={loginDoggy}
+                          alt="Message image"
+                          height={150}
+                          width={150}
+                          className="rounded-md border border-gray-300 w-full max-w-sm"
+                        />
+                      </div>
                     ) : message.link ? (
                       <a
                         href={message.link}
@@ -284,7 +309,9 @@ export default function Messages() {
                         {message.content}
                       </a>
                     ) : (
-                      message.content
+                      <p className="w-full overflow-wrap break-words text-left">
+                        {message.content}
+                      </p>
                     )}
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
@@ -395,6 +422,16 @@ export default function Messages() {
                             Your browser does not support videos.
                           </video>
                         </div>
+                      ) : message.type === "image" ? (
+                        <div>
+                          <Image
+                            src={loginDoggy}
+                            alt="Message image"
+                            height={150}
+                            width={150}
+                            className="rounded-md border border-gray-300 w-full max-w-sm"
+                          />
+                        </div>
                       ) : message.link ? (
                         <a
                           href={message.link}
@@ -405,7 +442,9 @@ export default function Messages() {
                           {message.content}
                         </a>
                       ) : (
-                        message.content
+                        <p className="break-words text-left">
+                          {message.content}
+                        </p>
                       )}
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
