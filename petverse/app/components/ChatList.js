@@ -18,7 +18,7 @@ export default function ChatList({
           {chats.map((chat) => (
             <div
               key={chat.id}
-              className={`flex items-center p-4 cursor-pointer ${
+              className={`flex gap-2 md:gap-2  p-4 cursor-pointer ${
                 chat.id === activeChat ? "bg-blue-100" : "hover:bg-gray-200"
               }`}
               onClick={() => {
@@ -28,14 +28,25 @@ export default function ChatList({
                 }
               }}
             >
-              <div className="flex-1">
-                <h2 className="font-semibold text-gray-800">{chat.name}</h2>
-                <p className="text-sm text-gray-600 truncate">
+              {/* User name and last unread message */}
+              <div
+                className="flex-1"
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                <h2 className="inline font-semibold text-gray-800 overflow-wrap break-words">
+                  {chat.name}
+                </h2>
+                <p className="block text-sm text-gray-600 ">
                   {chat.lastMessage}
                 </p>
               </div>
+              {/* No of unread messages and timestamp */}
               <div className="text-right">
-                <p className="text-xs text-gray-500">{chat.timestamp}</p>
+                <p className="text-xs  text-gray-500">{chat.timestamp}</p>
                 {chat.unread > 0 && (
                   <span className="text-xs bg-customTeal text-white rounded-full px-2 py-1">
                     {chat.unread}

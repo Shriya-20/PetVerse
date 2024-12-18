@@ -28,7 +28,7 @@ export default function Messages() {
             />
           </div>
           {/* Chat Window */}
-          <div className="flex basis-2/3 flex-col overflow-y-hidden bottom-0">
+          <div className="flex md:w-full flex-col overflow-y-hidden bottom-0">
             <ChatWindow
               chats={chats}
               activeChat={activeChat}
