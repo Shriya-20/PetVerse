@@ -1,9 +1,11 @@
+import ProfileIcon from "./ProfileIcon";
+import loginDoggy from "@/public/logindoggy.jpg";
+
 export default function ChatList({
   chats,
   activeChat,
   setActiveChat,
   setChatOpen,
-  isSmallScreen,
 }) {
   return (
     <>
@@ -23,11 +25,14 @@ export default function ChatList({
               }`}
               onClick={() => {
                 setActiveChat(chat.id);
-                if (isSmallScreen) {
-                  setChatOpen(true);
-                }
+                setChatOpen(true);
               }}
             >
+              <ProfileIcon
+                profile_pic={chat.profile_pic}
+                width="w-11"
+                height="h-11"
+              />
               {/* User name and last unread message */}
               <div
                 className="flex-1"
