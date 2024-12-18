@@ -4,6 +4,7 @@ const chats = [
   {
     id: 199,
     name: "X_AE_A-13b",
+    profile_pic: { loginDoggy },
     lastMessage: "Hey man!",
     timestamp: "12:25",
     unread: 12,
@@ -52,6 +53,7 @@ const chats = [
   {
     id: 10,
     name: "X_AE_A-13b",
+    profile_pic: { loginDoggy },
     lastMessage: "Hey man!",
     timestamp: "12:25",
     unread: 12,
@@ -91,6 +93,7 @@ const chats = [
   {
     id: 9,
     name: "X_AE_A-13b",
+    profile_pic: { loginDoggy },
     lastMessage: "Hey man!",
     timestamp: "12:25",
     unread: 12,
@@ -132,6 +135,7 @@ const chats = [
   {
     id: 2,
     name: "Jerome White fsdkflajsdklfjasdljfklasdjlfjal",
+    profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 0,
@@ -139,6 +143,7 @@ const chats = [
   {
     id: 73,
     name: "Madagascar Silver",
+    profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 999,
@@ -146,6 +151,7 @@ const chats = [
   {
     id: 62,
     name: "Jerome White",
+    profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 0,
@@ -153,6 +159,7 @@ const chats = [
   {
     id: 443,
     name: "Madagascar Silver",
+    profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 999,
@@ -160,6 +167,7 @@ const chats = [
   {
     id: 42,
     name: "Jerome White",
+    profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 0,
@@ -167,6 +175,7 @@ const chats = [
   {
     id: 33,
     name: "Madagascar Silver",
+    profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 999,
@@ -174,6 +183,7 @@ const chats = [
   {
     id: 22,
     name: "Jerome White",
+    profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 0,
@@ -181,6 +191,7 @@ const chats = [
   {
     id: 13,
     name: "Madagascar Silver",
+    profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 999,
