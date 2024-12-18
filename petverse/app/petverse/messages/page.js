@@ -205,14 +205,14 @@ export default function Messages() {
     chats.find((chat) => chat.id === activeChat)?.messages || [];
 
   return (
-    <div className="flex w-full max-w-full h-screen bg-gray-100 overflow-y-hidden">
+    <div className="flex  h-screen bg-gray-100 overflow-y-hidden">
       {/* For larger screens */}
       {screenSize >= 768 && (
         <>
           {/* User List */}
           <div
             className={`
-        md:w-full basis-1/3 bg-white border-r flex flex-col`}
+        md:w-2/6 bg-white border-r flex flex-col`}
           >
             <div className="p-4 sticky top-0 bg-white border-b-2">
               <h1 className="text-xl font-bold text-gray-800 z-50 bg-white">
@@ -263,7 +263,7 @@ export default function Messages() {
               <p className="text-sm text-gray-500">Last seen 7h ago</p>
             </div>
 
-            <div className="flex-1 w-full max-w-full  overflow-y-auto p-4 bg-gray-50">
+            <div className="flex-1  overflow-y-auto p-4 bg-gray-50">
               {activeMessages.map((message) => (
                 <div
                   key={message.id}
