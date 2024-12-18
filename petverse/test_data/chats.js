@@ -5,14 +5,16 @@ const chats = [
     id: 199,
     name: "X_AE_A-13b",
     profile_pic: { loginDoggy },
-    lastMessage: "Hey man!",
+    lastMessage:
+      "Hey man!  lfksdlfhl lskhfklsdl alsdfhaslkdfklsd afklsdhfkl asdflasdk flkasdfl kasdfkasdfh sdkfhklsdhflasl fsdlhk hljl ",
     timestamp: "12:25",
     unread: 12,
     messages: [
       {
         id: 1,
         sender: "them",
-        content: "Hey man!",
+        content:
+          "Hey man! ldkflasjkdfla dfl asdfklasd  fasdla fas lfkdsjfl sdlf sdlfjsdkfjl sdkf sdlfjsdklfjlasdk flsdkjfklasd jfklsdjfklsjd lfkdlflasdk jflasd flsdkflkasdjf las",
         timestamp: "10:25",
         type: "text",
       },
@@ -47,6 +49,102 @@ const chats = [
         link: "https://www.externallink.com",
         timestamp: "03:25",
         type: "link",
+      },
+      { id: 6, sender: "them", content: "Hey man!", timestamp: "10:25" },
+      {
+        id: 7,
+        sender: "me",
+        content:
+          "Hey, what's up? How are you doing, my friend? It's been a while dfs sdfsd sf sdf sdf sdf sdf sd fsdf sdf sdf sd fsd fsd fs sdf 😄",
+        timestamp: "11:25",
+      },
+      {
+        id: 8,
+        sender: "them",
+        content: "Have you seen the latest holographic display technology?",
+        timestamp: "12:25",
+        type: "video",
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+      },
+      {
+        id: 9,
+        sender: "them",
+        content:
+          "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+        timestamp: "02:25",
+        type: "image",
+        url: loginDoggy,
+      },
+      {
+        id: 10,
+        sender: "me",
+        content: "External Link Title",
+        link: "https://www.externallink.com",
+        timestamp: "03:25",
+      },
+      { id: 11, sender: "them", content: "Hey man!", timestamp: "10:25" },
+      {
+        id: 12,
+        sender: "me",
+        content:
+          "Hey, what's up? How are you doing, my friend? It's been a while dfs sdfsd sf sdf sdf sdf sdf sd fsdf sdf sdf sd fsd fsd fs sdf 😄",
+        timestamp: "11:25",
+      },
+      {
+        id: 13,
+        sender: "them",
+        content: "Have you seen the latest holographic display technology?",
+        timestamp: "12:25",
+        type: "video",
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+      },
+      {
+        id: 14,
+        sender: "them",
+        content:
+          "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+        timestamp: "02:25",
+        type: "image",
+        url: loginDoggy,
+      },
+      {
+        id: 15,
+        sender: "me",
+        content: "External Link Title",
+        link: "https://www.externallink.com",
+        timestamp: "03:25",
+      },
+      { id: 16, sender: "them", content: "Hey man!", timestamp: "10:25" },
+      {
+        id: 17,
+        sender: "me",
+        content:
+          "Hey, what's up? How are you doing, my friend? It's been a while dfs sdfsd sf sdf sdf sdf sdf sd fsdf sdf sdf sd fsd fsd fs sdf 😄",
+        timestamp: "11:25",
+      },
+      {
+        id: 18,
+        sender: "them",
+        content: "Have you seen the latest holographic display technology?",
+        timestamp: "12:25",
+        type: "video",
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+      },
+      {
+        id: 19,
+        sender: "them",
+        content:
+          "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+        timestamp: "02:25",
+        type: "image",
+        url: loginDoggy,
+      },
+      {
+        id: 20,
+        sender: "me",
+        content: "External Link Title",
+        link: "https://www.externallink.com",
+        timestamp: "03:25",
       },
     ],
   },
@@ -134,7 +232,7 @@ const chats = [
   },
   {
     id: 2,
-    name: "Jerome White fsdkflajsdklfjasdljfklasdjlfjal",
+    name: "Jerome White fsdkflajsdklfjasdljfklasdjlfjafdfsfsdfsdfsgfdfgdl",
     profile_pic: { loginDoggy },
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
