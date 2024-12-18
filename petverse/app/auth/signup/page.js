@@ -1,7 +1,15 @@
 "use client";
 import Link from "next/link";
-
+import { useState } from "react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 export default function Signup() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+
   function handleSignup() {
     return 1;
   }
@@ -84,9 +92,9 @@ export default function Signup() {
         <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4" />
       </div>{" "}
       {/* Input form */}
-      <form onSubmit={handleSignup}>
-        <div class="mt-4">
-          <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+      <form onSubmit={() => handleSignup}>
+        <div className="mt-4">
+          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
             Name
           </label>
           <input
@@ -94,13 +102,14 @@ export default function Signup() {
             name="name"
             value=""
             required="required"
-            autocomplete="name"
-            autofocus="autofocus"
-            class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+            autoComplete="name"
+            autoFocus={true}
+            onChange={(e) => setUserName(e.target.value)}
+            className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
           />
         </div>
-        <div class="mt-4">
-          <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+        <div className="mt-4">
+          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
             E-Mail Address
           </label>
           <input
@@ -108,52 +117,83 @@ export default function Signup() {
             name="email"
             value=""
             required="required"
-            autocomplete="email"
-            class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+            autoComplete="email"
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
           />
         </div>
-        <div class="mt-4">
-          <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+        <div className="mt-4">
+          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
             Password
           </label>
-          <input
-            type="password"
-            name="password"
-            required="required"
-            class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              required="required"
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-3 flex items-center"
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+              ) : (
+                <EyeIcon className="w-5 h-5 text-gray-400" />
+              )}
+            </button>
+          </div>
         </div>
-        <div class="mt-4">
-          <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+
+        <div className="mt-4">
+          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
             Confirm Password
           </label>
-          <input
-            type="password"
-            name="password_confirmation"
-            required="required"
-            class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
-          />
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              name="password_confirmation"
+              required="required"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-3 flex items-center"
+            >
+              {showConfirmPassword ? (
+                <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+              ) : (
+                <EyeIcon className="w-5 h-5 text-gray-400" />
+              )}
+            </button>
+          </div>
         </div>
+
         {/* Register button */}
-        <div class="mt-8">
+        <div className="mt-8">
           <button
             type="submit"
-            class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
+            className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
           >
             Register
           </button>
         </div>
       </form>
       {/* Link to Login page */}
-      <div class="flex items-center justify-between mt-4">
-        <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>{" "}
+      <div className="flex items-center justify-between mt-4">
+        <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>{" "}
         <Link
           href="/auth/login"
-          class="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
+          className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
         >
           Do you have an account?
         </Link>{" "}
-        <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+        <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
       </div>
     </>
   );
