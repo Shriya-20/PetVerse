@@ -25,16 +25,20 @@ export default function Messages() {
               chats={chats}
               activeChat={activeChat}
               setActiveChat={setActiveChat}
+              setChatOpen={setChatOpen}
             />
           </div>
-          {/* Chat Window */}
           <div className="flex md:w-full flex-col overflow-y-hidden bottom-0">
             <ChatWindow
               chats={chats}
               activeChat={activeChat}
               activeMessages={activeMessages}
+              chatOpen={chatOpen}
+              isSmallScreen={false}
+              setChatOpen={setChatOpen}
             />
           </div>
+          {/* Chat Window */}
         </>
       )}
 
@@ -49,7 +53,6 @@ export default function Messages() {
                 activeChat={activeChat}
                 setActiveChat={setActiveChat}
                 setChatOpen={setChatOpen}
-                isSmallScreen={true}
               />
             </div>
           )}
