@@ -31,9 +31,9 @@ export default function Profile() {
       </section>
 
       {/* Profile Section */}
-      <section className="relative py-16 bg-light1 dark:bg-dark1">
+      <section className="relative py-16 bg-light1 dark:bg-dark1 ">
         <div className="container mx-auto px-4">
-          <div className="relative flex flex-col min-w-0 break-words bg-light1 dark:bg-dark2 shadow-xl w-full mb-6 rounded-lg z-10 -mt-64">
+          <div className="relative flex flex-col min-w-0 break-words bg-light1 dark:bg-dark2 shadow-xl dark:shadow-sm dark:shadow-mid3 w-full mb-6 rounded-lg z-10 -mt-64">
             <div className="px-6">
               {/* Profile Header */}
               <div className="flex justify-center">
@@ -76,7 +76,7 @@ export default function Profile() {
                   {pets.map((pet) => (
                     <div
                       key={pet.id}
-                      className="flex flex-col items-center p-2 hover:bg-slate-100 rounded-2xl transition-all duration-200"
+                      className="flex flex-col items-center p-2 hover:bg-slate-100 dark:hover:bg-mid4 rounded-2xl transition-all duration-200"
                     >
                       {/* Smaller Image */}
                       <div className="relative h-[80px] w-[80px]">
@@ -85,14 +85,16 @@ export default function Profile() {
                           src={loginDoggy}
                           layout="fill"
                           objectFit="cover"
-                          className="rounded-full border-2 border-light2 shadow-md"
+                          className="rounded-full border-2 border-light2  shadow-md"
                         />
                       </div>
                       <div className="mt-2 text-center">
-                        <p className="font-bold text-textDark text-sm">
+                        <p className="font-bold text-textDark dark:text-textLight text-sm">
                           {pet.name}
                         </p>
-                        <p className="text-xs text-textDark">{pet.speice}</p>
+                        <p className="text-xs text-textDark dark:text-textLight">
+                          {pet.speice}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -110,7 +112,9 @@ export default function Profile() {
                       />
                     </div>
                     <div className="mt-2 text-center">
-                      <p className="font-bold text-textDark text-sm">Add pet</p>
+                      <p className="font-bold text-textDark dark:text-textLight text-sm">
+                        Add pet
+                      </p>
                     </div>
                     {/* Add pet Section */}
                     <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -122,15 +126,14 @@ export default function Profile() {
                               profile_pic={default_pet_profile_pic}
                               width="w-[170px]"
                               height="h-[170px]"
-                              className="border-2 border-light1 mb-4"
                             ></ProfileIcon>
                             {/* Edit Button */}
-                            <button className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter rounded-full hover:bg-teal-600">
+                            <button className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter dark:text-textLight rounded-full hover:bg-teal-600">
                               ✎
                             </button>
                           </div>
                         </div>
-                        <form className="md:col-span-2 add-pet mr-6">
+                        <form className="md:col-span-2 add-pet mr-6 ">
                           <input name="name" placeholder="Enter name" />
                           <input name="type" placeholder="Enter animal" />
                           <input name="breed" placeholder="Enter breed" />
