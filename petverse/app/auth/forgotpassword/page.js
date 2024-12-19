@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 export default function ForgotPassword() {
   const [isOtpActive, setisOtpActive] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleGetOtp = () => {
     setisOtpActive(true);
@@ -50,22 +52,33 @@ export default function ForgotPassword() {
           name="OTP"
           defaultValue=""
           required="required"
-          autoComplete="email"
-          className="w-full px-4 py-2 text-textDark bg-light border border-light2 rounded-lg dark:bg-dark2 dark:textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
+          className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
         />
         {isOtpActive && (
           <>
             <label className="block mt-2 text-sm text-textDark dark:text-textLight">
               Enter new passowrd
             </label>{" "}
-            <input
-              type="OTP"
-              name="OTP"
-              defaultValue=""
-              required="required"
-              autoComplete="email"
-              className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20 mb-2 mt-[5]"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                defaultValue=""
+                required="required"
+                className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20 mb-2 mt-[5]"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-3 flex items-center"
+              >
+                {showPassword ? (
+                  <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+                ) : (
+                  <EyeIcon className="w-5 h-5 text-gray-400" />
+                )}
+              </button>
+            </div>
           </>
         )}
         <button
