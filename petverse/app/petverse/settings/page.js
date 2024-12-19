@@ -6,11 +6,11 @@ import {
   AccordionHeader,
 } from "@material-tailwind/react";
 import { useState } from "react";
-import Theme from "@/app/components/Theme";
 import Accounts from "@/app/components/Accounts";
 import DeleteAccount from "@/app/components/DeleteAccount";
 import Logout from "@/app/components/Logout";
 import EditProfile from "@/app/components/EditProfile";
+import ThemeUI from "@/app/components/ThemeUI";
 
 function Icon({ id, open }) {
   return (
@@ -47,7 +47,7 @@ const settingsList = [
   {
     id: 3,
     heading: "Theme",
-    body: Theme,
+    body: ThemeUI,
   },
   {
     id: 4,
