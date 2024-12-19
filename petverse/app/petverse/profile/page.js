@@ -31,9 +31,9 @@ export default function Profile() {
       </section>
 
       {/* Profile Section */}
-      <section className="relative py-16 bg-light1">
+      <section className="relative py-16 bg-light1 dark:bg-dark1">
         <div className="container mx-auto px-4">
-          <div className="relative flex flex-col min-w-0 break-words bg-light1 shadow-xl w-full mb-6 rounded-lg z-10 -mt-64">
+          <div className="relative flex flex-col min-w-0 break-words bg-light1 dark:bg-dark2 shadow-xl w-full mb-6 rounded-lg z-10 -mt-64">
             <div className="px-6">
               {/* Profile Header */}
               <div className="flex justify-center">
@@ -44,7 +44,7 @@ export default function Profile() {
                     src={loginDoggy}
                     layout="fill"
                     objectFit="cover"
-                    className="shadow-xl rounded-full border-4 border-light1 mx-auto"
+                    className="shadow-xl rounded-full border-4 border-light1  dark:border-dark1 mx-auto"
                   />
                 </div>
               </div>
@@ -52,7 +52,7 @@ export default function Profile() {
               {/* Edit Button */}
               <div className="text-center mt-6">
                 <button
-                  className="bg-customTeal/80 hover:bg-customTeal/70 text-textLighter font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
+                  className="bg-customTeal/80 hover:bg-customTeal/70 text-textLighter dark:text-textLight font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
                   type="button"
                 >
                   Edit
@@ -61,11 +61,11 @@ export default function Profile() {
 
               {/* Profile Details */}
               <div className="text-center mt-6">
-                <h3 className="text-4xl font-semibold leading-normal mb-2 text-textDark">
+                <h3 className="text-4xl font-semibold leading-normal mb-2 text-textDark dark:text-textLight">
                   Pluto
                 </h3>
                 <div className="text-sm leading-normal text-textMid font-bold uppercase flex items-center justify-center">
-                  <i className="fas fa-map-marker-alt mr-2 text-lg text-textMid" />
+                  <i className="fas fa-map-marker-alt mr-2 text-lg text-textMid dark:text-textDarker" />
                   Herga, Karnataka
                 </div>
               </div>

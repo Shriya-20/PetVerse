@@ -1,3 +1,5 @@
+"use client";
+
 import LoginDoggy from "@/public/logindoggy.jpg";
 import LoginDoggy2 from "@/public/loginDoggies.jpg";
 import loginDoggy3 from "@/public/profile_bg.jpg";
