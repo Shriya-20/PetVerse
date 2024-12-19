@@ -22,7 +22,7 @@ body {
 
 @layer components {
   .sidebar-list li {
-    @apply m-1 rounded hover:bg-slate-100 p-2;
+    @apply m-1 rounded hover:bg-slate-100 dark:hover:bg-dark2 dark:hover:shadow-sm dark:hover:shadow-mid3 p-2;
   }
 
   .sidebar-logo {
@@ -34,7 +34,7 @@ body {
   }
 
   .sidebar-link {
-    @apply text-xl text-textDarker block w-full hover:text-customTeal;
+    @apply text-xl text-textDarker dark:text-textLight block w-full hover:text-customTeal dark:hover:text-customTeal;
   }
 
   .settings-accordian {
@@ -62,6 +62,6 @@ body {
   }
 
   .add-pet input {
-    @apply w-full hover:bg-slate-100 m-2 p-2 rounded;
+    @apply w-full dark:bg-mid4 dark:hover:bg-mid3 hover:bg-slate-100 m-2 p-2 rounded;
   }
 }

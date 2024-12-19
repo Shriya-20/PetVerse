@@ -17,10 +17,10 @@ export default function ChatWindow({
         <>
           {/* Chat header*/}
 
-          <div className="sticky top-0 flex items-center justify-between bg-light1  border-b  z-50">
+          <div className="sticky top-0 flex items-center justify-between bg-light1 dark:bg-dark1 shadow-md dark:border-0 pt-1 z-50">
             {chatOpen && isSmallScreen && (
               <ArrowLeftIcon
-                className="w-5 hover:bg-slate-50 rounded-full hover:text-customTeal"
+                className="w-5 hover:bg-slate-50 dark:hover:bg-mid4 rounded-full hover:text-customTeal"
                 onClick={() => setChatOpen(false)}
               />
             )}
@@ -34,17 +34,17 @@ export default function ChatWindow({
                 height="h-12"
                 custom_style="mx-4 mt-1 mb-2 "
               />
-              <h2 className="font-bold text-textDarker text-center">
+              <h2 className="font-bold text-textDarker dark:text-textLight text-center">
                 {chats.find((chat) => chat.id === activeChat)?.name || ""}
               </h2>
             </div>
-            <p className="text-sm text-textDark basis-1/3 text-right">
+            <p className="text-sm text-textDark dark:text-textLight basis-1/3 text-right pr-2">
               Last seen 7h ago
             </p>
           </div>
 
           {/* Chat messages */}
-          <div className="flex-1  overflow-y-auto p-4 bg-gray-50">
+          <div className="flex-1  overflow-y-auto p-4 bg-gray-50 dark:bg-dark2">
             {activeMessages.map((message) => (
               <div
                 key={message.id}
@@ -55,8 +55,8 @@ export default function ChatWindow({
                 <div
                   className={`inline-block p-3 rounded-lg break-words ${
                     message.sender === "me"
-                      ? "bg-customTeal text-textLighter "
-                      : "bg-light2 text-textDarker "
+                      ? "bg-customTeal text-textLighter dark:bg-customTeal dark:text-textLighter"
+                      : "bg-light1 text-textDarker dark:bg-dark1 dark:text-textLight"
                   }`}
                   style={{ maxWidth: "75%" }}
                 >
@@ -70,11 +70,11 @@ export default function ChatWindow({
           </div>
 
           {/* Send Message */}
-          <div className="p-4 bg-light1 border-t z-50 sticky bottom-0">
+          <div className="mx-4 mb-3 bg-light1 dark:bg-dark1  z-50 sticky bottom-0">
             <input
               type="text"
               placeholder="Type a message..."
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:bg-light1"
+              className="w-full p-3 border rounded-2xl focus:outline-none focus:ring-2 focus:bg-light1 dark:bg-dark2 dark:focus:bg-mid4"
             />
           </div>
         </>
