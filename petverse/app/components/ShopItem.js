@@ -13,7 +13,7 @@ export default function ShopItem(props) {
   }
   return (
     <>
-      <div className="max-w-[384px] mx-auto hover:shadow-sm">
+      <div className="max-w-[384px] mx-auto rounded-xl hover:shadow-sm  dark:hover:shadow-mid3">
         {/* Product image */}
         <div className="relative w-full max-w-sm aspect-square">
           <Image
@@ -24,10 +24,10 @@ export default function ShopItem(props) {
             height={384}
           />
         </div>
-        <div className="mt-5 flex items-center justify-between">
+        <div className="mt-5 flex px-2 pb-2 items-center justify-between">
           <div className="">
             {/* Product name */}
-            <h6 className="font-medium text-xl leading-8 text-textDarker mb-2">
+            <h6 className="font-medium text-xl leading-8 text-textDarker dark:text-textLight mb-2">
               {props.item_name}
             </h6>
             {/* Product price */}
@@ -38,7 +38,7 @@ export default function ShopItem(props) {
           {/* Seller profile */}
           <button
             onClick={handleClick}
-            className="p-1 min-[400px]:p-1 rounded-full bg-light1 border border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-light2 hover:border-mid1 hover:bg-gray-50 hover:scale-90"
+            className="p-1 min-[400px]:p-1 rounded-full bg-light1 border dark:bg-dark1 border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-light2  hover:border-mid1 hover:bg-gray-50 dark:hover:bg-dark2 hover:scale-90"
           >
             <ProfileIcon profile_pic={props.user_profile_pic} />
           </button>

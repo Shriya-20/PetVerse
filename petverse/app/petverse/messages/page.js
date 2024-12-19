@@ -15,12 +15,12 @@ export default function Messages() {
     chats.find((chat) => chat.id === activeChat)?.messages || [];
 
   return (
-    <div className="flex  h-screen bg-light2 overflow-y-hidden">
+    <div className="flex  h-screen bg-gray-50 dark:bg-dark1 overflow-y-hidden">
       {/* For larger screens */}
       {screenSize >= 768 && (
         <>
           {/* User List */}
-          <div className="md:w-2/6 bg-light1 border-r flex flex-col">
+          <div className="md:w-2/6 bg-light1 dark:bg-dark1  flex flex-col">
             <ChatList
               chats={chats}
               activeChat={activeChat}
@@ -28,7 +28,7 @@ export default function Messages() {
               setChatOpen={setChatOpen}
             />
           </div>
-          <div className="flex md:w-full flex-col overflow-y-hidden bottom-0">
+          <div className="flex md:w-full flex-col overflow-y-hidden bottom-0 dark:bg-dark2">
             <ChatWindow
               chats={chats}
               activeChat={activeChat}
@@ -47,7 +47,9 @@ export default function Messages() {
         <>
           {/* User List */}
           {!chatOpen && (
-            <div className={` w-full bg-light1 border-r flex flex-col`}>
+            <div
+              className={` w-full bg-light1 dark:bg-dark1 border-r flex flex-col`}
+            >
               <ChatList
                 chats={chats}
                 activeChat={activeChat}
@@ -60,7 +62,7 @@ export default function Messages() {
           {/* Chat Window */}
           {chatOpen && (
             <div
-              className={` w-full flex flex-grow flex-col overflow-y-auto bottom-0`}
+              className={` w-full flex flex-grow flex-col overflow-y-auto bottom-0  dark:bg-dark2`}
             >
               <ChatWindow
                 chats={chats}
