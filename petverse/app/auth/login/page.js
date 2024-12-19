@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import logo from "@/public/paw.png";
+import Image from "next/image";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,9 +14,15 @@ export default function Login() {
   }
   return (
     <>
-      <h2 className="text-2xl font-semibold text-center text-gray-700 dark:text-white">
-        PETverse
-      </h2>{" "}
+      <div className="flex items-center justify-center p-4">
+        <Image src={logo} alt="app logo" width={40} className="rounded-full" />
+        <p
+          className="text-2xl text-center font-semibold text-customTeal ml-2 transform scale-y-150 
+                         "
+        >
+          PET VERSE
+        </p>
+      </div>
       <p className="mt-2 text-xl text-center text-gray-600 dark:text-gray-200">
         We are <span className="text-primary">Happy</span> to see you back
       </p>{" "}
