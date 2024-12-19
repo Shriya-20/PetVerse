@@ -12,17 +12,14 @@ export default function Dashboard({ children }) {
   return (
     <>
       <div className="fixed inset-0 flex h-screen bg-light1 dark:bg-dark1">
-        <div className="lg:w-[245px] w-[55px] sticky top-0">
+        <div className="md:w-[45px] lg:w-[240px] w-[55px] sticky top-0">
           <Sidebar />
         </div>
         <div
-          className={clsx(
-            "flex-grow overflow-auto max-h-screen p-0 mr-2 pt-2",
-            {
-              "flex-grow overflow-hidden max-h-screen p-0 mr-2 pt-2":
-                isMessagesPage,
-            }
-          )}
+          className={clsx({
+            "flex-grow overflow-auto max-h-screen p-0 m-0": !isMessagesPage,
+            "flex-grow overflow-hidden max-h-screen p-0 m-0 ": isMessagesPage,
+          })}
         >
           {children}
         </div>
