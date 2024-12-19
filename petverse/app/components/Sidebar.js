@@ -40,11 +40,11 @@ const links = [
 export default function Sidebar() {
   return (
     <div
-      className="h-full sticky flex flex-col bg-light1 
-                  w-[52] lg:w-[240] shadow-xl"
+      className="h-full sticky flex flex-col bg-light1 dark:bg-dark2 
+                  w-[52] lg:w-[240] shadow-xl dark:shadow-md dark:shadow-mid3"
     >
       <div className="flex items-center p-4">
-        <Image src={logo} alt="app logo" width={40} className="" />
+        <Image src={logo} alt="app logo" width={40} className="rounded-full" />
         <p
           className="text-2xl font-semibold text-customTeal ml-2 transform scale-y-150 
                      hidden lg:block"
@@ -58,7 +58,9 @@ export default function Sidebar() {
           <li key={dest} className="sidebar-item">
             <Link href={dest} className="sidebar-link">
               <IconComponent className="sidebar-logo" />
-              <span className="hidden lg:inline">{placeholder}</span>
+              <span className="hidden lg:inline  dark:text-textLight">
+                {placeholder}
+              </span>
             </Link>
           </li>
         ))}

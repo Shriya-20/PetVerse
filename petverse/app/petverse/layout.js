@@ -11,7 +11,7 @@ export default function Dashboard({ children }) {
 
   return (
     <>
-      <div className="fixed inset-0 flex h-screen bg-light1">
+      <div className="fixed inset-0 flex h-screen bg-light1 dark:bg-dark1">
         <div className="lg:w-[245px] w-[55px] sticky top-0">
           <Sidebar />
         </div>
