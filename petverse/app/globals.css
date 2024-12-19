@@ -64,4 +64,16 @@ body {
   .add-pet input {
     @apply w-full hover:bg-slate-100 m-2 p-2 rounded;
   }
+
+  .theme-input {
+    @apply scale-150;
+  }
+
+  .theme label {
+    @apply p-2 m-4 flex;
+  }
+
+  .theme-span {
+    @apply ml-3 dark:text-light1;
+  }
 }
