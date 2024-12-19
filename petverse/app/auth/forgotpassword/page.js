@@ -27,7 +27,7 @@ export default function ForgotPassword() {
         <p className="text-back text-2xl block w-full my-4">
           Forgot your password?
         </p>
-        <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+        <label className="block mb-2 text-sm text-textDark dark:text-textLight">
           E-Mail Address or Phone number
         </label>{" "}
         <input
@@ -36,7 +36,7 @@ export default function ForgotPassword() {
           defaultValue=""
           required="required"
           autoComplete="email"
-          className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+          className="w-full px-4 py-2 text-textDark bg-light1 border border-light1 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
         />
         <button
           onClick={handleGetOtp}
@@ -44,7 +44,7 @@ export default function ForgotPassword() {
         >
           Get otp
         </button>
-        <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+        <label className="block mb-2 text-sm text-textDark dark:text-textLight">
           Enter OTP
         </label>{" "}
         <input
@@ -56,7 +56,7 @@ export default function ForgotPassword() {
         />
         {isOtpActive && (
           <>
-            <label className="block mt-2 text-sm text-gray-600 dark:text-gray-200">
+            <label className="block mt-2 text-sm text-textDark dark:text-textLight">
               Enter new passowrd
             </label>{" "}
             <div className="relative">
@@ -93,15 +93,15 @@ export default function ForgotPassword() {
           </p>
         )}
         <div className="flex items-center justify-between mt-4">
-          <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4" />{" "}
+          <span className="w-1/5 border-b dark:border-mid2 md:w-1/4" />{" "}
           <Link
             href="/auth/login"
-            className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
+            className="text-xs text-textDark uppercase dark:text-textMid hover:underline"
             onClick={() => setPasswordChanged(false)}
           >
             go to login
           </Link>{" "}
-          <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4" />
+          <span className="w-1/5 border-b dark:border-mid2 md:w-1/4" />
         </div>
       </div>
     </>

@@ -1,10 +1,14 @@
 import loginDoggy from "@/public/logindoggy.jpg";
+import loginDoggy2 from "@/public/loginDoggies.jpg";
+import default_profile from "@/public/default_user_profile_pic.jpeg";
+import profile_bg from "@/public/profile_bg.jpg";
+import profile_bg2 from "@/public/default_pet_profile_pic3.png";
 
 const chats = [
   {
     id: 199,
-    name: "X_AE_A-13b",
-    profile_pic: { loginDoggy },
+    name: "Sathvik Chonga",
+    profile_pic: loginDoggy,
     lastMessage:
       "Hey man!  lfksdlfhl lskhfklsdl alsdfhaslkdfklsd afklsdhfkl asdflasdk flkasdfl kasdfkasdfh sdkfhklsdhflasl fsdlhk hljl ",
     timestamp: "12:25",
@@ -150,8 +154,8 @@ const chats = [
   },
   {
     id: 10,
-    name: "X_AE_A-13b",
-    profile_pic: { loginDoggy },
+    name: "Rithvik",
+    profile_pic: loginDoggy2,
     lastMessage: "Hey man!",
     timestamp: "12:25",
     unread: 12,
@@ -190,8 +194,8 @@ const chats = [
   },
   {
     id: 9,
-    name: "X_AE_A-13b",
-    profile_pic: { loginDoggy },
+    name: "Shriya Chongi",
+    profile_pic: default_profile,
     lastMessage: "Hey man!",
     timestamp: "12:25",
     unread: 12,
@@ -233,7 +237,7 @@ const chats = [
   {
     id: 2,
     name: "Jerome White fsdkflajsdklfjasdljfklasdjlfjafdfsfsdfsdfsgfdfgdl",
-    profile_pic: { loginDoggy },
+    profile_pic: profile_bg,
     lastMessage: "Enter your message description here...",
     timestamp: "12:25",
     unread: 0,
@@ -241,56 +245,56 @@ const chats = [
   {
     id: 73,
     name: "Madagascar Silver",
-    profile_pic: { loginDoggy },
-    lastMessage: "Enter your message description here...",
+    profile_pic: profile_bg2,
+    lastMessage: "You guys go ahead.😄",
     timestamp: "12:25",
     unread: 999,
   },
   {
     id: 62,
     name: "Jerome White",
-    profile_pic: { loginDoggy },
-    lastMessage: "Enter your message description here...",
+    profile_pic: loginDoggy,
+    lastMessage: "i can't come to play today.",
     timestamp: "12:25",
     unread: 0,
   },
   {
     id: 443,
     name: "Madagascar Silver",
-    profile_pic: { loginDoggy },
-    lastMessage: "Enter your message description here...",
+    profile_pic: default_profile,
+    lastMessage: "AAAAAAAAARRRRRR!!!!",
     timestamp: "12:25",
     unread: 999,
   },
   {
     id: 42,
     name: "Jerome White",
-    profile_pic: { loginDoggy },
-    lastMessage: "Enter your message description here...",
+    profile_pic: loginDoggy2,
+    lastMessage: "Whatever man",
     timestamp: "12:25",
     unread: 0,
   },
   {
     id: 33,
     name: "Madagascar Silver",
-    profile_pic: { loginDoggy },
-    lastMessage: "Enter your message description here...",
+    profile_pic: profile_bg,
+    lastMessage: "Sure",
     timestamp: "12:25",
     unread: 999,
   },
   {
     id: 22,
     name: "Jerome White",
-    profile_pic: { loginDoggy },
-    lastMessage: "Enter your message description here...",
+    profile_pic: profile_bg2,
+    lastMessage: "......",
     timestamp: "12:25",
     unread: 0,
   },
   {
     id: 13,
     name: "Madagascar Silver",
-    profile_pic: { loginDoggy },
-    lastMessage: "Enter your message description here...",
+    profile_pic: loginDoggy,
+    lastMessage: "YOOOOO",
     timestamp: "12:25",
     unread: 999,
   },
