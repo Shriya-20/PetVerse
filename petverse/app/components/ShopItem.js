@@ -27,7 +27,7 @@ export default function ShopItem(props) {
         <div className="mt-5 flex items-center justify-between">
           <div className="">
             {/* Product name */}
-            <h6 className="font-medium text-xl leading-8 text-black mb-2">
+            <h6 className="font-medium text-xl leading-8 text-textDarker mb-2">
               {props.item_name}
             </h6>
             {/* Product price */}
@@ -38,7 +38,7 @@ export default function ShopItem(props) {
           {/* Seller profile */}
           <button
             onClick={handleClick}
-            className="p-1 min-[400px]:p-1 rounded-full bg-white border border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-400 hover:bg-gray-50 hover:scale-90"
+            className="p-1 min-[400px]:p-1 rounded-full bg-light1 border border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-light2 hover:border-mid1 hover:bg-gray-50 hover:scale-90"
           >
             <ProfileIcon profile_pic={props.user_profile_pic} />
           </button>

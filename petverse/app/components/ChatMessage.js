@@ -15,7 +15,7 @@ export default function ChatMessage({
         <div>
           <video
             controls
-            className="rounded-md border border-gray-300 w-full max-w-xs"
+            className="rounded-md border border-light2 w-full max-w-xs"
           >
             <source src={url} type="video/mp4" />
             Your browser does not support videos.
@@ -30,7 +30,7 @@ export default function ChatMessage({
             alt="Message image"
             height={150}
             width={150}
-            className="rounded-md border border-gray-300 w-full max-w-sm"
+            className="rounded-md border border-light2 w-full max-w-sm"
           />
         </div>
       );

@@ -40,7 +40,7 @@ const links = [
 export default function Sidebar() {
   return (
     <div
-      className="h-full sticky flex flex-col bg-white 
+      className="h-full sticky flex flex-col bg-light1 
                   w-[52] lg:w-[240] shadow-xl"
     >
       <div className="flex items-center p-4">
