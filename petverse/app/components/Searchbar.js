@@ -7,11 +7,11 @@ export default function Searchbar() {
   return (
     <>
       <div className="flex justify-center items-center ">
-        <div className="bg-white w-full md:w-3/4 shadow px-1 py-1 flex items-center rounded-full transition-colors duration-300 ease-in-out;">
+        <div className="bg-light1 w-full md:w-3/4 shadow px-1 py-1 flex items-center rounded-full transition-colors duration-300 ease-in-out;">
           <MagnifyingGlassIcon className="sidebar-logo mt-1" />
 
           <input
-            className="bg-transparent focus:outline-none w-full h-full text-gray-600 text-[19px]"
+            className="bg-transparent focus:outline-none w-full h-full text-textDark text-[19px]"
             placeholder="Search"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}

@@ -2,13 +2,12 @@
 
 import loginDoggy from "@/public/logindoggy.jpg";
 import Image from "next/image";
-import Link from "next/link";
-import PetComponent from "@/app/components/PetComponent";
 import Modal from "@/app/components/Modal";
 import addImage from "@/public/add.png";
 import ProfileIcon from "@/app/components/ProfileIcon";
 import { useState } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
+import pets from "@/test_data/pets.js";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
@@ -19,62 +18,6 @@ export default function Profile() {
     return;
   };
 
-  const pets = [
-    {
-      id: 19,
-      owner: "sathvik",
-      name: "kenchi",
-      speice: "cat",
-      breed: "persian",
-      profilepic:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
-    },
-    {
-      id: 15,
-      owner: "sathvik",
-      name: "kencha",
-      speice: "dog",
-      breed: "labrodor",
-      profilepic:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
-    },
-    {
-      id: 13,
-      owner: "sathvik",
-      name: "kenchi",
-      speice: "cat",
-      breed: "persian",
-      profilepic:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
-    },
-    {
-      id: 12,
-      owner: "sathvik",
-      name: "kencha",
-      speice: "dog",
-      breed: "labrodor",
-      profilepic:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
-    },
-    {
-      id: 29,
-      owner: "sathvik",
-      name: "kenchi",
-      speice: "cat",
-      breed: "persian",
-      profilepic:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
-    },
-    {
-      id: 11,
-      owner: "sathvik",
-      name: "kenchi",
-      speice: "cat",
-      breed: "persian",
-      profilepic:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.rover.com%2Fuk%2Fblog%2Forange-tabby-cat%2F&psig=AOvVaw1KrhvDCYleHRO_VUUsVGCo&ust=1734416890378000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCM28vUq4oDFQAAAAAdAAAAABAE",
-    },
-  ];
   return (
     <>
       {/* Hero Section */}
@@ -88,9 +31,9 @@ export default function Profile() {
       </section>
 
       {/* Profile Section */}
-      <section className="relative py-16 bg-white">
+      <section className="relative py-16 bg-light1">
         <div className="container mx-auto px-4">
-          <div className="relative flex flex-col min-w-0 break-words bg-white shadow-xl w-full mb-6 rounded-lg z-10 -mt-64">
+          <div className="relative flex flex-col min-w-0 break-words bg-light1 shadow-xl w-full mb-6 rounded-lg z-10 -mt-64">
             <div className="px-6">
               {/* Profile Header */}
               <div className="flex justify-center">
@@ -101,7 +44,7 @@ export default function Profile() {
                     src={loginDoggy}
                     layout="fill"
                     objectFit="cover"
-                    className="shadow-xl rounded-full border-4 border-white mx-auto"
+                    className="shadow-xl rounded-full border-4 border-light1 mx-auto"
                   />
                 </div>
               </div>
@@ -109,7 +52,7 @@ export default function Profile() {
               {/* Edit Button */}
               <div className="text-center mt-6">
                 <button
-                  className="bg-customTeal/80 hover:bg-customTeal/70 text-white font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
+                  className="bg-customTeal/80 hover:bg-customTeal/70 text-textLighter font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
                   type="button"
                 >
                   Edit
@@ -118,11 +61,11 @@ export default function Profile() {
 
               {/* Profile Details */}
               <div className="text-center mt-6">
-                <h3 className="text-4xl font-semibold leading-normal mb-2 text-gray-700">
+                <h3 className="text-4xl font-semibold leading-normal mb-2 text-textDark">
                   Pluto
                 </h3>
-                <div className="text-sm leading-normal text-gray-400 font-bold uppercase flex items-center justify-center">
-                  <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-400" />
+                <div className="text-sm leading-normal text-textMid font-bold uppercase flex items-center justify-center">
+                  <i className="fas fa-map-marker-alt mr-2 text-lg text-textMid" />
                   Herga, Karnataka
                 </div>
               </div>
@@ -142,14 +85,14 @@ export default function Profile() {
                           src={loginDoggy}
                           layout="fill"
                           objectFit="cover"
-                          className="rounded-full border-2 border-gray-300 shadow-md"
+                          className="rounded-full border-2 border-light2 shadow-md"
                         />
                       </div>
                       <div className="mt-2 text-center">
-                        <p className="font-bold text-gray-700 text-sm">
+                        <p className="font-bold text-textDark text-sm">
                           {pet.name}
                         </p>
-                        <p className="text-xs text-gray-500">{pet.speice}</p>
+                        <p className="text-xs text-textDark">{pet.speice}</p>
                       </div>
                     </div>
                   ))}
@@ -163,11 +106,11 @@ export default function Profile() {
                         layout="fill"
                         objectFit="cover"
                         onClick={openModal}
-                        className="rounded-full border-2 border-gray-300 shadow-md"
+                        className="rounded-full border-2 border-light2 shadow-md"
                       />
                     </div>
                     <div className="mt-2 text-center">
-                      <p className="font-bold text-gray-700 text-sm">Add pet</p>
+                      <p className="font-bold text-textDark text-sm">Add pet</p>
                     </div>
                     {/* Add pet Section */}
                     <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -179,10 +122,10 @@ export default function Profile() {
                               profile_pic={default_pet_profile_pic}
                               width="w-[170px]"
                               height="h-[170px]"
-                              className="border-2 border-white mb-4"
+                              className="border-2 border-light1 mb-4"
                             ></ProfileIcon>
                             {/* Edit Button */}
-                            <button className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-white rounded-full hover:bg-teal-600">
+                            <button className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter rounded-full hover:bg-teal-600">
                               ✎
                             </button>
                           </div>

@@ -15,12 +15,12 @@ export default function Messages() {
     chats.find((chat) => chat.id === activeChat)?.messages || [];
 
   return (
-    <div className="flex  h-screen bg-gray-100 overflow-y-hidden">
+    <div className="flex  h-screen bg-light2 overflow-y-hidden">
       {/* For larger screens */}
       {screenSize >= 768 && (
         <>
           {/* User List */}
-          <div className="md:w-2/6 bg-white border-r flex flex-col">
+          <div className="md:w-2/6 bg-light1 border-r flex flex-col">
             <ChatList
               chats={chats}
               activeChat={activeChat}
@@ -47,7 +47,7 @@ export default function Messages() {
         <>
           {/* User List */}
           {!chatOpen && (
-            <div className={` w-full bg-white border-r flex flex-col`}>
+            <div className={` w-full bg-light1 border-r flex flex-col`}>
               <ChatList
                 chats={chats}
                 activeChat={activeChat}
