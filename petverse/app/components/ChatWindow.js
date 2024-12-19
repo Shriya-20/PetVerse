@@ -17,7 +17,7 @@ export default function ChatWindow({
         <>
           {/* Chat header*/}
 
-          <div className="sticky top-0 flex items-center justify-between bg-white  border-b  z-50">
+          <div className="sticky top-0 flex items-center justify-between bg-light1  border-b  z-50">
             {chatOpen && isSmallScreen && (
               <ArrowLeftIcon
                 className="w-5 hover:bg-slate-50 rounded-full hover:text-customTeal"
@@ -34,11 +34,11 @@ export default function ChatWindow({
                 height="h-12"
                 custom_style="mx-4 mt-1 mb-2 "
               />
-              <h2 className="font-bold text-gray-800 text-center">
+              <h2 className="font-bold text-textDarker text-center">
                 {chats.find((chat) => chat.id === activeChat)?.name || ""}
               </h2>
             </div>
-            <p className="text-sm text-gray-500 basis-1/3 text-right">
+            <p className="text-sm text-textDark basis-1/3 text-right">
               Last seen 7h ago
             </p>
           </div>
@@ -55,14 +55,14 @@ export default function ChatWindow({
                 <div
                   className={`inline-block p-3 rounded-lg break-words ${
                     message.sender === "me"
-                      ? "bg-customTeal text-white "
-                      : "bg-gray-200 text-gray-800 "
+                      ? "bg-customTeal text-textLighter "
+                      : "bg-light2 text-textDarker "
                   }`}
                   style={{ maxWidth: "75%" }}
                 >
                   <ChatMessage {...message} />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-textDark mt-1">
                   {message.timestamp}
                 </p>
               </div>
@@ -70,11 +70,11 @@ export default function ChatWindow({
           </div>
 
           {/* Send Message */}
-          <div className="p-4 bg-white border-t z-50 sticky bottom-0">
+          <div className="p-4 bg-light1 border-t z-50 sticky bottom-0">
             <input
               type="text"
               placeholder="Type a message..."
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:bg-white"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:bg-light1"
             />
           </div>
         </>

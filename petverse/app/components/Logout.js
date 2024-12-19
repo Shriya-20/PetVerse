@@ -12,10 +12,10 @@ export default function Logout() {
       <div className="ml-2 p-1 m-1">
         <input
           placeholder="don't type 'CONFIRM' to delete your account"
-          className="w-1/3 p-2 border-1 border-black rounded hover:bg-slate-100 mr-2"
+          className="w-1/3 p-2 border-1 border-dark1 rounded hover:bg-slate-100 mr-2"
         />
         <button
-          className="bg-red-600 text-white p-2 rounded-md md:w-1/6 hover:bg-red-700"
+          className="bg-red-600 text-textLighter p-2 rounded-md md:w-1/6 hover:bg-red-700"
           onClick={handleLogout}
         >
           Log out

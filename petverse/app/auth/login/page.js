@@ -23,14 +23,14 @@ export default function Login() {
           PET VERSE
         </p>
       </div>
-      <p className="mt-2 text-xl text-center text-gray-600 dark:text-gray-200">
+      <p className="mt-2 text-xl text-center text-textDark dark:text-textLight">
         We are <span className="text-primary">Happy</span> to see you back
       </p>{" "}
       <div className="mt-4 space-y-3 sm:flex sm:items-center sm:space-x-4 sm:space-y-0">
         {/* Login with Google */}
         <Link
           href="/petverse"
-          className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-gray-600 transition-colors duration-300 transform border rounded-lg dark:text-gray-300 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,14 +61,14 @@ export default function Login() {
           </svg>
           {""}
 
-          <span className="text-sm text-gray-800 dark:text-gray-200">
+          <span className="text-sm text-textDarker dark:text-textLight">
             Login with Google
           </span>
         </Link>{" "}
         {/* Login with facebook */}
         <Link
           href="/petverse"
-          className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-gray-600 transition-colors duration-300 transform border rounded-lg dark:text-gray-300 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -85,21 +85,21 @@ export default function Login() {
             ></path>
           </svg>
           {""}
-          <span className="text-sm text-gray-800 dark:text-gray-200">
+          <span className="text-sm text-textDarker dark:text-textLight">
             Login with Facebook
           </span>
         </Link>
       </div>{" "}
       {/* Use email  */}
       <div className="flex items-center justify-between mt-4">
-        <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4" />{" "}
+        <span className="w-1/5 border-b dark:border-mid2 lg:w-1/4" />{" "}
         <Link
           href="#"
-          className="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline"
+          className="text-xs text-center text-textDark uppercase dark:text-textMid hover:underline"
         >
           or use your email
         </Link>{" "}
-        <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4" />
+        <span className="w-1/5 border-b dark:border-mid1 lg:w-1/4" />
       </div>{" "}
       {/* Login Form. Set up login! */}
       <form onSubmit={handleLogin}>
@@ -110,7 +110,7 @@ export default function Login() {
           autoComplete="off"
         />{" "}
         <div className="mt-4">
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+          <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             E-Mail Address
           </label>{" "}
           <input
@@ -119,11 +119,11 @@ export default function Login() {
             defaultValue=""
             required="required"
             autoComplete="email"
-            className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+            className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
           />
         </div>{" "}
         <div className="mt-4">
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+          <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Password
           </label>{" "}
           <div className="relative">
@@ -131,7 +131,7 @@ export default function Login() {
               type={showPassword ? "text" : "password"}
               name="password"
               required="required"
-              className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+              className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
             />
             <button
               type="button"
@@ -139,9 +139,9 @@ export default function Login() {
               className="absolute inset-y-0 right-3 flex items-center"
             >
               {showPassword ? (
-                <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+                <EyeSlashIcon className="w-5 h-5 text-textMid" />
               ) : (
-                <EyeIcon className="w-5 h-5 text-gray-400" />
+                <EyeIcon className="w-5 h-5 text-textMid" />
               )}
             </button>
           </div>
@@ -154,12 +154,12 @@ export default function Login() {
                 type="checkbox"
                 name="remember"
                 id="remember"
-                className="border-gray-200 rounded shadow-sm text-primary dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+                className="border-light2 rounded shadow-sm text-primary dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
               />
 
               <label
                 htmlFor="remember"
-                className="ml-2 text-gray-700 dark:text-gray-300"
+                className="ml-2 text-textDark dark:text-textLight"
               >
                 Remember Me
               </label>
@@ -167,7 +167,7 @@ export default function Login() {
           </div>{" "}
           <Link
             href="/auth/forgotpassword"
-            className="text-sm text-gray-600 dark:text-gray-400 hover:underline"
+            className="text-sm text-textDark dark:text-textMid hover:underline"
           >
             Forgot Your Password?
           </Link>
@@ -175,7 +175,7 @@ export default function Login() {
         <div className="mt-8">
           <button
             type="submit"
-            className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/80 focus:outline-none focus:bg-customTeal/80"
+            className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/80 focus:outline-none focus:bg-customTeal/80"
           >
             Sign in
           </button>
@@ -183,14 +183,14 @@ export default function Login() {
       </form>{" "}
       {/* Create account */}
       <div className="flex items-center justify-between mt-4">
-        <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4" />{" "}
+        <span className="w-1/5 border-b dark:border-mid2 md:w-1/4" />{" "}
         <Link
           href="/auth/signup"
-          className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
+          className="text-xs text-textDark uppercase dark:text-textMid hover:underline"
         >
           Create an account
         </Link>{" "}
-        <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4" />
+        <span className="w-1/5 border-b dark:border-mid2 md:w-1/4" />
       </div>
     </>
   );

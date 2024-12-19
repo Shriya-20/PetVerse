@@ -20,7 +20,7 @@ export default function Signup() {
         {/* Sign Up with Google */}
         <Link
           href="/petverse"
-          className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-gray-600 transition-colors duration-300 transform border rounded-lg dark:text-gray-300 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -51,14 +51,14 @@ export default function Signup() {
           </svg>
           {""}
 
-          <span className="text-sm text-gray-800 dark:text-gray-200">
+          <span className="text-sm text-textDarker dark:text-textLight">
             Sign Up with Google
           </span>
         </Link>{" "}
         {/* SignUp with Facebook */}
         <Link
           href="/petverse"
-          className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-gray-600 transition-colors duration-300 transform border rounded-lg dark:text-gray-300 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -75,26 +75,26 @@ export default function Signup() {
             ></path>
           </svg>
           {""}
-          <span className="text-sm text-gray-800 dark:text-gray-200">
+          <span className="text-sm text-textDarker dark:text-textLight">
             SignUp with Facebook
           </span>
         </Link>
       </div>{" "}
       {/* 'use email' text */}
       <div className="flex items-center justify-between mt-4">
-        <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4" />{" "}
+        <span className="w-1/5 border-b dark:border-mid2 lg:w-1/4" />{" "}
         <Link
           href="#"
-          className="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline"
+          className="text-xs text-center text-textDark uppercase dark:text-textMid hover:underline"
         >
           or use your email
         </Link>{" "}
-        <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4" />
+        <span className="w-1/5 border-b dark:border-mid1 lg:w-1/4" />
       </div>{" "}
       {/* Input form */}
       <form onSubmit={() => handleSignup}>
         <div className="mt-4">
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+          <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Name
           </label>
           <input
@@ -105,11 +105,11 @@ export default function Signup() {
             autoComplete="name"
             autoFocus={true}
             onChange={(e) => setUserName(e.target.value)}
-            className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+            className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
           />
         </div>
         <div className="mt-4">
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+          <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             E-Mail Address
           </label>
           <input
@@ -119,11 +119,11 @@ export default function Signup() {
             required="required"
             autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+            className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
           />
         </div>
         <div className="mt-4">
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+          <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Password
           </label>
           <div className="relative">
@@ -132,7 +132,7 @@ export default function Signup() {
               name="password"
               required="required"
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+              className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
             />
             <button
               type="button"
@@ -140,16 +140,16 @@ export default function Signup() {
               className="absolute inset-y-0 right-3 flex items-center"
             >
               {showPassword ? (
-                <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+                <EyeSlashIcon className="w-5 h-5 text-textMid" />
               ) : (
-                <EyeIcon className="w-5 h-5 text-gray-400" />
+                <EyeIcon className="w-5 h-5 text-textMid" />
               )}
             </button>
           </div>
         </div>
 
         <div className="mt-4">
-          <label className="block mb-2 text-sm text-gray-600 dark:text-gray-200">
+          <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Confirm Password
           </label>
           <div className="relative">
@@ -158,7 +158,7 @@ export default function Signup() {
               name="password_confirmation"
               required="required"
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-gray-400 focus:ring-opacity-20"
+              className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
             />
             <button
               type="button"
@@ -166,9 +166,9 @@ export default function Signup() {
               className="absolute inset-y-0 right-3 flex items-center"
             >
               {showConfirmPassword ? (
-                <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+                <EyeSlashIcon className="w-5 h-5 text-textMid" />
               ) : (
-                <EyeIcon className="w-5 h-5 text-gray-400" />
+                <EyeIcon className="w-5 h-5 text-textMid" />
               )}
             </button>
           </div>
@@ -178,7 +178,7 @@ export default function Signup() {
         <div className="mt-8">
           <button
             type="submit"
-            className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
+            className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
           >
             Register
           </button>
@@ -186,14 +186,14 @@ export default function Signup() {
       </form>
       {/* Link to Login page */}
       <div className="flex items-center justify-between mt-4">
-        <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>{" "}
+        <span className="w-1/5 border-b dark:border-mid2 md:w-1/4"></span>{" "}
         <Link
           href="/auth/login"
-          className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
+          className="text-xs text-textDark uppercase dark:text-textMid hover:underline"
         >
           Do you have an account?
         </Link>{" "}
-        <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+        <span className="w-1/5 border-b dark:border-mid2 md:w-1/4"></span>
       </div>
     </>
   );

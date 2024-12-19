@@ -5,13 +5,13 @@ export default function Modal({ isOpen, onClose, children }) {
 
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="fixed inset-0 flex items-center justify-center bg-dark1 bg-opacity-50 z-50">
         {/* Modal Content */}
-        <div className="bg-white p-3 mx-3 rounded-lg shadow-lg max-w-lg w-full relative">
+        <div className="bg-light1 p-3 mx-3 rounded-lg shadow-lg max-w-lg w-full relative">
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 rounded-full w-7 h-7 text-gray-500 hover:text-gray-700 hover:bg-slate-200 text-xl"
+            className="absolute top-3 right-3 rounded-full w-7 h-7 text-textDark hover:text-textDark hover:bg-slate-200 text-xl"
           >
             x
           </button>
