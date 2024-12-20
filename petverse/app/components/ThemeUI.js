@@ -7,7 +7,7 @@ export default function ThemeUI() {
 
   return (
     <>
-      <div className="my-4 mx-2 theme">
+      <div className="my-4 mx-2 theme dark:bg-dark2">
         <label>
           <input
             type="radio"
