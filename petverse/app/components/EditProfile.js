@@ -74,11 +74,11 @@ export default function EditProfile() {
       {/* User Details and Password Change Section */}
       <div className="col-span-2 space-y-2">
         {/* Change Username Section */}
-        <div>
+        <div className="">
           <input
             type="text"
             placeholder="Enter new name"
-            className="w-full p-2 border border-light2 rounded-md mb-4"
+            className="edit-profile-input"
           />
           <button className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal">
             Change Name
@@ -92,21 +92,21 @@ export default function EditProfile() {
             type="password"
             placeholder="Enter old password"
             onChange={handleChangePasswordData}
-            className="w-full p-2 border border-light2 rounded-md mb-4"
+            className="edit-profile-input"
           />
           <input
             name="newPassword"
             type="password"
             placeholder="Enter new password"
             onChange={handleChangePasswordData}
-            className="w-full p-2 border border-light2 rounded-md mb-4"
+            className="edit-profile-input"
           />
           <input
             name="confirmPassword"
             type="password"
             placeholder="Confirm new password"
             onChange={handleChangePasswordData}
-            className="w-full p-2 border border-light2 rounded-md mb-4"
+            className="edit-profile-input"
           />
           <button
             onClick={handleChangePassword}
@@ -123,7 +123,7 @@ export default function EditProfile() {
             type="text"
             placeholder="Enter Location"
             onChange={handleChangeLocation}
-            className="w-full p-2 border border-light2 rounded-md mb-4"
+            className="edit-profile-input"
           />
           <button
             onClick={handleChangeLocation}
