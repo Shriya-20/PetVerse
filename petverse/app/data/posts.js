@@ -31,7 +31,7 @@ const posts = [
   },
   {
     id: 4,
-    src: "/3.png",
+    src: "/4.png",
     title: "Playful Puppy",
     desc: "Watch this playful puppy chasing after a ball. He's full of energy and loves to run around!",
     type: "video",
@@ -51,7 +51,7 @@ const posts = [
   },
   {
     id: 6,
-    src: "/3.png",
+    src: "/2.png",
     title: "Talking Parrot",
     desc: "Meet Polly, the talking parrot who knows how to say 'hello' and 'good morning' to everyone.",
     type: "video",
