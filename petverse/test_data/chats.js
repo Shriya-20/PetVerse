@@ -18,7 +18,7 @@ const chats = [
         id: 1,
         sender: "them",
         content:
-          "Hey man! ldkflasjkdfla dfl asdfklasd  fasdla fas lfkdsjfl sdlf sdlfjsdkfjl sdkf sdlfjsdklfjlasdk flsdkjfklasd jfklsdjfklsjd lfkdlflasdk jflasd flsdkflkasdjf las",
+          "Hey man! www.youtube.com asdfklasd  fasdla fas lfkdsjfl sdlf sdlfjsdkfjl sdkf sdlfjsdklfjlasdk flsdkjfklasd jfklsdjfklsjd lfkdlflasdk jflasd flsdkflkasdjf las",
         timestamp: "10:25",
         type: "text",
       },
@@ -42,7 +42,7 @@ const chats = [
         id: 4,
         sender: "them",
         content:
-          "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore. ldddddddddddddddddddddddddddddddddddddddfkslfsdkfjlsdjfksdlflsdjkfjlsdjfksdlfjkljsk",
+          "Duis https://leetcode.com/explore/interview/card/system-design-for-interviews-and-beyond/?utm_campaign=HomeBanner&utm_medium=Banner&utm_source=Banner&gio_link_id=GRwNarl9 velit esse cillum dolore. ldddddddddddddddddddddddddddddddddddddddfkslfsdkfjlsdjfksdlflsdjkfjlsdjfksdlfjkljsk",
         timestamp: "02:25",
         type: "text",
       },
@@ -90,8 +90,7 @@ const chats = [
       {
         id: 12,
         sender: "me",
-        content:
-          "Hey, what's up? How are you doing, my friend? It's been a while dfs sdfsd sf sdf sdf sdf sdf sd fsdf sdf sdf sd fsd fsd fs sdf 😄",
+        content: "https://www.youtube.com/",
         timestamp: "11:25",
       },
       {
