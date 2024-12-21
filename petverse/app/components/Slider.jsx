@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Heart } from "react-feather";  // Heart icon from react-feather
+import { ChevronLeft, ChevronRight } from "react-feather";  // Chevron icons
 import Image from "next/image";
 
-//  Image Component
+// Image Component
 const SlideImage = ({ src, alt, opacity, width, height }) => (
   <div className="flex-shrink-0" style={{ width: `${width}%` }}>
     <Image
@@ -46,15 +46,15 @@ export default function Slider({
         <div className="relative flex justify-center items-center gap-4">
           {/* Previous Image */}
           <SlideImage
-            src={slides[(curr - 1 + slides.length) % slides.length]}
-            alt={`Previous Slide 1`}
+            src={slides[(curr - 1 + slides.length) % slides.length].src}
+            alt={`Previous Slide`}
             opacity="70"
             width={20}
           />
 
           {/* Current Image */}
           <SlideImage
-            src={slides[curr]}
+            src={slides[curr].src}
             alt={`Current Slide`}
             opacity="100"
             width={60}
@@ -62,38 +62,13 @@ export default function Slider({
 
           {/* Next Image */}
           <SlideImage
-            src={slides[(curr + 1) % slides.length]}
-            alt={`Next Slide 1`}
+            src={slides[(curr + 1) % slides.length].src}
+            alt={`Next Slide`}
             opacity="70"
             width={20}
           />
-
-          {/* Like Button */}
-          {/* <div className="absolute top-4 right-4 z-10">
-            <button
-              onClick={toggleLike}
-              className="p-2 rounded-full bg-white/80 text-gray-800 hover:bg-white shadow-lg"
-            >
-              <Heart
-                size={30}
-                className={`text-red-500 ${liked ? "fill-red-500" : "fill-none"}`}
-              />
-            </button>
-          </div> */}
-
-          {/* User Profile Image */}
-          {/* <div className="absolute top-4 left-4 z-10">
-            <div className="flex items-center justify-center w-12 h-12 rounded-full overflow-hidden shadow-lg">
-              <Image
-                src={userImage}
-                alt="User Profile"
-                width={48}
-                height={48}
-                className="object-cover"
-              />
-            </div>
-          </div> */}
         </div>
+
         {/* Navigation Buttons */}
         <div className="absolute inset-0 flex items-center justify-between p-4">
           <button

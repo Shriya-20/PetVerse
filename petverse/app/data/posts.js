@@ -1,7 +1,7 @@
 const posts = [
     {
       id: 1,
-      src: "/2.png",  
+      src: "/1.png",  
       title: "Adorable Golden Retriever",
       desc: "Meet Max, the playful Golden Retriever. He loves playing fetch and enjoys long walks in the park.",
       type: "image", 
@@ -19,7 +19,7 @@ const posts = [
     },
     {
       id: 3,
-      src: "/4.png",
+      src: "/1.png",
       title: "Charming Parrot",
       desc: "This is Rio, an amazing parrot who can mimic sounds and loves singing along to songs.",
       type: "image", 
@@ -28,7 +28,7 @@ const posts = [
     },
     {
       id: 4,
-      src: "/5.png",  
+      src: "/3.png",  
       title: "Playful Puppy",
       desc: "Watch this playful puppy chasing after a ball. He's full of energy and loves to run around!",
       type: "video", 
@@ -37,7 +37,7 @@ const posts = [
     },
     {
       id: 5,
-      src: "/6.png",  
+      src: "/1.png",  
       title: "Cute Bunny",
       desc: "This is Snowy, the bunny who loves munching on carrots and hopping around the yard.",
       type: "image", 
@@ -46,7 +46,7 @@ const posts = [
     },
     {
       id: 6,
-      src: "/7.png", 
+      src: "/3.png", 
       title: "Talking Parrot",
       desc: "Meet Polly, the talking parrot who knows how to say 'hello' and 'good morning' to everyone.",
       type: "video", 
@@ -55,7 +55,7 @@ const posts = [
     },
     {
       id: 7,
-      src: "/2.png",  
+      src: "/1.png",  
       title: "Adorable Golden Retriever",
       desc: "Meet Max, the playful Golden Retriever. He loves playing fetch and enjoys long walks in the park.",
       type: "image", 
@@ -73,7 +73,7 @@ const posts = [
     },
     {
       id: 9,
-      src: "/4.png",
+      src: "/1.png",
       title: "Charming Parrot",
       desc: "This is Rio, an amazing parrot who can mimic sounds and loves singing along to songs.",
       type: "image", 
@@ -91,7 +91,7 @@ const posts = [
     },
     {
       id: 11,
-      src: "/6.png",  
+      src: "/1.png",  
       title: "Cute Bunny",
       desc: "This is Snowy, the bunny who loves munching on carrots and hopping around the yard.",
       type: "image", 
@@ -100,7 +100,7 @@ const posts = [
     },
     {
       id: 12,
-      src: "/7.png", 
+      src: "/3.png", 
       title: "Talking Parrot",
       desc: "Meet Polly, the talking parrot who knows how to say 'hello' and 'good morning' to everyone.",
       type: "video", 
