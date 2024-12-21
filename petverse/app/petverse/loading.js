@@ -32,3 +32,27 @@ export default function Loading() {
     </>
   );
 }
+
+// import { PulseLoader } from "react-spinners";
+
+// function Loading() {
+//   return (
+//     <div
+//       style={{
+//         display: 'flex',         
+//         justifyContent: 'center',
+//         alignItems: 'center',     
+//         height: '100vh'        
+//       }}
+//     >
+//       <PulseLoader
+//         color="#0abfad"
+//         margin={1}
+//         size={27}
+//         speedMultiplier={1}
+//       />
+//     </div>
+//   );
+// }
+
+// export default Loading;
