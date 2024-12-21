@@ -36,23 +36,23 @@ body {
   }
 
   .settings-accordian {
-    @apply bg-light1 m-1 shadow-md rounded-[12];
+    @apply bg-light1 m-1 shadow-md rounded-[12] dark:bg-dark2;
   }
 
   .settings-accordian-heading {
-    @apply text-xl font-thin !font-thin p-3 hover:bg-slate-100;
+    @apply text-xl !font-thin p-3 hover:bg-slate-100 dark:bg-dark2 dark:text-textLight;
   }
 
   .settings-accordian-body {
-    @apply h-auto;
+    @apply h-auto dark:bg-dark2;
   }
 
   .custom-button {
     @apply bg-customTeal text-textLighter hover:bg-teal-600;
   }
 
-  .edit-profile input {
-    @apply flex-grow p-2 border border-light2 rounded-md block md:flex-grow w-full md:w-2/3;
+  .edit-profile-input {
+    @apply w-full p-2 border border-light2 rounded-md mb-4 dark:bg-mid4 dark:text-textLight;
   }
 
   .edit-profile button {
@@ -64,14 +64,15 @@ body {
   }
 
   .theme-input {
-    @apply scale-150;
+    @apply scale-150 dark:bg-dark2 mr-4 dark:text-textLight;
   }
 
   .theme label {
-    @apply p-2 m-4 flex;
+    @apply p-2 m-4 flex dark:bg-dark2;
   }
 
-  .theme-span {
-    @apply ml-3 dark:text-light1;
+  .theme span {
+    @apply ml-1 dark:text-textLight dark:bg-dark2;
   }
 }
+
