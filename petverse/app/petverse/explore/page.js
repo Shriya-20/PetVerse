@@ -18,7 +18,7 @@ export default function Explore() {
       <Searchbar />
 
       <div className="min-h-screen flex justify-center items-center">
-        <div className="relative w-full max-w-[1350px]">
+        <div className="relative w-full max-w-[1370px]">
           <Slider 
             slides={slides}
             userImage="/default_user_profile_pic.jpeg"
