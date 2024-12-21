@@ -59,10 +59,21 @@ export default function Slider({ autoSlide = true, autoSlideInterval = 3000, sli
             const position = curr + index - Math.floor(visibleImages / 2);
             const slideIndex = (position + slides.length) % slides.length;
 
-            // Adjust opacity and width based on position
+            // Calculate opacity and width based on the index position
             const isCurrent = index === Math.floor(visibleImages / 2);
-            const opacity = isCurrent ? "100" : isCurrent - 1 ? "70" : "50";
-            const width = isCurrent ? 30 : isCurrent - 1 ? 20 : 15;
+            const isPrevious = index === Math.floor(visibleImages / 2) - 1;
+            const isNext = index === Math.floor(visibleImages / 2) + 1;
+
+            let opacity = "50"; // Default opacity for non-active images
+            let width = 15; // Default width for non-active images
+
+            if (isCurrent) {
+              opacity = "100"; // Active image is fully visible
+              width = 30; // Active image is larger
+            } else if (isPrevious || isNext) {
+              opacity = "70"; // Previous and next images are less visible
+              width = 20; // Previous and next images are smaller
+            }
 
             return (
               <SlideImage
