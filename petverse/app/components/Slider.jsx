@@ -5,7 +5,7 @@ import SlideImage from "./ImageComponent";
 import NavigationButtons from "./NavigationButtons";
 import SlideIndicators from "./SlideIndicators";
 
-export default function Slider({ autoSlide = true, autoSlideInterval = 3000, slides }) {
+export default function Slider({ autoSlide = false, autoSlideInterval = 3000, slides }) {
   const [curr, setCurr] = useState(0);
   const [visibleImages, setVisibleImages] = useState(5); // Default: Show 5 images
 
