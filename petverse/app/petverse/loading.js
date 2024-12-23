@@ -13,7 +13,7 @@ export default function Loading() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SystemDark = window.matchMedia(
-        "(system-prefers-scheme: dark)"
+        "(prefers-color-scheme: dark)"
       ).matches;
       const resolvedTheme =
         theme === "system" ? (SystemDark ? "dark" : "light") : theme;
@@ -27,6 +27,7 @@ export default function Loading() {
         <Image
           src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
           alt="loading gif"
+          priority={true}
         />
       </div>
     </>
@@ -39,10 +40,10 @@ export default function Loading() {
 //   return (
 //     <div
 //       style={{
-//         display: 'flex',         
+//         display: 'flex',
 //         justifyContent: 'center',
-//         alignItems: 'center',     
-//         height: '100vh'        
+//         alignItems: 'center',
+//         height: '100vh'
 //       }}
 //     >
 //       <PulseLoader
