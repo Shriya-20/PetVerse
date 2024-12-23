@@ -5,18 +5,42 @@ import Image from "next/image";
 import Modal from "@/app/components/Modal";
 import addImage from "@/public/add.png";
 import ProfileIcon from "@/app/components/ProfileIcon";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import pets from "@/test_data/pets.js";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
+  const [user, setUser] = useState({});
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
   const handleAddPet = () => {
     return;
   };
+
+  useEffect(() => {
+    async function GetUserData() {
+      try {
+        const response = await fetch("/api/users");
+        if (!response.ok)
+          throw new Error("Error in fetching data from Backend");
+        const userData = await response.json();
+        console.log(userData);
+        setUser(userData[0]);
+
+        return userData;
+      } catch (error) {
+        console.error("Error in fetching the data");
+        console.log(error);
+      }
+    }
+
+    GetUserData();
+  }, []);
+
+  console.log(user);
+  console.log(user.pets);
 
   return (
     <>
@@ -62,42 +86,46 @@ export default function Profile() {
               {/* Profile Details */}
               <div className="text-center mt-6">
                 <h3 className="text-4xl font-semibold leading-normal mb-2 text-textDark dark:text-textLight">
-                  Pluto
+                  {user.username}
                 </h3>
                 <div className="text-sm leading-normal text-textMid font-bold uppercase flex items-center justify-center">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-textMid dark:text-textDarker" />
-                  Herga, Karnataka
+                  {user.location}
                 </div>
               </div>
 
               {/* Pets Display */}
               <div className="mt-10 py-10 border-t border-blueGray-200">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 justify-center">
-                  {pets.map((pet) => (
-                    <div
-                      key={pet.id}
-                      className="flex flex-col items-center p-2 hover:bg-slate-100 dark:hover:bg-mid4 rounded-2xl transition-all duration-200"
-                    >
-                      {/* Smaller Image */}
-                      <div className="relative h-[80px] w-[80px]">
-                        <Image
-                          alt="pet-pic"
-                          src={loginDoggy}
-                          layout="fill"
-                          objectFit="cover"
-                          className="rounded-full border-2 border-light2  shadow-md"
-                        />
+                  {user.pets?.length > 0 ? (
+                    user.pets.map((pet) => (
+                      <div
+                        key={pets.id}
+                        className="flex flex-col items-center p-2 hover:bg-slate-100 dark:hover:bg-mid4 rounded-2xl transition-all duration-200"
+                      >
+                        {/* Smaller Image */}
+                        <div className="relative h-[80px] w-[80px]">
+                          <Image
+                            alt="pet-pic"
+                            src={loginDoggy}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-full border-2 border-light2  shadow-md"
+                          />
+                        </div>
+                        <div className="mt-2 text-center">
+                          <p className="font-bold text-textDark dark:text-textLight text-sm">
+                            {pet.name}
+                          </p>
+                          <p className="text-xs text-textDark dark:text-textLight">
+                            {pet.speice}
+                          </p>
+                        </div>
                       </div>
-                      <div className="mt-2 text-center">
-                        <p className="font-bold text-textDark dark:text-textLight text-sm">
-                          {pet.name}
-                        </p>
-                        <p className="text-xs text-textDark dark:text-textLight">
-                          {pet.speice}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <></>
+                  )}
 
                   {/* Add Pet */}
                   <div className="flex flex-col items-center justify-center cursor-pointer rounded-2xl transition-all duration-200">
