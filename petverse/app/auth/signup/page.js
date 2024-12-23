@@ -2,6 +2,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { handleSignUpWithEmail } from "@/app/_backend/auth";
+import { useRouter } from "next/navigation";
+
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -10,8 +13,17 @@ export default function Signup() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
 
-  function handleSignup() {
-    return 1;
+  const router = useRouter();
+
+  async function handleSignup(e) {
+    e.preventDefault();
+    try {
+      await handleSignUpWithEmail(email, password);
+      router.push("/petverse/messages");
+      console.log("Sign up Successful");
+    } catch (error) {
+      console.log(`Error with Sign Up: ${error}`);
+    }
   }
 
   return (
@@ -92,7 +104,7 @@ export default function Signup() {
         <span className="w-1/5 border-b dark:border-mid1 lg:w-1/4" />
       </div>{" "}
       {/* Input form */}
-      <form onSubmit={() => handleSignup}>
+      <form onSubmit={handleSignup}>
         <div className="mt-4">
           <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Name
@@ -100,7 +112,7 @@ export default function Signup() {
           <input
             type="text"
             name="name"
-            value=""
+            value={userName}
             required="required"
             autoComplete="name"
             autoFocus={true}
@@ -115,7 +127,7 @@ export default function Signup() {
           <input
             type="email"
             name="email"
-            value=""
+            value={email}
             required="required"
             autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
@@ -130,6 +142,7 @@ export default function Signup() {
             <input
               type={showPassword ? "text" : "password"}
               name="password"
+              value={password}
               required="required"
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
@@ -156,6 +169,7 @@ export default function Signup() {
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="password_confirmation"
+              value={confirmPassword}
               required="required"
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"

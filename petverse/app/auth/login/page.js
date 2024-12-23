@@ -5,12 +5,25 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import logo from "@/public/paw.png";
 import Image from "next/image";
+import { handleSignInWithEmail } from "@/app/_backend/auth";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  function handleLogin() {
-    return 1;
+  const router = useRouter();
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    try {
+      await handleSignInWithEmail(email, password);
+      router.push("/petverse/messages");
+      console.log("Login Successful");
+    } catch (error) {
+      console.log(`Error while Logging In${error}`);
+    }
   }
   return (
     <>
@@ -116,7 +129,8 @@ export default function Login() {
           <input
             type="email"
             name="email"
-            defaultValue=""
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required="required"
             autoComplete="email"
             className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
@@ -130,6 +144,8 @@ export default function Login() {
             <input
               type={showPassword ? "text" : "password"}
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required="required"
               className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
             />
