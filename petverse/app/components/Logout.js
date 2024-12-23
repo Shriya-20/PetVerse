@@ -1,11 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { handleSignOut } from "../_backend/auth";
 
 export default function Logout() {
   const router = useRouter();
 
-  const handleLogout = () => router.push("/auth/login");
+  async function handleLogout() {
+    try {
+      await handleSignOut();
+      router.push("/auth/login");
+      console.log("Logout Sucessful");
+    } catch (error) {
+      console.log(`Error while logging out. ${error}`);
+    }
+  }
 
   return (
     <>
