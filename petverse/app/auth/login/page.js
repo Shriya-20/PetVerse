@@ -7,8 +7,10 @@ import logo from "@/public/paw.png";
 import Image from "next/image";
 import { handleSignInWithEmail } from "@/app/_backend/auth";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 export default function Login() {
+  const { setUser } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -18,13 +20,26 @@ export default function Login() {
   async function handleLogin(e) {
     e.preventDefault();
     try {
-      await handleSignInWithEmail(email, password);
+      const response = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      if (!response.ok) {
+        throw new Error("Invalid email or password");
+      }
+      const { token } = await response.json();
+      document.cookie = `token=${token}; path=/`;
+
+      const userResponse = await fetch("/api/session");
+
+      const userData = await userResponse.json();
+      setUser(userData);
       router.push("/petverse/messages");
-      console.log("Login Successful");
     } catch (error) {
       console.log(`Error while Logging In${error}`);
     }
   }
+
   return (
     <>
       <div className="flex items-center justify-center p-4">
