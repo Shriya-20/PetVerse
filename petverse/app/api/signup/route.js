@@ -23,18 +23,11 @@ async function handleSignUpWithEmail(userName, email, password) {
 
 export async function POST(req) {
   try {
-    console.log("Post function called.");
     const { userName, email, password } = await req.json();
-    console.log("Extracted data from request");
     const newUser = await handleSignUpWithEmail(userName, email, password);
-    console.log("Completed firebase SignUP");
 
     const db = await connectToDatabase();
-    console.log("connected to database");
     await db.collection("users").insertOne(newUser);
-    console.log("inserted user into database");
-
-    console.log("Sucessfully inserted user into database");
     return new Response(JSON.stringify({ success: "true" }), { status: 200 });
   } catch (error) {
     console.error("Error during Signup: ", error.message);
