@@ -8,34 +8,28 @@ import ProfileIcon from "@/app/components/ProfileIcon";
 import { useState, useEffect } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import pets from "@/test_data/pets.js";
-import { useUser } from "@/context/UserContext";
 
-export default function Profile() {
+export default function ProfileView() {
   const [isModalOpen, setModalIsOpen] = useState(false);
+  const [user, setUser] = useState({});
   const [pets, setPets] = useState([]);
-  const { user } = useUser();
-  const { userData, setUserData } = useState({});
+
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
   const handleAddPet = () => {
     return;
   };
 
-  console.log(user);
-  console.log(user.id);
-
   useEffect(() => {
     async function GetUserData() {
       try {
-        const response = await fetch("/api/users", {
-          method: "POST",
-          body: JSON.stringify(user.id),
-        });
+        const response = await fetch("/api/users");
         if (!response.ok)
           throw new Error("Error in fetching data from Backend");
-        const data = await response.json();
-        console.log(data);
-        setUserData(data);
+        const userData = await response.json();
+        console.log(userData);
+        setUser(userData[0]);
+
         return userData;
       } catch (error) {
         console.error("Error in fetching the data");
@@ -44,7 +38,7 @@ export default function Profile() {
     }
 
     GetUserData();
-  }, [user, setUserData, userData]);
+  }, []);
 
   /*
   useEffect(() => {
@@ -103,14 +97,14 @@ export default function Profile() {
                   className="bg-customTeal/80 hover:bg-customTeal/70 text-textLighter dark:text-textLight font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
                   type="button"
                 >
-                  Edit
+                  Message
                 </button>
               </div>
 
               {/* Profile Details */}
               <div className="text-center mt-6">
                 <h3 className="text-4xl font-semibold leading-normal mb-2 text-textDark dark:text-textLight">
-                  {userData.username}
+                  {user.username}
                 </h3>
                 <div className="text-sm leading-normal text-textMid font-bold uppercase flex items-center justify-center">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-textMid dark:text-textDarker" />
@@ -152,55 +146,6 @@ export default function Profile() {
                   )}
 
                   {/* Add Pet */}
-                  <div className="flex flex-col items-center justify-center cursor-pointer rounded-2xl transition-all duration-200">
-                    <div className="relative h-[80px] w-[80px] opacity-30 hover:opacity-50 transition-all">
-                      <Image
-                        alt="add-pet"
-                        src={addImage}
-                        layout="fill"
-                        objectFit="cover"
-                        onClick={openModal}
-                        className="rounded-full border-2 border-light2 shadow-md"
-                      />
-                    </div>
-                    <div className="mt-2 text-center">
-                      <p className="font-bold text-textDark dark:text-textLight text-sm">
-                        Add pet
-                      </p>
-                    </div>
-                    {/* Add pet Section */}
-                    <Modal isOpen={isModalOpen} onClose={closeModal}>
-                      <div className="md:grid md:grid-cols-3 md:justify-center">
-                        <div className="md:flex md:flex-col items-center justify-center justify-items-center col-span-1 mb-4 relative">
-                          <div className="relative">
-                            {" "}
-                            <ProfileIcon
-                              profile_pic={default_pet_profile_pic}
-                              width="w-[170px]"
-                              height="h-[170px]"
-                            ></ProfileIcon>
-                            {/* Edit Button */}
-                            <button className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter dark:text-textLight rounded-full hover:bg-teal-600">
-                              ✎
-                            </button>
-                          </div>
-                        </div>
-                        <form className="md:col-span-2 add-pet mr-6 ">
-                          <input name="name" placeholder="Enter name" />
-                          <input name="type" placeholder="Enter animal" />
-                          <input name="breed" placeholder="Enter breed" />
-                          <input name="location" placeholder="Enter location" />
-                          <button
-                            type="submit"
-                            onClick={handleAddPet}
-                            className="custom-button p-2 rounded m-2 w-full"
-                          >
-                            create profile
-                          </button>
-                        </form>
-                      </div>
-                    </Modal>
-                  </div>
                 </div>
               </div>
             </div>

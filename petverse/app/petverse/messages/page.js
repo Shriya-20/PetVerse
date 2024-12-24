@@ -1,15 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useScreenSize from "@/app/components/Screensize";
 import chats from "@/test_data/chats";
 import ChatWindow from "@/app/components/ChatWindow";
 import ChatList from "@/app/components/ChatList";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 export default function Messages() {
   const [activeChat, setActiveChat] = useState(1);
   const [chatOpen, setChatOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const screenSize = useScreenSize();
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user === undefined) {
+      return;
+    }
+    if (!user) {
+      router.push("/auth/login");
+    } else {
+      setIsLoading(false);
+    }
+  }, [user, router]);
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
 
   const activeMessages =
     chats.find((chat) => chat.id === activeChat)?.messages || [];
