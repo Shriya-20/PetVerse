@@ -18,11 +18,27 @@ export default function Signup() {
   async function handleSignup(e) {
     e.preventDefault();
     try {
-      await handleSignUpWithEmail(email, password);
+      console.log("Signup started . handle Signup called.");
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userName: userName,
+          email: email,
+          password: password,
+        }),
+      });
+      console.log(response.status);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to Sign Up");
+      }
       router.push("/petverse/messages");
       console.log("Sign up Successful");
     } catch (error) {
-      console.log(`Error with Sign Up: ${error}`);
+      console.log(`Error with Sign Up: ${error.message}`);
     }
   }
 
