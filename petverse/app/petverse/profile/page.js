@@ -8,27 +8,34 @@ import ProfileIcon from "@/app/components/ProfileIcon";
 import { useState, useEffect } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import pets from "@/test_data/pets.js";
+import { useUser } from "@/context/UserContext";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
-  const [user, setUser] = useState({});
-
+  const [pets, setPets] = useState([]);
+  const { user } = useUser();
+  const { userData, setUserData } = useState({});
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
   const handleAddPet = () => {
     return;
   };
 
+  console.log(user);
+  console.log(user.id);
+
   useEffect(() => {
     async function GetUserData() {
       try {
-        const response = await fetch("/api/users");
+        const response = await fetch("/api/users", {
+          method: "POST",
+          body: JSON.stringify(user.id),
+        });
         if (!response.ok)
           throw new Error("Error in fetching data from Backend");
-        const userData = await response.json();
-        console.log(userData);
-        setUser(userData[0]);
-
+        const data = await response.json();
+        console.log(data);
+        setUserData(data);
         return userData;
       } catch (error) {
         console.error("Error in fetching the data");
@@ -37,10 +44,27 @@ export default function Profile() {
     }
 
     GetUserData();
-  }, []);
+  }, [user, setUserData, userData]);
 
-  console.log(user);
-  console.log(user.pets);
+  /*
+  useEffect(() => {
+    async function GetUserPets() {
+      try {
+        const response = await fetch("/api/pets", {
+          method: "POST",
+          body: JSON.stringify(user._id)
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch pets");
+        const pets = await response.json()
+        setPets(pets)
+      } catch (error) {
+        console.error("Error fetching the Data")
+      }
+    }
+    GetUserPets();
+  }, []);
+  */
 
   return (
     <>
@@ -86,7 +110,7 @@ export default function Profile() {
               {/* Profile Details */}
               <div className="text-center mt-6">
                 <h3 className="text-4xl font-semibold leading-normal mb-2 text-textDark dark:text-textLight">
-                  {user.username}
+                  {userData.username}
                 </h3>
                 <div className="text-sm leading-normal text-textMid font-bold uppercase flex items-center justify-center">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-textMid dark:text-textDarker" />
