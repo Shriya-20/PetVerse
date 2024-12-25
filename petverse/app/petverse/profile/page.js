@@ -13,13 +13,17 @@ import { useUser } from "@/context/UserContext";
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
   const [pets, setPets] = useState([]);
-  const { user } = useUser();
-  const { userData, setUserData } = useState({});
+  const { user, setUser } = useUser();
+  const [userData, setUserData] = useState({});
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
   const handleAddPet = () => {
     return;
   };
+
+  if (!user) {
+    console.log("Couldn't get user context");
+  }
 
   console.log(user);
   console.log(user.id);
@@ -27,15 +31,19 @@ export default function Profile() {
   useEffect(() => {
     async function GetUserData() {
       try {
+        console.log("Trying to fetch data");
         const response = await fetch("/api/users", {
           method: "POST",
           body: JSON.stringify(user.id),
+          credentials: "include",
         });
         if (!response.ok)
           throw new Error("Error in fetching data from Backend");
         const data = await response.json();
         console.log(data);
-        setUserData(data);
+        setUserData(() => ({
+          ...data,
+        }));
         return userData;
       } catch (error) {
         console.error("Error in fetching the data");
@@ -44,7 +52,7 @@ export default function Profile() {
     }
 
     GetUserData();
-  }, [user, setUserData, userData]);
+  }, [user, setUser]);
 
   /*
   useEffect(() => {

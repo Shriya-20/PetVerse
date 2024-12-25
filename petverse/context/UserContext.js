@@ -10,9 +10,11 @@ export function Userprovider({ children }) {
   useEffect(() => {
     async function fetchSession() {
       try {
-        const response = await fetch("/api/session");
+        const response = await fetch("/api/session", {
+          credentials: "include",
+        });
         if (response.ok) {
-          const userData = await response.json();
+          const userData = await response;
           setUser(userData);
         }
       } catch (error) {
