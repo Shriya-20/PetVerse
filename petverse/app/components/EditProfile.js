@@ -3,6 +3,8 @@
 import LoginDoggy from "@/public/logindoggy.jpg";
 import { useState, useRef } from "react";
 import ProfileIcon from "./ProfileIcon";
+import { uploadImageToServer } from "../actions";
+import { useUser } from "@/context/UserContext";
 
 export default function EditProfile() {
   const changeUserProfileRef = useRef();
@@ -11,17 +13,28 @@ export default function EditProfile() {
     newPassword: "",
     confirmPassword: "",
   });
+  const { user } = useUser();
 
   const handleChangeProfilepicButton = () => {
     changeUserProfileRef.current.click();
   };
 
-  const handleChangeProfilepic = (event) => {
+  async function handleChangeProfilepic(event) {
     const file = event.target.files[0];
+    const arrayBuffer = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => resolve(event.target.result);
+      reader.onerror = (error) => reject(error); // Handle errors
+      reader.readAsArrayBuffer(file);
+    });
+
+    const path = `${user.id}/profilePic.jpg`;
+    const imageUrl = await uploadImageToServer(arrayBuffer, path);
+
     if (file) {
       console.log("file selected");
     }
-  };
+  }
 
   const handleChangePasswordData = (event) => {
     const { name, value } = event.target;
