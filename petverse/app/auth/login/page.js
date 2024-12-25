@@ -5,12 +5,9 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import logo from "@/public/paw.png";
 import Image from "next/image";
-import { handleSignInWithEmail } from "@/app/_backend/auth";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/context/UserContext";
 
 export default function Login() {
-  const { setUser } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,12 +25,6 @@ export default function Login() {
         throw new Error("Invalid email or password");
       }
 
-      const userResponse = await fetch("/api/session", {
-        credentials: "include", // Include cookies with the request
-      });
-
-      const userData = await userResponse.json();
-      setUser(userData);
       router.push("/petverse/messages");
     } catch (error) {
       console.log(`Error while Logging In${error}`);

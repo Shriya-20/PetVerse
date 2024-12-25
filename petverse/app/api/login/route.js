@@ -15,10 +15,7 @@ export async function POST(req) {
       password
     );
     const db = await connectToDatabase();
-    console.log("successfully connected to database");
     const user = await db.collection("users").findOne({ email });
-    console.log("succussfully retrived the user data");
-
     const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, {
       expiresIn: "1h",
     });
@@ -34,7 +31,8 @@ export async function POST(req) {
       // httpOnly: true, // Prevent JavaScript access (XSS protection)
       secure: process.env.NODE_ENV === "production", // Only use HTTPS in production
       sameSite: "Strict", // CSRF protection
-      maxAge: 60, // 1 hour in seconds
+      maxAge: 60 * 10, // 3 minutes in seconds
+      path: "/",
     });
 
     console.log(response);

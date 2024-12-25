@@ -10,7 +10,7 @@ export async function GET(req) {
     console.log("Went through response cookies");
 
     if (!token) {
-      return NextResponse.json("Unauthorized", { status: 401 });
+      return NextResponse.json(null);
     }
     console.log(token);
     console.log("GOT token");
