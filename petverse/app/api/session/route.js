@@ -1,27 +1,26 @@
 import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 
-// key to generate and decode jwt token for creating sessions
-const SECRET_KEY = process.env.SESSION_SECRET_KEY;
+const SECRET_KEY = process.env.NEXT_PUBLIC_SESSION_SECRET_KEY;
 
 export async function GET(req) {
-  const token = req.cookies.get("token");
-  console.log(token);
-
-  if (!token) {
-    console.log("Error in getting token");
-    return new Response("Not authenticated", { status: 401 });
-  }
-  console.log("secret key");
-  console.log(SECRET_KEY);
   try {
-    console.log("trying to do something");
-    const userData = jwt.verify(token.value, SECRET_KEY);
-    console.log("Session succuessfully created");
-    console.log(userData);
+    const token = req.cookies.get("token")?.value;
 
-    return new Response(JSON.stringify(userData), { status: 200 });
+    console.log("Went through response cookies");
+
+    if (!token) {
+      return NextResponse.json("Unauthorized", { status: 401 });
+    }
+    console.log(token);
+    console.log("GOT token");
+
+    const userData = jwt.verify(token, SECRET_KEY);
+    console.log(`User Data extracted from cookie: ${userData}`);
+
+    return NextResponse.json(userData);
   } catch (error) {
-    console.log("error in creating session");
-    return new Response("invalid token", { status: 401 });
+    console.error("Token verification failed:", error.message);
+    return NextResponse.json("Invalid or expired token", { status: 403 });
   }
 }

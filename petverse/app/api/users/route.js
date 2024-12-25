@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 
 export async function POST(req) {
   try {
+    console.log("Atemplting to fetch user data");
     const user_id = await req.json();
     console.log(user_id);
     const db = await connectToDatabase();
