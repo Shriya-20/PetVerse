@@ -1,11 +1,12 @@
 "use client";
 
+import Loading from "@/app/loading";
 import { createContext, useState, useEffect, useContext } from "react";
 
 const UserContext = createContext();
 
 export function Userprovider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
 
   useEffect(() => {
     async function fetchSession() {
@@ -13,8 +14,9 @@ export function Userprovider({ children }) {
         const response = await fetch("/api/session", {
           credentials: "include",
         });
+        console.log(response);
         if (response.ok) {
-          const userData = await response;
+          const userData = await response.json();
           setUser(userData);
         }
       } catch (error) {
