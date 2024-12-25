@@ -1,15 +1,27 @@
 "use client";
 
 import LoginDoggy from "@/public/logindoggy.jpg";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ProfileIcon from "./ProfileIcon";
 
 export default function EditProfile() {
+  const changeUserProfileRef = useRef();
   const [passwordChangeData, setPasswordChangeData] = useState({
     password: "",
     newPassword: "",
     confirmPassword: "",
   });
+
+  const handleChangeProfilepicButton = () => {
+    changeUserProfileRef.current.click();
+  };
+
+  const handleChangeProfilepic = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("file selected");
+    }
+  };
 
   const handleChangePasswordData = (event) => {
     const { name, value } = event.target;
@@ -58,16 +70,28 @@ export default function EditProfile() {
       <div className="md:flex md:flex-col items-center justify-center justify-items-center col-span-1 mb-4 relative">
         <div className="relative">
           {" "}
-          <ProfileIcon
-            profile_pic={LoginDoggy}
-            width="w-[170px]"
-            height="h-[170px]"
-            className="border-2 border-light1 mb-4"
-          ></ProfileIcon>
-          {/* Edit Button */}
-          <button className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter rounded-full hover:bg-teal-600">
-            ✎
-          </button>
+          <div className="relative inline-block">
+            <ProfileIcon
+              profile_pic={LoginDoggy}
+              width="w-[170px]"
+              height="h-[170px]"
+              className="border-2 border-light1 mb-4"
+            ></ProfileIcon>
+            {/* Edit Button */}
+            <button
+              className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter rounded-full hover:bg-teal-600"
+              onClick={handleChangeProfilepicButton}
+            >
+              ✎
+            </button>
+            <input
+              type="file"
+              ref={changeUserProfileRef}
+              onChange={handleChangeProfilepic}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
         </div>
       </div>
 
