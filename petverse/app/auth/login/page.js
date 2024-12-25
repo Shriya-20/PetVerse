@@ -27,10 +27,10 @@ export default function Login() {
       if (!response.ok) {
         throw new Error("Invalid email or password");
       }
-      const { token } = await response.json();
-      document.cookie = `token=${token}; path=/`;
 
-      const userResponse = await fetch("/api/session");
+      const userResponse = await fetch("/api/session", {
+        credentials: "include", // Include cookies with the request
+      });
 
       const userData = await userResponse.json();
       setUser(userData);
