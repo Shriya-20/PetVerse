@@ -10,18 +10,135 @@ import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import pets from "@/test_data/pets.js";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import { getAdditionalUserInfo } from "firebase/auth";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
-  const [pets, setPets] = useState([]);
+  const [petsData, setPetsData] = useState([]);
   const { user, setUser } = useUser();
   const [userData, setUserData] = useState({});
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [addPetData, setAddPetData] = useState({
+    name: "",
+    type: "",
+    breed: "",
+    location: "",
+    userid: "",
+  });
   const router = useRouter();
   const addPetProfileRef = useRef(null);
-  const handleAddPet = () => {
-    return;
+
+  // To check whether the user is authenticated or not
+  useEffect(() => {
+    if (user === undefined) {
+      return;
+    }
+    if (!user) {
+      router.push("/auth/login");
+    } else {
+      setAddPetData((prev) => {
+        return {
+          ...prev,
+          ["userid"]: user.id,
+        };
+      });
+      setIsLoading(false);
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+    async function GetUserData() {
+      try {
+        const response = await fetch("/api/users", {
+          method: "POST",
+          body: JSON.stringify(user.id),
+          credentials: "include",
+        });
+        if (!response.ok)
+          throw new Error("Error in fetching data from Backend");
+        const data = await response.json();
+        setUserData(() => ({
+          ...data,
+        }));
+        return userData;
+      } catch (error) {
+        console.error("Error in fetching the data");
+        console.log(error);
+      }
+    }
+
+    async function GetUserPets() {
+      try {
+        const response = await fetch("/api/pets/userpets", {
+          method: "POST",
+          body: JSON.stringify(user.id),
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch pets");
+        console.log(response);
+        const pets = await response.json();
+        console.log("AAAAAAAAAAAAAAAAA");
+        console.log(pets);
+        setPetsData(pets);
+      } catch (error) {
+        console.log("error in fetching data KKKKK");
+        console.error("Error fetching the Data");
+      }
+    }
+
+    if (user) {
+      GetUserData();
+      GetUserPets();
+    }
+  }, [user]);
+  /*
+  useEffect(() => {
+    async function GetUserPets() {
+      try {
+        const response = await fetch("/api/pets/userpets", {
+          method: "POST",
+          body: JSON.stringify(user.id),
+        });
+        console.log("Error in fetching user pets");
+
+        if (!response.ok) throw new Error("Failed to fetch pets");
+        const pets = await response.json();
+        setPetsData(pets);
+      } catch (error) {
+        console.error("Error fetching the Data");
+      }
+    }
+    GetUserPets();
+  }, []);
+  */
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
+  async function handleAddPet() {
+    try {
+      const response = await fetch("/api/pets/add", {
+        method: "POST",
+        body: JSON.stringify(addPetData),
+      });
+      console.log("added pet sucessfullt");
+      console.log(response);
+    } catch (error) {
+      console.log("Failed to add pet", error);
+    }
+  }
+
+  const handlePetDataChange = (e) => {
+    const { name, value } = e.target;
+    setAddPetData((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
   };
 
   const handleAddPetProfile = () => {
@@ -39,34 +156,7 @@ export default function Profile() {
     console.log("Couldn't get user context");
   }
 
-  console.log(user);
-  console.log(user.id);
-
-  useEffect(() => {
-    async function GetUserData() {
-      try {
-        console.log("Trying to fetch data");
-        const response = await fetch("/api/users", {
-          method: "POST",
-          body: JSON.stringify(user.id),
-          credentials: "include",
-        });
-        if (!response.ok)
-          throw new Error("Error in fetching data from Backend");
-        const data = await response.json();
-        console.log(data);
-        setUserData(() => ({
-          ...data,
-        }));
-        return userData;
-      } catch (error) {
-        console.error("Error in fetching the data");
-        console.log(error);
-      }
-    }
-
-    GetUserData();
-  }, [user, setUser]);
+  console.log("USERPETS", petsData);
 
   /*
   useEffect(() => {
@@ -144,10 +234,10 @@ export default function Profile() {
               {/* Pets Display */}
               <div className="mt-10 py-10 border-t border-blueGray-200">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 justify-center">
-                  {user.pets?.length > 0 ? (
-                    user.pets.map((pet) => (
+                  {petsData?.length > 0 ? (
+                    petsData.map((pet) => (
                       <div
-                        key={pets.id}
+                        key={pet.id}
                         className="flex flex-col items-center p-2 hover:bg-slate-100 dark:hover:bg-mid4 rounded-2xl transition-all duration-200"
                       >
                         {/* Smaller Image */}
@@ -165,7 +255,7 @@ export default function Profile() {
                             {pet.name}
                           </p>
                           <p className="text-xs text-textDark dark:text-textLight">
-                            {pet.speice}
+                            {pet.type}
                           </p>
                         </div>
                       </div>
@@ -219,14 +309,39 @@ export default function Profile() {
                             </div>
                           </div>
                         </div>
-                        <form className="md:col-span-2 add-pet mr-6 ">
-                          <input name="name" placeholder="Enter name" />
-                          <input name="type" placeholder="Enter animal" />
-                          <input name="breed" placeholder="Enter breed" />
-                          <input name="location" placeholder="Enter location" />
+                        <form
+                          className="md:col-span-2 add-pet mr-6 "
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            handleAddPet();
+                          }}
+                        >
+                          <input
+                            name="name"
+                            placeholder="Enter name"
+                            onChange={(e) => handlePetDataChange(e)}
+                            required
+                          />
+                          <input
+                            name="type"
+                            placeholder="Enter animal"
+                            required
+                            onChange={(e) => handlePetDataChange(e)}
+                          />
+                          <input
+                            name="breed"
+                            placeholder="Enter breed"
+                            required
+                            onChange={(e) => handlePetDataChange(e)}
+                          />
+                          <input
+                            name="location"
+                            placeholder="Enter location"
+                            required
+                            onChange={(e) => handlePetDataChange(e)}
+                          />
                           <button
                             type="submit"
-                            onClick={handleAddPet}
                             className="custom-button p-2 rounded m-2 w-full"
                           >
                             create profile
