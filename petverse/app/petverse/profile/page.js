@@ -5,10 +5,11 @@ import Image from "next/image";
 import Modal from "@/app/components/Modal";
 import addImage from "@/public/add.png";
 import ProfileIcon from "@/app/components/ProfileIcon";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import pets from "@/test_data/pets.js";
 import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
@@ -17,8 +18,21 @@ export default function Profile() {
   const [userData, setUserData] = useState({});
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
+  const router = useRouter();
+  const addPetProfileRef = useRef(null);
   const handleAddPet = () => {
     return;
+  };
+
+  const handleAddPetProfile = () => {
+    addPetProfileRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file", file);
+    }
   };
 
   if (!user) {
@@ -110,6 +124,7 @@ export default function Profile() {
                 <button
                   className="bg-customTeal/80 hover:bg-customTeal/70 text-textLighter dark:text-textLight font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
                   type="button"
+                  onClick={() => router.push("/petverse/settings")}
                 >
                   Edit
                 </button>
@@ -181,16 +196,27 @@ export default function Profile() {
                       <div className="md:grid md:grid-cols-3 md:justify-center">
                         <div className="md:flex md:flex-col items-center justify-center justify-items-center col-span-1 mb-4 relative">
                           <div className="relative">
-                            {" "}
-                            <ProfileIcon
-                              profile_pic={default_pet_profile_pic}
-                              width="w-[170px]"
-                              height="h-[170px]"
-                            ></ProfileIcon>
-                            {/* Edit Button */}
-                            <button className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter dark:text-textLight rounded-full hover:bg-teal-600">
-                              ✎
-                            </button>
+                            <div className="relative inline-block">
+                              <ProfileIcon
+                                profile_pic={default_pet_profile_pic}
+                                width="w-[170px]"
+                                height="h-[170px]"
+                              />
+                              {/* Edit Button */}
+                              <button
+                                className="absolute bottom-2 right-2 p-2 bg-customTeal text-textLighter dark:text-textLight rounded-full hover:bg-teal-600"
+                                onClick={handleAddPetProfile}
+                              >
+                                ✎
+                              </button>
+                              <input
+                                type="file"
+                                ref={addPetProfileRef}
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                className="hidden"
+                              />
+                            </div>
                           </div>
                         </div>
                         <form className="md:col-span-2 add-pet mr-6 ">

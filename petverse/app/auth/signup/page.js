@@ -35,7 +35,7 @@ export default function Signup() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to Sign Up");
       }
-      router.push("/petverse/messages");
+      router.push("/auth/login");
       console.log("Sign up Successful");
     } catch (error) {
       console.log(`Error with Sign Up: ${error.message}`);
