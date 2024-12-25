@@ -93,26 +93,6 @@ export default function Profile() {
       GetUserPets();
     }
   }, [user]);
-  /*
-  useEffect(() => {
-    async function GetUserPets() {
-      try {
-        const response = await fetch("/api/pets/userpets", {
-          method: "POST",
-          body: JSON.stringify(user.id),
-        });
-        console.log("Error in fetching user pets");
-
-        if (!response.ok) throw new Error("Failed to fetch pets");
-        const pets = await response.json();
-        setPetsData(pets);
-      } catch (error) {
-        console.error("Error fetching the Data");
-      }
-    }
-    GetUserPets();
-  }, []);
-  */
 
   if (isLoading) {
     return <div>Loading</div>;
@@ -157,26 +137,6 @@ export default function Profile() {
   }
 
   console.log("USERPETS", petsData);
-
-  /*
-  useEffect(() => {
-    async function GetUserPets() {
-      try {
-        const response = await fetch("/api/pets", {
-          method: "POST",
-          body: JSON.stringify(user._id)
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch pets");
-        const pets = await response.json()
-        setPets(pets)
-      } catch (error) {
-        console.error("Error fetching the Data")
-      }
-    }
-    GetUserPets();
-  }, []);
-  */
 
   return (
     <>
@@ -237,7 +197,7 @@ export default function Profile() {
                   {petsData?.length > 0 ? (
                     petsData.map((pet) => (
                       <div
-                        key={pet.id}
+                        key={pet._id}
                         className="flex flex-col items-center p-2 hover:bg-slate-100 dark:hover:bg-mid4 rounded-2xl transition-all duration-200"
                       >
                         {/* Smaller Image */}
