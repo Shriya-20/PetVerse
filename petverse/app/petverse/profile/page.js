@@ -133,7 +133,11 @@ export default function Profile() {
                 <div className="relative h-[150px] w-[150px] -mt-20">
                   <Image
                     alt="profile-pic"
-                    src={loginDoggy}
+                    src={
+                      "profilePicture" in userData
+                        ? userData.profilePicture
+                        : loginDoggy
+                    }
                     layout="fill"
                     objectFit="cover"
                     className="shadow-xl rounded-full border-4 border-light1  dark:border-dark1 mx-auto"
