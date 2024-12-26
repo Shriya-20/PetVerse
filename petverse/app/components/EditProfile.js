@@ -2,12 +2,15 @@
 
 import LoginDoggy from "@/public/logindoggy.jpg";
 import { useState, useRef } from "react";
+import { useUser } from "@/context/UserContext";
 import ProfileIcon from "./ProfileIcon";
 import { uploadImageToServer } from "../actions";
 import { useUser } from "@/context/UserContext";
 
 export default function EditProfile() {
   const changeUserProfileRef = useRef();
+  const [newUsername, setNewUserName] = useState("");
+  const [newLocation, steNewLocation] = useState("");
   const [passwordChangeData, setPasswordChangeData] = useState({
     password: "",
     newPassword: "",
@@ -70,11 +73,21 @@ export default function EditProfile() {
     return;
   };
 
-  const data = {
-    username: "Sathvik",
-    password: "sathvik",
-    location: "Suratkhal, Mangalore",
-    profile_pic: LoginDoggy,
+  const handleNameInput = (e) => {
+    setNewUserName(e.target.value);
+  };
+
+  // not completed yet
+  const handleChangeName = async () => {
+    try {
+      const reponse = await fetch("/api/users/update/username", {
+        method: "POST",
+        body: JSON.stringify(),
+      });
+    } catch (error) {
+      console.log(error);
+      console.log("Failed to change username");
+    }
   };
 
   return (
@@ -111,16 +124,26 @@ export default function EditProfile() {
       {/* User Details and Password Change Section */}
       <div className="col-span-2 space-y-2">
         {/* Change Username Section */}
-        <div className="">
+        <form
+          className=""
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleChangeName();
+          }}
+        >
           <input
             type="text"
             placeholder="Enter new name"
             className="edit-profile-input"
+            required
           />
-          <button className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal">
+          <button
+            className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
+            type="submit"
+          >
             Change Name
           </button>
-        </div>
+        </form>
 
         {/* Change Password Section */}
         <div>
@@ -154,13 +177,14 @@ export default function EditProfile() {
         </div>
 
         {/* Change Location Section */}
-        <div>
+        <form>
           <input
             name="location"
             type="text"
             placeholder="Enter Location"
             onChange={handleChangeLocation}
             className="edit-profile-input"
+            required
           />
           <button
             onClick={handleChangeLocation}
@@ -168,7 +192,7 @@ export default function EditProfile() {
           >
             Change Location
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
