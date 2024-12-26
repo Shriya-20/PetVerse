@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  deleteUser,
 } from "firebase/auth";
 import { auth } from "@/app/_backend/firebaseConfig";
 
@@ -25,5 +26,13 @@ export async function handleSignOut() {
     await signOut(auth);
   } catch (error) {
     console.log(`Error when logging out: ${error}`);
+  }
+}
+
+export async function handleDeleteUser() {
+  try {
+    await deleteUser(auth.currentUser);
+  } catch (error) {
+    console.log("Error while deleting user");
   }
 }

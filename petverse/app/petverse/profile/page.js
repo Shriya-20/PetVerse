@@ -161,7 +161,7 @@ export default function Profile() {
                 </h3>
                 <div className="text-sm leading-normal text-textMid font-bold uppercase flex items-center justify-center">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-textMid dark:text-textDarker" />
-                  {user.location}
+                  {userData.location}
                 </div>
               </div>
 
