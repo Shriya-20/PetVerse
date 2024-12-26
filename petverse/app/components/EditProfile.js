@@ -9,12 +9,13 @@ import { uploadImageToServer } from "../actions";
 export default function EditProfile() {
   const changeUserProfileRef = useRef();
   const [newUsername, setNewUserName] = useState("");
-  const [newLocation, steNewLocation] = useState("");
+  const [newLocation, setNewLocation] = useState("");
   const [passwordChangeData, setPasswordChangeData] = useState({
     password: "",
     newPassword: "",
     confirmPassword: "",
   });
+
   const { user } = useUser();
   const userId = user.id;
 
@@ -72,24 +73,43 @@ export default function EditProfile() {
     }
   };
 
-  const handleChangeLocation = () => {
-    return;
+  const handleLocationInput = (e) => {
+    setNewLocation(e.target.value);
+  };
+
+  const handleChangeLocation = async () => {
+    try {
+      const response = await fetch("/api/users/update/location", {
+        method: "POST",
+        body: JSON.stringify({ userId: user.id, location: newLocation }),
+      });
+
+      if (!response.ok) {
+        return new Error("Failed to change location of user");
+      }
+      console.log(response);
+      console.log("Successfully updated user location");
+    } catch (error) {
+      console.log("Failed to update user data");
+    }
   };
 
   const handleNameInput = (e) => {
     setNewUserName(e.target.value);
   };
 
-  // not completed yet
   const handleChangeName = async () => {
     try {
-      const reponse = await fetch("/api/users/update/username", {
+      const response = await fetch("/api/users/update/username", {
         method: "POST",
-        body: JSON.stringify(),
+        body: JSON.stringify({ userId: user.id, name: newUsername }),
       });
+
+      if (!response.ok) {
+        return new Error("Failed to change username");
+      }
     } catch (error) {
       console.log(error);
-      console.log("Failed to change username");
     }
   };
 
@@ -139,6 +159,7 @@ export default function EditProfile() {
             placeholder="Enter new name"
             className="edit-profile-input"
             required
+            onChange={handleNameInput}
           />
           <button
             className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
@@ -180,18 +201,23 @@ export default function EditProfile() {
         </div>
 
         {/* Change Location Section */}
-        <form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleChangeLocation();
+          }}
+        >
           <input
             name="location"
             type="text"
             placeholder="Enter Location"
-            onChange={handleChangeLocation}
+            onChange={handleLocationInput}
             className="edit-profile-input"
             required
           />
           <button
-            onClick={handleChangeLocation}
             className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
+            type="submit"
           >
             Change Location
           </button>
