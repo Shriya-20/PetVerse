@@ -1,25 +1,5 @@
 import { connectToDatabase } from "@/app/utils/db";
-import { auth } from "@/app/_backend/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-
-async function handleSignUpWithEmail(userName, email, password) {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const dateJoined = new Date().toISOString();
-    const user = {
-      username: userName,
-      email: email,
-      dateJoined: dateJoined,
-    };
-    return user;
-  } catch (error) {
-    throw new Error("Failed to create user");
-  }
-}
+import { handleSignUpWithEmail } from "@/app/_backend/auth";
 
 export async function POST(req) {
   try {
