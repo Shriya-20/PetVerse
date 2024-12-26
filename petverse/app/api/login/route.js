@@ -28,10 +28,10 @@ export async function POST(req) {
     );
 
     response.cookies.set("token", token, {
-      // httpOnly: true, // Prevent JavaScript access (XSS protection)
-      secure: process.env.NODE_ENV === "production", // Only use HTTPS in production
-      sameSite: "Strict", // CSRF protection
-      maxAge: 60 * 10, // 3 minutes in seconds
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 60 * 60,
       path: "/",
     });
 

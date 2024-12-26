@@ -29,22 +29,6 @@ export default function Profile() {
   const addPetProfileRef = useRef(null);
 
   // To check whether the user is authenticated or not
-  useEffect(() => {
-    if (user === undefined) {
-      return;
-    }
-    if (!user) {
-      router.push("/auth/login");
-    } else {
-      setAddPetData((prev) => {
-        return {
-          ...prev,
-          ["userid"]: user.id,
-        };
-      });
-      setIsLoading(false);
-    }
-  }, [user, router]);
 
   useEffect(() => {
     async function GetUserData() {
@@ -88,10 +72,6 @@ export default function Profile() {
       GetUserPets();
     }
   }, [user]);
-
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
 
   async function handleAddPet() {
     try {
