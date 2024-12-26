@@ -1,7 +1,7 @@
 "use client";
 
 import LoginDoggy from "@/public/logindoggy.jpg";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useUser } from "@/context/UserContext";
 import ProfileIcon from "./ProfileIcon";
 import { uploadImageToServer } from "../actions";
@@ -10,8 +10,11 @@ export default function EditProfile() {
   const changeUserProfileRef = useRef();
   const [newUsername, setNewUserName] = useState("");
   const [newLocation, setNewLocation] = useState("");
+  const [profilepic, setProfilePic] = useState();
+  const [userData, setUserData] = useState({});
   const [passwordChangeData, setPasswordChangeData] = useState({
     password: "",
+
     newPassword: "",
     confirmPassword: "",
   });
@@ -22,6 +25,28 @@ export default function EditProfile() {
   const handleChangeProfilepicButton = () => {
     changeUserProfileRef.current.click();
   };
+
+  useEffect(() => {
+    async function handleUserProfile() {
+      try {
+        const response = await fetch("/api/users", {
+          method: "POST",
+          body: JSON.stringify({ userId }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user profile");
+        }
+        const userdata = await response.json();
+        setUserData(() => ({
+          ...userdata,
+        }));
+        console.log("fetched user");
+      } catch (error) {
+        console.log("Failed to get user profile", error);
+      }
+    }
+  }, []);
 
   async function handleChangeProfilepic(event) {
     try {
@@ -121,7 +146,9 @@ export default function EditProfile() {
           {" "}
           <div className="relative inline-block">
             <ProfileIcon
-              profile_pic={LoginDoggy}
+              profile_pic={
+                userData.profilePicture ? userData.profilePicture : LoginDoggy
+              }
               width="w-[170px]"
               height="h-[170px]"
               className="border-2 border-light1 mb-4"
