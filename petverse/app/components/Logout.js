@@ -13,13 +13,12 @@ export default function Logout() {
         credentials: "include",
       });
       if (!response.ok) {
-        console.log("Error while logging out");
+        throw new Error("Error logging out");
       }
-    } catch (error) {
-      console.log(`Error while logging out. ${error}`);
-    } finally {
       console.log("Logout Sucessful");
       router.push("/auth/login");
+    } catch (error) {
+      console.log(`Error while logging out. ${error}`);
     }
   }
 
