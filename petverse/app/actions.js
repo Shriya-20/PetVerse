@@ -1,6 +1,6 @@
 "use server";
 import { readFileSync } from "fs";
-import path from "path"; // Import the path module
+import path from "path";
 import { storage } from "@/app/_backend/firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -10,9 +10,10 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export async function uploadImageToServer(imageBuffer, path) {
   try {
     const storageRef = ref(storage, path);
-    const metadata = { contentType: "image/jpeg" }; // Or determine from file type
+    const metadata = { contentType: "image/jpeg" };
     const snapshot = await uploadBytes(storageRef, imageBuffer, metadata);
-    return await getDownloadURL(snapshot.ref);
+    const url = await getDownloadURL(storageRef);
+    return url;
   } catch (error) {
     console.error("Error uploading image:", error);
     throw error;
@@ -22,7 +23,6 @@ export async function uploadImageToServer(imageBuffer, path) {
 // For uploading from local project directory
 export async function uploadImageToServer2() {
   try {
-    // Construct the absolute path to your image
     const imagePath = "@/public/logindoggy.jpg";
     path.join(process.cwd(), "public", "default_user_profile_pic.jpeg");
     // const imagePath = "public/logindoggy.jpg";
