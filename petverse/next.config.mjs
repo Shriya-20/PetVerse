@@ -9,7 +9,7 @@ const nextConfig = {
       },
       {
         source: "/",
-        destination: "/auth/login",
+        destination: "/petverse/messages",
         permanent: true,
       },
     ];
