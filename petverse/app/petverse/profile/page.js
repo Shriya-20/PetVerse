@@ -7,10 +7,8 @@ import addImage from "@/public/add.png";
 import ProfileIcon from "@/app/components/ProfileIcon";
 import { useState, useEffect, useRef } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
-import pets from "@/test_data/pets.js";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { getAdditionalUserInfo } from "firebase/auth";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
@@ -61,10 +59,7 @@ export default function Profile() {
         });
 
         if (!response.ok) throw new Error("Failed to fetch pets");
-        console.log(response);
         const pets = await response.json();
-        console.log("AAAAAAAAAAAAAAAAA");
-        console.log(pets);
         setPetsData(pets);
       } catch (error) {
         console.log("error in fetching data KKKKK");
@@ -85,6 +80,7 @@ export default function Profile() {
         body: JSON.stringify(addPetData),
       });
       console.log("added pet sucessfullt");
+      window.location.reload();
       console.log(response);
     } catch (error) {
       console.log("Failed to add pet", error);
@@ -115,8 +111,6 @@ export default function Profile() {
   if (!user) {
     console.log("Couldn't get user context");
   }
-
-  console.log("USERPETS", petsData);
 
   return (
     <>
