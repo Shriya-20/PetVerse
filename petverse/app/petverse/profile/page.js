@@ -28,8 +28,6 @@ export default function Profile() {
   const router = useRouter();
   const addPetProfileRef = useRef(null);
 
-  // To check whether the user is authenticated or not
-
   useEffect(() => {
     async function GetUserData() {
       try {

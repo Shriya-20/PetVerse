@@ -1,20 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { handleSignOut } from "../_backend/auth";
 import { useUser } from "@/context/UserContext";
 
 export default function Logout() {
   const router = useRouter();
-  //const { setUser } = useUser();
+  const { setUser } = useUser();
 
   async function handleLogout() {
     try {
-      await handleSignOut();
-      router.push("/auth/login");
-      //document.cookie = "token=; Max-Age=0; path=/";
-      //setUser(null);
+      const response = await fetch("/api/logout", {
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error("Error logging out");
+      }
       console.log("Logout Sucessful");
+      router.push("/auth/login");
     } catch (error) {
       console.log(`Error while logging out. ${error}`);
     }

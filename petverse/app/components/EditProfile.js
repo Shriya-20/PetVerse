@@ -10,31 +10,36 @@ export default function EditProfile() {
   const changeUserProfileRef = useRef();
   const [newUsername, setNewUserName] = useState("");
   const [newLocation, setNewLocation] = useState("");
-  const { user } = useUser();
   const [passwordChangeData, setPasswordChangeData] = useState({
     password: "",
     newPassword: "",
     confirmPassword: "",
   });
 
+  const { user } = useUser();
+  const userId = user.id;
+
   const handleChangeProfilepicButton = () => {
     changeUserProfileRef.current.click();
   };
 
   async function handleChangeProfilepic(event) {
-    const file = event.target.files[0];
-    const arrayBuffer = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (event) => resolve(event.target.result);
-      reader.onerror = (error) => reject(error); // Handle errors
-      reader.readAsArrayBuffer(file);
-    });
+    try {
+      const file = event.target.files[0];
+      const arrayBuffer = await file.arrayBuffer();
 
-    const path = `${user.id}/profilePic.jpg`;
-    const imageUrl = await uploadImageToServer(arrayBuffer, path);
-
-    if (file) {
-      console.log("file selected");
+      const path = `${userId}/profilePic.jpg`;
+      const imageUrl = await uploadImageToServer(arrayBuffer, path);
+      const response = await fetch("/api/update_profile_pic", {
+        method: "POST",
+        body: JSON.stringify({ imageUrl, userId }),
+      });
+      if (!response.ok) {
+        throw new Error("Something went wrong. Try again");
+      }
+      console.log("profile pic updated");
+    } catch (error) {
+      console.log("Something went wrong. Try again");
     }
   }
 
