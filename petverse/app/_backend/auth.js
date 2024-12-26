@@ -6,6 +6,25 @@ import {
 } from "firebase/auth";
 import { auth } from "@/app/_backend/firebaseConfig";
 
+export async function handleSignUpWithEmail(userName, email, password) {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const dateJoined = new Date().toISOString();
+    const user = {
+      username: userName,
+      email: email,
+      dateJoined: dateJoined,
+    };
+    return user;
+  } catch (error) {
+    throw new Error("Failed to create user");
+  }
+}
+
 export async function handleSignInWithEmail(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(
