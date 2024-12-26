@@ -4,8 +4,23 @@ import path from "path"; // Import the path module
 import { storage } from "@/app/_backend/firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+{
+  /* To upload image taken from imput */
+}
+export async function uploadImageToServer(imageBuffer, path) {
+  try {
+    const storageRef = ref(storage, path);
+    const metadata = { contentType: "image/jpeg" }; // Or determine from file type
+    const snapshot = await uploadBytes(storageRef, imageBuffer, metadata);
+    return await getDownloadURL(snapshot.ref);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+}
+
 // For uploading from local project directory
-export async function uploadImageToServer() {
+export async function uploadImageToServer2() {
   try {
     // Construct the absolute path to your image
     const imagePath = "@/public/logindoggy.jpg";
@@ -28,7 +43,7 @@ export async function uploadImageToServer() {
 {
   /* To upload a image that has a url */
 }
-export async function uploadImageToServer2() {
+export async function uploadImageToServer3() {
   const storageRef = ref(storage, "image.jpg");
 
   const response = await fetch(
