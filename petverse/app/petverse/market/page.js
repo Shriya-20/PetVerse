@@ -2,119 +2,55 @@
 
 import Searchbar from "@/app/components/Searchbar";
 import ShopItem from "@/app/components/ShopItem";
-import LoginDoggy from "@/public/logindoggy.jpg";
-import LoginDoggy2 from "@/public/loginDoggies.jpg";
-import profilepic from "@/public/profile_bg.jpg";
-
-const shopItems = [
-  {
-    item_image: LoginDoggy,
-    item_alt: "cream image",
-    item_name: "Skin care cream",
-    item_price: "$74.99",
-    item_owner: "",
-    user_profile_pic: LoginDoggy,
-  },
-  {
-    item_image: LoginDoggy2,
-    item_alt: "cream image",
-    item_name: "Men’s Facial",
-    item_price: "$25",
-    item_owner: "",
-    user_profile_pic: LoginDoggy2,
-  },
-  {
-    item_image: LoginDoggy,
-    item_alt: "serum bottle image",
-    item_name: "Dark circles serum",
-    item_price: "$199.99",
-    item_owner: "",
-    user_profile_pic: profilepic,
-  },
-  {
-    item_image: profilepic,
-    item_alt: "cream image",
-    item_name: "Skin care cream",
-    item_price: "$74.99",
-    item_owner: "",
-    user_profile_pic: LoginDoggy,
-  },
-  {
-    item_image: LoginDoggy,
-    item_alt: "cream image",
-    item_name: "Skin care cream",
-    item_price: "$74.99",
-    item_owner: "",
-    user_profile_pic: LoginDoggy,
-  },
-  {
-    item_image: LoginDoggy2,
-    item_alt: "cream image",
-    item_name: "Men’s Facial",
-    item_price: "$25",
-    item_owner: "",
-    user_profile_pic: LoginDoggy2,
-  },
-  {
-    item_image: LoginDoggy,
-    item_alt: "serum bottle image",
-    item_name: "Dark circles serum",
-    item_price: "$199.99",
-    item_owner: "",
-    user_profile_pic: profilepic,
-  },
-  {
-    item_image: profilepic,
-    item_alt: "cream image",
-    item_name: "Skin care cream",
-    item_price: "$74.99",
-    item_owner: "",
-    user_profile_pic: LoginDoggy,
-  },
-  {
-    item_image: LoginDoggy,
-    item_alt: "cream image",
-    item_name: "Skin care cream",
-    item_price: "$74.99",
-    item_owner: "",
-    user_profile_pic: LoginDoggy,
-  },
-  {
-    item_image: LoginDoggy2,
-    item_alt: "cream image",
-    item_name: "Men’s Facial",
-    item_price: "$25",
-    item_owner: "",
-    user_profile_pic: LoginDoggy2,
-  },
-  {
-    item_image: LoginDoggy,
-    item_alt: "serum bottle image",
-    item_name: "Dark circles serum",
-    item_price: "$199.99",
-    item_owner: "",
-    user_profile_pic: profilepic,
-  },
-  {
-    item_image: profilepic,
-    item_alt: "cream image",
-    item_name: "Skin care cream",
-    item_price: "$74.99",
-    item_owner: "",
-    user_profile_pic: LoginDoggy,
-  },
-];
+import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function Marketplace() {
+  const [randomItems, setRandomItems] = useState([]);
+
+  useEffect(() => {
+    async function GetRandomItems() {
+      try {
+        const response = await fetch("/api/market/newuser");
+        if (!response.ok) {
+          throw new Error("Error in fetching items randomly");
+        }
+        const data = await response.json();
+        setRandomItems(data);
+        console.log(data);
+        console.log("FETCHED DATA S");
+      } catch (error) {
+        console.log("Error in fetching items randomly", error);
+      }
+    }
+    GetRandomItems();
+  }, []);
+  console.log("marketPlace items");
+  console.log(randomItems);
+
   return (
     <>
       <div className="items-center">
-        <Searchbar />
+        <div className="flex items-center">
+          <div className="m-1 flex-grow">
+            <Searchbar className="" />
+          </div>
+
+          <div className="m-1 basis-1/5 md:basis-1/8 flex-shrink-0">
+            <Link
+              className="bg-customTeal px-4 py-3 w-full md:w-3/4 lg:w-1/2 text-lg rounded-xl text-white hover:bg-teal-600 whitespace-nowrap"
+              href={"/petverse/useritems"}
+            >
+              Your Items
+            </Link>
+          </div>
+        </div>
+
         <section className="py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {shopItems.map((shopItem, index) => (
-                <ShopItem key={index} {...shopItem} />
+              {randomItems.map((shopItem) => (
+                <ShopItem key={shopItem._id} {...shopItem} />
               ))}
             </div>
           </div>
