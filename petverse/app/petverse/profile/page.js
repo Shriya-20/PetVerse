@@ -5,6 +5,7 @@ import Image from "next/image";
 import Modal from "@/app/components/Modal";
 import addImage from "@/public/add.png";
 import ProfileIcon from "@/app/components/ProfileIcon";
+import { uploadImageToServer } from "@/app/actions";
 import { useState, useEffect, useRef } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import { useUser } from "@/context/UserContext";
@@ -99,12 +100,15 @@ export default function Profile() {
     addPetProfileRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  async function handleAddPetProfilePic(event) {
     const file = event.target.files[0];
+    const imageBuffer = await file.arrayBuffer();
+
+    const response = await uploadImageToServer(imageBuffer);
     if (file) {
       console.log("Selected file", file);
     }
-  };
+  }
 
   if (!user) {
     console.log("Couldn't get user context");
@@ -239,7 +243,7 @@ export default function Profile() {
                               <input
                                 type="file"
                                 ref={addPetProfileRef}
-                                onChange={handleFileChange}
+                                onChange={handleAddPetProfilePic}
                                 accept="image/*"
                                 className="hidden"
                               />
