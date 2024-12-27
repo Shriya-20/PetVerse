@@ -23,18 +23,19 @@ export default function Profile() {
     type: "",
     breed: "",
     location: "",
-    userid: "",
+    userid: user.id,
   });
   const router = useRouter();
   const addPetProfileRef = useRef(null);
+
+  const userId = user.id;
 
   useEffect(() => {
     async function GetUserData() {
       try {
         const response = await fetch("/api/users", {
           method: "POST",
-          body: JSON.stringify(user.id),
-          credentials: "include",
+          body: JSON.stringify({ userId }),
         });
         if (!response.ok)
           throw new Error("Error in fetching data from Backend");
@@ -42,7 +43,6 @@ export default function Profile() {
         setUserData(() => ({
           ...data,
         }));
-        return userData;
       } catch (error) {
         console.error("Error in fetching the data");
         console.log(error);
@@ -53,15 +53,16 @@ export default function Profile() {
       try {
         const response = await fetch("/api/pets/userpets", {
           method: "POST",
-          body: JSON.stringify(user.id),
+          body: JSON.stringify({ userId }),
         });
 
         if (!response.ok) throw new Error("Failed to fetch pets");
         const pets = await response.json();
-        setPetsData(pets);
+        console.log(pets);
+        console.log(petsData);
+        setPetsData(() => pets);
       } catch (error) {
-        console.log("error in fetching data KKKKK");
-        console.error("Error fetching the Data");
+        console.error("Error fetching the pet Data");
       }
     }
 

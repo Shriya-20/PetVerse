@@ -8,11 +8,15 @@ export default function ProfileIcon({
 }) {
   return (
     <>
-      <Image
-        src={profile_pic}
-        alt="avatar"
-        className={`relative inline-block ${custom_style} ${height} ${width} !rounded-full`}
-      />
+      <div className={`relative  ${height} ${width}`}>
+        <Image
+          src={profile_pic}
+          alt="avatar"
+          className={`relative inline-block ${custom_style} rounded-full`}
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
     </>
   );
 }
