@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useUser } from "@/context/UserContext";
 import ProfileIcon from "./ProfileIcon";
 import { uploadImageToServer } from "../actions";
+import Popup from "./Popup";
 
 export default function EditProfile() {
   const changeUserProfileRef = useRef();
@@ -12,12 +13,25 @@ export default function EditProfile() {
   const [newLocation, setNewLocation] = useState("");
   const [profilepic, setProfilePic] = useState();
   const [userData, setUserData] = useState({});
+  const [popUp, setPopUp] = useState(false);
+  const [popUpMessage, setPopUpMessage] = useState("");
+  const [popUpType, setPopUpType] = useState("success");
   const [passwordChangeData, setPasswordChangeData] = useState({
     password: "",
 
     newPassword: "",
     confirmPassword: "",
   });
+
+  const handlePopUp = (type, message) => {
+    setPopUpType(type);
+    setPopUpMessage(message);
+    setPopUp(true);
+  };
+
+  const handlePopUpClose = () => {
+    setPopUp(false);
+  };
 
   const { user } = useUser();
   const userId = user.id;
@@ -116,7 +130,9 @@ export default function EditProfile() {
       }
       console.log(response);
       console.log("Successfully updated user location");
+      handlePopUp("success", "Changed your location");
     } catch (error) {
+      handlePopUp("error", "Failed change to your location");
       console.log("Failed to update user data");
     }
   };
@@ -135,125 +151,136 @@ export default function EditProfile() {
       if (!response.ok) {
         return new Error("Failed to change username");
       }
+      handlePopUp("success", "Changed your username");
     } catch (error) {
+      handlePopUp("error", "Failed change to your username");
       console.log(error);
     }
   };
 
   return (
-    <div className="md:grid md:grid-cols-3 gap-8 p-8">
-      {/* Profile Picture Section */}
-      <div className="md:flex md:flex-col items-center justify-center justify-items-center col-span-1 mb-4 relative">
-        <div className="relative">
-          {" "}
-          <div className="relative inline-block">
-            <ProfileIcon
-              profile_pic={
-                "profilePicture" in userData
-                  ? userData.profilePicture
-                  : LoginDoggy
-              }
-              width="w-[150px]"
-              height="h-[150px]"
-              className="border-2 border-light1 mb-4"
-            ></ProfileIcon>
-            {/* Edit Button */}
-            <button
-              className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter rounded-full hover:bg-teal-600"
-              onClick={handleChangeProfilepicButton}
-            >
-              ✎
-            </button>
-            <input
-              type="file"
-              ref={changeUserProfileRef}
-              onChange={handleChangeProfilepic}
-              accept="image/*"
-              className="hidden"
-            />
+    <>
+      {popUp && (
+        <Popup
+          type={popUpType}
+          message={popUpMessage}
+          onClose={handlePopUpClose}
+        />
+      )}
+      <div className="md:grid md:grid-cols-3 gap-8 p-8">
+        {/* Profile Picture Section */}
+        <div className="md:flex md:flex-col items-center justify-center justify-items-center col-span-1 mb-4 relative">
+          <div className="relative">
+            {" "}
+            <div className="relative inline-block">
+              <ProfileIcon
+                profile_pic={
+                  "profilePicture" in userData
+                    ? userData.profilePicture
+                    : LoginDoggy
+                }
+                width="w-[150px]"
+                height="h-[150px]"
+                className="border-2 border-light1 mb-4"
+              ></ProfileIcon>
+              {/* Edit Button */}
+              <button
+                className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter rounded-full hover:bg-teal-600"
+                onClick={handleChangeProfilepicButton}
+              >
+                ✎
+              </button>
+              <input
+                type="file"
+                ref={changeUserProfileRef}
+                onChange={handleChangeProfilepic}
+                accept="image/*"
+                className="hidden"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* User Details and Password Change Section */}
-      <div className="col-span-2 space-y-2">
-        {/* Change Username Section */}
-        <form
-          className=""
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleChangeName();
-          }}
-        >
-          <input
-            type="text"
-            placeholder="Enter new name"
-            className="edit-profile-input"
-            required
-            onChange={handleNameInput}
-          />
-          <button
-            className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
-            type="submit"
+        {/* User Details and Password Change Section */}
+        <div className="col-span-2 space-y-2">
+          {/* Change Username Section */}
+          <form
+            className=""
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleChangeName();
+            }}
           >
-            Change Name
-          </button>
-        </form>
+            <input
+              type="text"
+              placeholder="Enter new name"
+              className="edit-profile-input"
+              required
+              onChange={handleNameInput}
+            />
+            <button
+              className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
+              type="submit"
+            >
+              Change Name
+            </button>
+          </form>
 
-        {/* Change Password Section */}
-        <div>
-          <input
-            name="password"
-            type="password"
-            placeholder="Enter old password"
-            onChange={handleChangePasswordData}
-            className="edit-profile-input"
-          />
-          <input
-            name="newPassword"
-            type="password"
-            placeholder="Enter new password"
-            onChange={handleChangePasswordData}
-            className="edit-profile-input"
-          />
-          <input
-            name="confirmPassword"
-            type="password"
-            placeholder="Confirm new password"
-            onChange={handleChangePasswordData}
-            className="edit-profile-input"
-          />
-          <button
-            onClick={handleChangePassword}
-            className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
+          {/* Change Password Section */}
+          <div>
+            <input
+              name="password"
+              type="password"
+              placeholder="Enter old password"
+              onChange={handleChangePasswordData}
+              className="edit-profile-input"
+            />
+            <input
+              name="newPassword"
+              type="password"
+              placeholder="Enter new password"
+              onChange={handleChangePasswordData}
+              className="edit-profile-input"
+            />
+            <input
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirm new password"
+              onChange={handleChangePasswordData}
+              className="edit-profile-input"
+            />
+            <button
+              onClick={handleChangePassword}
+              className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
+            >
+              Change Password
+            </button>
+          </div>
+
+          {/* Change Location Section */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleChangeLocation();
+            }}
           >
-            Change Password
-          </button>
+            <input
+              name="location"
+              type="text"
+              placeholder="Enter Location"
+              onChange={handleLocationInput}
+              className="edit-profile-input"
+              required
+            />
+            <button
+              className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
+              type="submit"
+            >
+              Change Location
+            </button>
+          </form>
         </div>
-
-        {/* Change Location Section */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleChangeLocation();
-          }}
-        >
-          <input
-            name="location"
-            type="text"
-            placeholder="Enter Location"
-            onChange={handleLocationInput}
-            className="edit-profile-input"
-            required
-          />
-          <button
-            className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
-            type="submit"
-          >
-            Change Location
-          </button>
-        </form>
       </div>
-    </div>
+    </>
   );
 }
