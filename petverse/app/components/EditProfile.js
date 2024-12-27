@@ -46,7 +46,9 @@ export default function EditProfile() {
         console.log("Failed to get user profile", error);
       }
     }
-  }, []);
+
+    handleUserProfile();
+  }, [user]);
 
   async function handleChangeProfilepic(event) {
     try {
@@ -147,10 +149,12 @@ export default function EditProfile() {
           <div className="relative inline-block">
             <ProfileIcon
               profile_pic={
-                userData.profilePicture ? userData.profilePicture : LoginDoggy
+                "profilePicture" in userData
+                  ? userData.profilePicture
+                  : LoginDoggy
               }
-              width="w-[170px]"
-              height="h-[170px]"
+              width="w-[150px]"
+              height="h-[150px]"
               className="border-2 border-light1 mb-4"
             ></ProfileIcon>
             {/* Edit Button */}
