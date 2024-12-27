@@ -9,6 +9,7 @@ import { useState, useEffect, useRef } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
@@ -23,7 +24,7 @@ export default function Profile() {
     type: "",
     breed: "",
     location: "",
-    userid: "",
+    userid: user.id,
   });
   const router = useRouter();
   const addPetProfileRef = useRef(null);
@@ -77,9 +78,7 @@ export default function Profile() {
         method: "POST",
         body: JSON.stringify(addPetData),
       });
-      console.log("added pet sucessfullt");
       window.location.reload();
-      console.log(response);
     } catch (error) {
       console.log("Failed to add pet", error);
     }
@@ -172,9 +171,10 @@ export default function Profile() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 justify-center">
                   {petsData?.length > 0 ? (
                     petsData.map((pet) => (
-                      <div
+                      <Link
                         key={pet._id}
                         className="flex flex-col items-center p-2 hover:bg-slate-100 dark:hover:bg-mid4 rounded-2xl transition-all duration-200"
+                        href={`/petverse/pets/${pet._id}`}
                       >
                         {/* Smaller Image */}
                         <div className="relative h-[80px] w-[80px]">
@@ -194,7 +194,7 @@ export default function Profile() {
                             {pet.type}
                           </p>
                         </div>
-                      </div>
+                      </Link>
                     ))
                   ) : (
                     <></>
