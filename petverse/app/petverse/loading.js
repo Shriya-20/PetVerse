@@ -23,7 +23,7 @@ export default function Loading() {
 
   return (
     <>
-      <div className="flex items-center justify-center dark:bg-black">
+      <div className="flex items-center justify-center dark:bg-black h-full">
         <Image
           src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
           alt="loading gif"
