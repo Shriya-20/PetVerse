@@ -14,12 +14,15 @@ import Link from "next/link";
 
 export default function Profile() {
   const [isModalOpen, setModalIsOpen] = useState(false);
+  const [isModal2Open, setIsModal2Open] = useState(false);
   const [petsData, setPetsData] = useState([]);
   const { user, setUser } = useUser();
   const [userData, setUserData] = useState({});
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const openModal2 = () => setIsModal2Open(true);
+  const closeModal2 = () => setIsModal2Open(false);
+  const [newPetProfilePic, setNewPetProfilePic] = useState(null);
   const [addPetData, setAddPetData] = useState({
     name: "",
     type: "",
@@ -27,6 +30,7 @@ export default function Profile() {
     location: "",
     userid: user.id,
   });
+  const [petId, setPetId] = useState(null);
   const router = useRouter();
   const addPetProfileRef = useRef(null);
 
@@ -80,7 +84,10 @@ export default function Profile() {
         method: "POST",
         body: JSON.stringify(addPetData),
       });
-      window.location.reload();
+      const id = await response.json();
+      setPetId(id);
+      closeModal();
+      openModal2();
     } catch (error) {
       console.log("Failed to add pet", error);
     }
@@ -101,17 +108,23 @@ export default function Profile() {
   };
 
   async function handleAddPetProfilePic(event) {
-    const file = event.target.files[0];
-    const imageBuffer = await file.arrayBuffer();
-
-    const response = await uploadImageToServer(imageBuffer);
-    if (file) {
-      console.log("Selected file", file);
+    try {
+      const file = event.target.files[0];
+      const imageBuffer = await file.arrayBuffer();
+      const path = `${petId}/profilePicture.jpg`;
+      const imageUrl = await uploadImageToServer(imageBuffer, path);
+      const response = await fetch("/api/update_pet_profile_pic", {
+        method: "POST",
+        body: JSON.stringify({ imageUrl, petId }),
+      });
+      setNewPetProfilePic(imageUrl);
+      if (!response.ok) {
+        throw new Error("Error chaning profile pic");
+      }
+      console.log("profile pic updated");
+    } catch (error) {
+      console.error("Something went wrong: ", error);
     }
-  }
-
-  if (!user) {
-    console.log("Couldn't get user context");
   }
 
   return (
@@ -185,7 +198,11 @@ export default function Profile() {
                         <div className="relative h-[80px] w-[80px]">
                           <Image
                             alt="pet-pic"
-                            src={loginDoggy}
+                            src={
+                              "profilePicture" in pet
+                                ? pet.profilePicture
+                                : default_pet_profile_pic
+                            }
                             layout="fill"
                             objectFit="cover"
                             className="rounded-full border-2 border-light2  shadow-md"
@@ -224,34 +241,9 @@ export default function Profile() {
                     </div>
                     {/* Add pet Section */}
                     <Modal isOpen={isModalOpen} onClose={closeModal}>
-                      <div className="md:grid md:grid-cols-3 md:justify-center">
-                        <div className="md:flex md:flex-col items-center justify-center justify-items-center col-span-1 mb-4 relative">
-                          <div className="relative">
-                            <div className="relative inline-block">
-                              <ProfileIcon
-                                profile_pic={default_pet_profile_pic}
-                                width="w-[170px]"
-                                height="h-[170px]"
-                              />
-                              {/* Edit Button */}
-                              <button
-                                className="absolute bottom-2 right-2 p-2 bg-customTeal text-textLighter dark:text-textLight rounded-full hover:bg-teal-600"
-                                onClick={handleAddPetProfile}
-                              >
-                                ✎
-                              </button>
-                              <input
-                                type="file"
-                                ref={addPetProfileRef}
-                                onChange={handleAddPetProfilePic}
-                                accept="image/*"
-                                className="hidden"
-                              />
-                            </div>
-                          </div>
-                        </div>
+                      <div className="flex flex-col justify-center justify-items-center p-6">
                         <form
-                          className="md:col-span-2 add-pet mr-6 "
+                          className=" add-pet mr-6 "
                           onSubmit={(e) => {
                             e.preventDefault();
                             handleAddPet();
@@ -288,6 +280,66 @@ export default function Profile() {
                             create profile
                           </button>
                         </form>
+                      </div>
+                    </Modal>
+                    <Modal
+                      isOpen={isModal2Open}
+                      onClose={() => {
+                        if (newPetProfilePic) {
+                          window.location.reload();
+                        } else {
+                          closeModal2();
+                        }
+                      }}
+                    >
+                      <div className=" col-span-1 mb-4 relative">
+                        <div className="p-4 justify-self-center">
+                          <p className="text-2xl text-textDark">
+                            {" "}
+                            Add profile picture
+                          </p>
+                        </div>
+                        <div className="relative justify-self-center">
+                          <div className="relative inline-block">
+                            <ProfileIcon
+                              profile_pic={
+                                newPetProfilePic
+                                  ? newPetProfilePic
+                                  : default_pet_profile_pic
+                              }
+                              width="w-[170px]"
+                              height="h-[170px]"
+                            />
+                            {/* Edit Button */}
+                            <button
+                              className="absolute bottom-2 right-2 p-2 bg-customTeal text-textLighter dark:text-textLight rounded-full hover:bg-teal-600"
+                              onClick={handleAddPetProfile}
+                            >
+                              ✎
+                            </button>
+                            <input
+                              type="file"
+                              ref={addPetProfileRef}
+                              onChange={handleAddPetProfilePic}
+                              accept="image/*"
+                              className="hidden"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex flex-row justify-between p-4 pb-0">
+                          <button
+                            className="custom-button p-2 rounded-lg hover:bg-teal-500"
+                            onClick={() => {
+                              if (newPetProfilePic) {
+                                window.location.reload();
+                              } else {
+                                closeModal2();
+                              }
+                            }}
+                          >
+                            Done
+                          </button>
+                        </div>
                       </div>
                     </Modal>
                   </div>
