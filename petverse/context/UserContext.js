@@ -49,7 +49,7 @@ export function Userprovider({ children }) {
     }
     fetchSession();
 
-    const interval = setInterval(fetchSession, 30000);
+    const interval = setInterval(fetchSession, 10000);
 
     return () => clearInterval(interval);
   }, []);

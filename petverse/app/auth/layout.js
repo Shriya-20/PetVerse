@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
 import loginDoggy from "@/public/logindoggy.jpg";
-import loginDoggy2 from "@/public/loginDoggies.jpg";
 import Image from "next/image";
 export default function AuthenticationLayout({ children }) {
   return (
