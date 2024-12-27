@@ -6,7 +6,7 @@ import errorImage from "@/public/error.jpg";
 export default function Error() {
   return (
     <>
-      <div className="items-center flex justify-center">
+      <div className="items-center flex justify-center h-full bg-white">
         <Image src={errorImage} alt="error image" />
       </div>
     </>
