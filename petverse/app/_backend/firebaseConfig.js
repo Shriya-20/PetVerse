@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import {} from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -18,3 +18,6 @@ const firebaseConfig = {
 const FirebaseApp = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(FirebaseApp);
 export const auth = getAuth(FirebaseApp);
+
+// Initialize Cloud Storage and get a reference to the service
+export const storage = getStorage(FirebaseApp);

@@ -2,21 +2,26 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  deleteUser,
 } from "firebase/auth";
 import { auth } from "@/app/_backend/firebaseConfig";
 
-export async function handleSignUpWithEmail(email, password) {
+export async function handleSignUpWithEmail(userName, email, password) {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
-    const user = userCredential.user;
-    console.log("User created");
-    console.log(`User: ${user}`);
+    const dateJoined = new Date().toISOString();
+    const user = {
+      username: userName,
+      email: email,
+      dateJoined: dateJoined,
+    };
+    return user;
   } catch (error) {
-    console.log(`Error Code: ${error.code}  Error message: ${error.message}`);
+    throw new Error("Failed to create user");
   }
 }
 
@@ -40,5 +45,13 @@ export async function handleSignOut() {
     await signOut(auth);
   } catch (error) {
     console.log(`Error when logging out: ${error}`);
+  }
+}
+
+export async function handleDeleteUser() {
+  try {
+    await deleteUser(auth.currentUser);
+  } catch (error) {
+    console.log("Error while deleting user");
   }
 }
