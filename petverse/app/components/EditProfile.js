@@ -55,7 +55,7 @@ export default function EditProfile() {
       const file = event.target.files[0];
       const arrayBuffer = await file.arrayBuffer();
 
-      const path = `${userId}/profilePic.jpg`;
+      const path = `users/${userId}/profilePic.jpg`;
       const imageUrl = await uploadImageToServer(arrayBuffer, path);
       const response = await fetch("/api/update_profile_pic", {
         method: "POST",
@@ -66,7 +66,7 @@ export default function EditProfile() {
       }
       console.log("profile pic updated");
     } catch (error) {
-      console.log("Something went wrong. Try again");
+      console.error("Error: ", error);
     }
   }
 

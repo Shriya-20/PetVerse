@@ -1,5 +1,4 @@
 import ProfileIcon from "./ProfileIcon";
-import loginDoggy from "@/public/logindoggy.jpg";
 
 export default function ChatList({
   chats,
