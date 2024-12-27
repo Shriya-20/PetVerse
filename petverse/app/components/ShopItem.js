@@ -4,21 +4,23 @@ import ProfileIcon from "./ProfileIcon";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export default function ShopItem(props) {
+export default function ShopItem(item) {
   const router = useRouter();
 
   // The fucntion should route the user to the chat of the product seller
   function handleClick() {
     router.push("/petverse/messages");
   }
+
+  console.log(item.images[0]);
   return (
     <>
       <div className="max-w-[384px] mx-auto rounded-xl hover:shadow-sm  dark:hover:shadow-mid3">
         {/* Product image */}
         <div className="relative w-full max-w-sm aspect-square">
           <Image
-            src={props.item_image}
-            alt={props.item_alt}
+            src={item.images[0]}
+            alt={item.title}
             className="relative w-full h-full rounded-xl object-cover"
             width={384}
             height={384}
@@ -28,11 +30,11 @@ export default function ShopItem(props) {
           <div className="">
             {/* Product name */}
             <h6 className="font-medium text-xl leading-8 text-textDarker dark:text-textLight mb-2">
-              {props.item_name}
+              {item.title}
             </h6>
             {/* Product price */}
             <h6 className="font-semibold text-xl leading-8 text-customTeal">
-              {props.item_price}
+              {item.price}
             </h6>
           </div>
           {/* Seller profile */}
@@ -40,7 +42,7 @@ export default function ShopItem(props) {
             onClick={handleClick}
             className="p-1 min-[400px]:p-1 rounded-full bg-light1 border dark:bg-dark1 border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-light2  hover:border-mid1 hover:bg-gray-50 dark:hover:bg-dark2 hover:scale-90"
           >
-            <ProfileIcon profile_pic={props.user_profile_pic} />
+            <ProfileIcon profile_pic={item.sellerPic} />
           </button>
         </div>
       </div>
