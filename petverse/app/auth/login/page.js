@@ -5,7 +5,6 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import logo from "@/public/paw.png";
 import Image from "next/image";
-import { handleSignInWithEmail } from "@/app/_backend/auth";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -18,13 +17,20 @@ export default function Login() {
   async function handleLogin(e) {
     e.preventDefault();
     try {
-      await handleSignInWithEmail(email, password);
+      const response = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      if (!response.ok) {
+        throw new Error("Invalid email or password");
+      }
+
       router.push("/petverse/messages");
-      console.log("Login Successful");
     } catch (error) {
       console.log(`Error while Logging In${error}`);
     }
   }
+
   return (
     <>
       <div className="flex items-center justify-center p-4">

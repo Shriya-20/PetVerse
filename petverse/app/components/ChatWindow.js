@@ -1,7 +1,7 @@
 import ChatMessage from "./ChatMessage";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProfileIcon from "./ProfileIcon";
-import loginDoggy from "@/public/logindoggy.jpg";
+import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
 
 export default function ChatWindow({
   chats,
@@ -28,7 +28,7 @@ export default function ChatWindow({
               <ProfileIcon
                 profile_pic={
                   chats.find((chat) => chat.id === activeChat)?.profile_pic ||
-                  loginDoggy
+                  default_profile_pic
                 }
                 width="w-12"
                 height="h-12"

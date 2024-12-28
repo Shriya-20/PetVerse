@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import Sidebar from "../components/Sidebar";
 import { usePathname } from "next/navigation";
+import { Userprovider } from "@/context/UserContext";
 
 export default function Dashboard({ children }) {
   const pathname = usePathname();
@@ -21,7 +22,7 @@ export default function Dashboard({ children }) {
             "flex-grow overflow-hidden max-h-screen p-0 m-0 ": isMessagesPage,
           })}
         >
-          {children}
+          <Userprovider>{children}</Userprovider>
         </div>
       </div>
     </>

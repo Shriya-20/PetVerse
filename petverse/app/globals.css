@@ -74,5 +74,8 @@ body {
   .theme span {
     @apply ml-1 dark:text-textLight dark:bg-dark2;
   }
-}
 
+  .addItemInput {
+    @apply m-1 p-2 text-lg hover:bg-slate-200 focus:bg-slate-100 rounded-sm border-gray-600 border-[0.5px] dark:bg-mid4;
+  }
+}
