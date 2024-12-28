@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const tlds = ["com", "org", "net", "int", "edu", "gov", "in", "arpa"];
-
 export default function ChatMessage({
   id,
   sender,
