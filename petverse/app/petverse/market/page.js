@@ -36,12 +36,12 @@ export default function Marketplace() {
             <Searchbar className="" />
           </div>
 
-          <div className="m-1 basis-1/5 md:basis-1/8 flex-shrink-0">
+          <div className="m-1 mt-3 basis-1/5 md:basis-1/8 ">
             <Link
-              className="bg-customTeal px-4 py-3 w-full md:w-3/4 lg:w-1/2 text-lg rounded-xl text-white hover:bg-teal-600 whitespace-nowrap"
+              className="bg-customTeal px-3 py-3 w-full md:w-3/4 lg:w-1/2 text-lg rounded-xl text-white hover:bg-teal-600 whitespace-nowrap"
               href={"/petverse/useritems"}
             >
-              Your Items
+              My Items
             </Link>
           </div>
         </div>

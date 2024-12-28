@@ -3,6 +3,7 @@
 import ProfileIcon from "./ProfileIcon";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import default_item from "@/public/default_item.png";
 
 export default function ShopItem(item) {
   const router = useRouter();
@@ -42,7 +43,9 @@ export default function ShopItem(item) {
             onClick={handleClick}
             className="p-1 min-[400px]:p-1 rounded-full bg-light1 border dark:bg-dark1 border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-light2  hover:border-mid1 hover:bg-gray-50 dark:hover:bg-dark2 hover:scale-90"
           >
-            <ProfileIcon profile_pic={item.sellerPic} />
+            <ProfileIcon
+              profile_pic={item.sellerPic ? item.sellerPic : default_item}
+            />
           </button>
         </div>
       </div>
