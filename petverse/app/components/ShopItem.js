@@ -14,14 +14,13 @@ export default function ShopItem(item) {
     router.push("/petverse/messages");
   }
 
-  console.log(item.images[0]);
   return (
     <>
       <div className="max-w-[384px] mx-auto rounded-xl hover:shadow-sm  dark:hover:shadow-mid3">
         {/* Product image */}
         <div className="relative w-full max-w-sm aspect-square">
           <Image
-            src={item.images[0] == "" ? default_item : item.images[0]}
+            src={"images" in item ? item.images[0] : default_item}
             alt={item.title}
             className="relative w-full h-full rounded-xl object-cover"
             width={384}
