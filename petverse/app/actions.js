@@ -19,7 +19,6 @@ export async function uploadImageToServer(imageBuffer, path) {
     const url = await getDownloadURL(storageRef);
     return url;
   } catch (error) {
-    console.error("Error uploading image:", error);
     throw error;
   }
 }
@@ -37,12 +36,7 @@ export async function deleteFile(path) {
 export async function deleteFolder(path) {
   try {
     const folderRef = ref(storage, path);
-    console.log("Got storage REF");
-
     const dir = await listAll(folderRef);
-    console.log(dir.items);
-    console.log(Array.isArray(dir.items));
-    console.log(dir.prefixes);
 
     if (dir.items && Array.isArray(dir.items)) {
       for (const fileRef of dir.items) {
@@ -62,10 +56,8 @@ export async function deleteFolder(path) {
     //   }
     // }
 
-    console.log("DELETED OB");
     return 1;
   } catch (error) {
-    console.log("ERROR IN DELETEING PET: " + error);
     throw error;
   }
 }
