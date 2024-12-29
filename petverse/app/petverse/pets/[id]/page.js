@@ -32,9 +32,8 @@ export default function PetProfile() {
   const [newLocation, setNewLocation] = useState("");
   const { user } = useUser();
   const router = useRouter();
-  console.log(params);
 
-  const userId = user._id;
+  const userId = user.id;
 
   useEffect(() => {
     async function getPetData() {
@@ -67,7 +66,7 @@ export default function PetProfile() {
     try {
       const response = await fetch("/api/pets/update", {
         method: "POST",
-        body: JSON.stringify({ field: field, value: value, petId: params }),
+        body: JSON.stringify({ field: field, value: value, petId: params.id }),
       });
 
       if (!response.ok) {
@@ -87,14 +86,14 @@ export default function PetProfile() {
       }
       const response = await fetch("/api/pets/delete", {
         method: "POST",
-        body: JSON.stringify({ petId: params, userId: userAgent }),
+        body: JSON.stringify({ petId: params.id, userId: user.id }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to delete profile");
       }
       console.log("Successfully deleted profile");
-      setConfirm("");
+
       router.push("/petverse/profile");
     } catch (error) {
       console.log(error);
@@ -110,9 +109,9 @@ export default function PetProfile() {
       const file = event.target.files[0];
       const arrayBuffer = await file.arrayBuffer();
 
-      const path = `${params}/profilePic.jpg`;
+      const path = `${params.id}/profilePicture.jpg`;
       const imageUrl = await uploadImageToServer(arrayBuffer, path);
-      const response = await fetch("/api/update_profile_pic", {
+      const response = await fetch("/api/update_pet_profile_pic", {
         method: "POST",
         body: JSON.stringify({ imageUrl, userId }),
       });
@@ -363,6 +362,7 @@ export default function PetProfile() {
           </div>
         </div>
       </Modal>
+      {/* Delete Pet profile */}
       <Modal
         onClose={() => {
           setIsModel2Open(false);
