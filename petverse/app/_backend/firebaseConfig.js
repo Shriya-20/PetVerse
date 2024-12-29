@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
+import { exportPages } from "next/dist/export/worker";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -17,7 +18,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const FirebaseApp = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(FirebaseApp);
-export const auth = getAuth(FirebaseApp);
-
+const auth = getAuth(FirebaseApp);
 // Initialize Cloud Storage and get a reference to the service
-export const storage = getStorage(FirebaseApp);
+const storage = getStorage(FirebaseApp);
+//const db=app.firestore();
+
+export {storage,auth};
