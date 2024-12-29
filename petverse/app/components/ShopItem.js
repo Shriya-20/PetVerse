@@ -28,9 +28,9 @@ export default function ShopItem(item) {
         <div className="mt-5 flex px-2 pb-2 items-center justify-between">
           <div className="">
             {/* Product name */}
-            <h6 className="font-medium text-xl leading-8 text-textDarker dark:text-textLight mb-2">
+            <p className="w-32 font-medium text-xl leading-8 text-textDarker dark:text-textLight mb-2 overflow-hidden text-ellipsis whitespace-nowrap">
               {item.title}
-            </h6>
+            </p>
             {/* Product price */}
             <h6 className="font-semibold text-xl leading-8 text-customTeal">
               {item.price}
