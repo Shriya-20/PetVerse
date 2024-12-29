@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import default_item from "@/public/default_item.png";
 
 export default function UserShopItem(item) {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function UserShopItem(item) {
         {/* Product image */}
         <div className="relative w-full max-w-sm aspect-square">
           <Image
-            src={item.images[0]}
+            src={item.images ? item.images[0] : default_item}
             alt={item.title}
             className="relative w-full h-full rounded-xl object-cover"
             width={384}
