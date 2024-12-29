@@ -13,7 +13,6 @@ export async function GET() {
         },
       ])
       .toArray();
-    console.log(items);
     return NextResponse.json(items, { status: 200 });
   } catch (error) {
     console.log("Error in fetching items");

@@ -2,63 +2,64 @@
 
 import loginDoggy from "@/public/logindoggy.jpg";
 import Image from "next/image";
-import Modal from "@/app/components/Modal";
-import addImage from "@/public/add.png";
-import ProfileIcon from "@/app/components/ProfileIcon";
 import { useState, useEffect } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
-import pets from "@/test_data/pets.js";
+import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
-export default function ProfileView() {
-  const [isModalOpen, setModalIsOpen] = useState(false);
-  const [user, setUser] = useState({});
-  const [pets, setPets] = useState([]);
+export default function Profile() {
+  const [petsData, setPetsData] = useState([]);
+  const { user, setUser } = useUser();
+  const [userData, setUserData] = useState({});
+  const params = useParams();
 
-  const openModal = () => setModalIsOpen(true);
-  const closeModal = () => setModalIsOpen(false);
-  const handleAddPet = () => {
-    return;
-  };
+  const userId = params.id;
+
+  const router = useRouter();
 
   useEffect(() => {
     async function GetUserData() {
       try {
-        const response = await fetch("/api/users");
+        const response = await fetch("/api/users", {
+          method: "POST",
+          body: JSON.stringify({ userId }),
+        });
         if (!response.ok)
           throw new Error("Error in fetching data from Backend");
-        const userData = await response.json();
-        console.log(userData);
-        setUser(userData[0]);
-
-        return userData;
+        const data = await response.json();
+        setUserData(() => ({
+          ...data,
+        }));
       } catch (error) {
         console.error("Error in fetching the data");
         console.log(error);
       }
     }
 
-    GetUserData();
-  }, []);
-
-  /*
-  useEffect(() => {
     async function GetUserPets() {
       try {
-        const response = await fetch("/api/pets", {
+        const response = await fetch("/api/pets/userpets", {
           method: "POST",
-          body: JSON.stringify(user._id)
+          body: JSON.stringify({ userId }),
         });
 
         if (!response.ok) throw new Error("Failed to fetch pets");
-        const pets = await response.json()
-        setPets(pets)
+        const pets = await response.json();
+        console.log(pets);
+        console.log(petsData);
+        setPetsData(() => pets);
       } catch (error) {
-        console.error("Error fetching the Data")
+        console.error("Error fetching the pet Data");
       }
     }
-    GetUserPets();
-  }, []);
-  */
+
+    if (user) {
+      GetUserData();
+      GetUserPets();
+    }
+  }, [user]);
 
   return (
     <>
@@ -83,7 +84,11 @@ export default function ProfileView() {
                 <div className="relative h-[150px] w-[150px] -mt-20">
                   <Image
                     alt="profile-pic"
-                    src={loginDoggy}
+                    src={
+                      "profilePicture" in userData
+                        ? userData.profilePicture
+                        : loginDoggy
+                    }
                     layout="fill"
                     objectFit="cover"
                     className="shadow-xl rounded-full border-4 border-light1  dark:border-dark1 mx-auto"
@@ -96,6 +101,7 @@ export default function ProfileView() {
                 <button
                   className="bg-customTeal/80 hover:bg-customTeal/70 text-textLighter dark:text-textLight font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
                   type="button"
+                  onClick={() => router.push("/petverse/messages")}
                 >
                   Message
                 </button>
@@ -104,28 +110,33 @@ export default function ProfileView() {
               {/* Profile Details */}
               <div className="text-center mt-6">
                 <h3 className="text-4xl font-semibold leading-normal mb-2 text-textDark dark:text-textLight">
-                  {user.username}
+                  {userData.username}
                 </h3>
                 <div className="text-sm leading-normal text-textMid font-bold uppercase flex items-center justify-center">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-textMid dark:text-textDarker" />
-                  {user.location}
+                  {userData.location}
                 </div>
               </div>
 
               {/* Pets Display */}
               <div className="mt-10 py-10 border-t border-blueGray-200">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 justify-center">
-                  {user.pets?.length > 0 ? (
-                    user.pets.map((pet) => (
-                      <div
-                        key={pets.id}
+                  {petsData?.length > 0 ? (
+                    petsData.map((pet) => (
+                      <Link
+                        key={pet._id}
                         className="flex flex-col items-center p-2 hover:bg-slate-100 dark:hover:bg-mid4 rounded-2xl transition-all duration-200"
+                        href={`/petverse/pets/${pet._id}`}
                       >
                         {/* Smaller Image */}
                         <div className="relative h-[80px] w-[80px]">
                           <Image
                             alt="pet-pic"
-                            src={loginDoggy}
+                            src={
+                              "profilePicture" in pet
+                                ? pet.profilePicture
+                                : default_pet_profile_pic
+                            }
                             layout="fill"
                             objectFit="cover"
                             className="rounded-full border-2 border-light2  shadow-md"
@@ -136,16 +147,14 @@ export default function ProfileView() {
                             {pet.name}
                           </p>
                           <p className="text-xs text-textDark dark:text-textLight">
-                            {pet.speice}
+                            {pet.type}
                           </p>
                         </div>
-                      </div>
+                      </Link>
                     ))
                   ) : (
                     <></>
                   )}
-
-                  {/* Add Pet */}
                 </div>
               </div>
             </div>
