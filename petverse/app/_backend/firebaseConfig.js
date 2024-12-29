@@ -21,6 +21,6 @@ const FirebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(FirebaseApp);
 // Initialize Cloud Storage and get a reference to the service
 const storage = getStorage(FirebaseApp);
-const db=app.firestore();
+//const db=app.firestore();
 
-export {db,storage,auth};
+export {storage,auth};

@@ -95,6 +95,7 @@ const SearchInput=styled.input`
   border:none; //use full page
   flex:1;
 `;
+
 // const Header=styled.div``;
 const IconsContainer=styled.div``;
 // const Container=styled.div``;
