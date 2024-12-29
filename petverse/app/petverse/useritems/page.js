@@ -16,12 +16,14 @@ export default function UserItems() {
   const [itemArrayBuffer, setItemArrayBuffer] = useState();
   const { user } = useUser();
   const userId = user.id;
-  console.log(userId);
 
   useEffect(() => {
     async function GetUserItems() {
       try {
-        const response = await fetch("/api/market/newuser");
+        const response = await fetch("/api/market/useritems", {
+          method: "POST",
+          body: JSON.stringify({ userId }),
+        });
         if (!response.ok) {
           throw new Error("Error in fetching items randomly");
         }
@@ -38,32 +40,42 @@ export default function UserItems() {
     itemImageRef.current.click();
   };
 
-  const hangleItemImage = async (e) => {
-    const file = e.target.files[0];
-    const arraybuffer = await file.arrayBuffer();
-    setItemArrayBuffer(arraybuffer);
-    console.log(itemArrayBuffer);
+  const handleItemImage = async (e) => {
+    try {
+      const file = e.target.files[0];
+      console.log(file);
+      const arrayBuffer = await file.arrayBuffer();
+      console.log(arrayBuffer);
+      setItemArrayBuffer(arrayBuffer);
+    } catch (error) {
+      console.error("Error reading file:", error);
+    }
   };
 
   async function handleCreateItem() {
     try {
+      const formData = new FormData();
+      formData.append("itemName", itemName);
+      formData.append("itemPrice", itemPrice);
+      formData.append("itemDescription", itemDescription);
+      formData.append("itemQuantity", itemQuantity);
+      formData.append("userId", userId);
+
+      const blob = new Blob([itemArrayBuffer], {
+        type: "application/octet-stream",
+      });
+      formData.append("itemImage", blob);
+
       const response = await fetch("/api/market/additem", {
         method: "POST",
-        body: JSON.stringify({
-          itemName,
-          itemPrice,
-          itemDescription,
-          itemQuantity,
-          itemArrayBuffer,
-          userId,
-        }),
+        body: formData,
       });
-      console.log("Itemmmmmmmmm");
 
       if (!response.ok) {
         throw new Error("Failed to add new item");
       }
       console.log("Added item successfully");
+      location.reload();
     } catch (error) {
       console.log("Failed to add item to market");
       console.log(error);
@@ -98,7 +110,7 @@ export default function UserItems() {
                 accept="image/*"
                 ref={itemImageRef}
                 required
-                onChange={hangleItemImage}
+                onChange={handleItemImage}
                 className="hidden"
               />
             </div>
@@ -139,6 +151,9 @@ export default function UserItems() {
         </div>
 
         <section className="py-12">
+          <div className="w-full text-center -mt-9 mb-4 font-semibold ">
+            My items
+          </div>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {userItems.map((shopItem) => (
