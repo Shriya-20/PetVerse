@@ -1,6 +1,7 @@
+import Loading from "./Loading";
 // Component for creating pop ups in the page
 
-export default function Modal({ isOpen, onClose, children }) {
+export default function Modal({ isOpen, onClose, isLoading, children }) {
   if (!isOpen) return null;
 
   return (
@@ -18,6 +19,7 @@ export default function Modal({ isOpen, onClose, children }) {
           {children}
         </div>
       </div>
+      <Loading isLoading={isLoading} />
     </>
   );
 }
