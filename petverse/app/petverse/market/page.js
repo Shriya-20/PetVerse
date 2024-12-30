@@ -4,14 +4,20 @@ import Searchbar from "@/app/components/Searchbar";
 import ShopItem from "@/app/components/ShopItem";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useUser } from "@/context/UserContext";
 
 export default function Marketplace() {
   const [randomItems, setRandomItems] = useState([]);
+  const { user } = useUser();
+  const userId = user.id;
 
   useEffect(() => {
     async function GetRandomItems() {
       try {
-        const response = await fetch("/api/market/newuser");
+        const response = await fetch("/api/market/newuser", {
+          method: "POST",
+          body: JSON.stringify({ userId }),
+        });
         if (!response.ok) {
           throw new Error("Error in fetching items randomly");
         }

@@ -59,10 +59,10 @@ export default function UserShopItem(item) {
           {/* Delete button */}
           <button
             onClick={handleDelete}
-            className="absolute bottom-2 right-2 p-2 bg-mid4 rounded-full hover:bg-red-600 focus:outline-none shadow-md 
-                     sm:p-2 md:p-3 lg:p-4"
+            className="absolute bottom-2 right-2 p-3 bg-mid4 rounded-full hover:bg-red-600 focus:outline-none shadow-md 
+                      md:p-3 lg:p-4"
           >
-            <TrashIcon className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-white" />
+            <TrashIcon className="h-4 w-4  text-white" />
           </button>
         </div>
       </div>
