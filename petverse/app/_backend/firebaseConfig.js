@@ -4,6 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { exportPages } from "next/dist/export/worker";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,6 +14,7 @@ const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
+  databaseURL: process.env.NEXT_PUBLIC_DATABASE_URL,
 };
 
 // Initialize Firebase
@@ -23,4 +25,7 @@ const auth = getAuth(FirebaseApp);
 const storage = getStorage(FirebaseApp);
 //const db=app.firestore();
 
-export {storage,auth};
+// Initialize Realtime Database and get a reference to the service
+const database = getDatabase(FirebaseApp);
+
+export { storage, auth, database };
