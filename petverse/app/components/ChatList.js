@@ -1,6 +1,6 @@
 import ProfileIcon from "./ProfileIcon";
-import styled from 'styled-components'
-import SearchIcon from '@mui/icons-material/Search';
+import styled from "styled-components";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function ChatList({
   chats,
@@ -13,19 +13,18 @@ export default function ChatList({
       <div className="flex items-center justify-center p-4 pt-5 sticky top-0 bg-light1 dark:bg-dark2 shadow-md dark:shadow-mid3 dark:shadow-sm border-r ">
         <h1 className="text-xl font-bold text-textDarker dark:text-textLight z-50 bg-light1 dark:bg-dark2">
           Messages
-        </h1> 
-        </div>
+        </h1>
+      </div>
 
-        <IconsContainer>
-
-          <Search>
-            <SearchIcon />
-            <SearchInput placeholder="Search for chats" />
-          </Search>
-
-        </IconsContainer>
-       
-     
+      <IconsContainer>
+        <Search>
+          <SearchIcon />
+          <SearchInput
+            placeholder="Search for chats"
+            className="dark:bg-dark1"
+          />
+        </Search>
+      </IconsContainer>
 
       {/* User list */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden">
@@ -83,23 +82,19 @@ export default function ChatList({
   );
 }
 
-
-const Search=styled.div`
-  padding:20px;
+const Search = styled.div`
+  padding: 20px;
   display: flex;
   align-items: center;
-  border-radius:2px;
-  `;
-const SearchInput=styled.input`
-  outline-width:0;
-  border:none; //use full page
-  flex:1;
+  border-radius: 2px;
+`;
+const SearchInput = styled.input`
+  outline-width: 0;
+  border: none; //use full page
+  flex: 1;
 `;
 
 // const Header=styled.div``;
-const IconsContainer=styled.div``;
+const IconsContainer = styled.div``;
 // const Container=styled.div``;
 // const IconButton=styled.div``;
-
-
-

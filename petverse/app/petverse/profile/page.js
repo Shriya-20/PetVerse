@@ -33,6 +33,7 @@ export default function Profile() {
   const [petId, setPetId] = useState(null);
   const router = useRouter();
   const addPetProfileRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const userId = user.id;
 
@@ -79,6 +80,7 @@ export default function Profile() {
   }, [user]);
 
   async function handleAddPet() {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/pets/add", {
         method: "POST",
@@ -86,10 +88,13 @@ export default function Profile() {
       });
       const id = await response.json();
       setPetId(id);
+
       closeModal();
       openModal2();
     } catch (error) {
       console.log("Failed to add pet", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -108,6 +113,7 @@ export default function Profile() {
   };
 
   async function handleAddPetProfilePic(event) {
+    setIsLoading(true);
     try {
       const file = event.target.files[0];
       const imageBuffer = await file.arrayBuffer();
@@ -124,6 +130,8 @@ export default function Profile() {
       console.log("profile pic updated");
     } catch (error) {
       console.error("Something went wrong: ", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -240,7 +248,11 @@ export default function Profile() {
                       </p>
                     </div>
                     {/* Add pet Section */}
-                    <Modal isOpen={isModalOpen} onClose={closeModal}>
+                    <Modal
+                      isOpen={isModalOpen}
+                      onClose={closeModal}
+                      isLoading={isLoading}
+                    >
                       <div className="flex flex-col justify-center justify-items-center p-6">
                         <form
                           className=" add-pet mr-6 "
@@ -291,6 +303,7 @@ export default function Profile() {
                           closeModal2();
                         }
                       }}
+                      isLoading={isLoading}
                     >
                       <div className=" col-span-1 mb-4 relative">
                         <div className="p-4 justify-self-center">
