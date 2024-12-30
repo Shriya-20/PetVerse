@@ -46,13 +46,13 @@ export default function Marketplace() {
           </div>
         </div>
 
-        <section className="py-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {randomItems.map((shopItem) => (
-                <ShopItem key={shopItem._id} {...shopItem} />
-              ))}
-            </div>
+        <section className="py-12 px-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 auto-rows-auto">
+            {randomItems.map((shopItem) => (
+              <div key={shopItem._id} className="w-full">
+                <ShopItem {...shopItem} />
+              </div>
+            ))}
           </div>
         </section>
       </div>

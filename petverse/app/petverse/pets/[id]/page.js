@@ -135,14 +135,14 @@ export default function PetProfile() {
                   ? petData.profilePicture
                   : default_pet_profile_pic
               }
-              height="h-36"
-              width="w-36"
+              height="h-20 md:h-32 lg:h-36"
+              width="w-20 md:w-32 lg:w-36"
             />
           </div>
           <div className="shrink px-3 md:px-5 lg:px-7">
             <div className="flex flex-col">
-              <p className="text-3xl">{petData.name}</p>
-              <p className="text-xl">{petData.breed}</p>
+              <p className="text-xl md:text-2xl lg:text-3xl">{petData.name}</p>
+              <p className="text-sm md:text-lg lg:text-xl">{petData.breed}</p>
               {petData.age && <p className="text-lg">{petData.age} years</p>}
             </div>
           </div>
