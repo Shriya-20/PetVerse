@@ -61,6 +61,22 @@ export default function Profile() {
     }
   }, [user]);
 
+  async function HandleGoToChat() {
+    try {
+      const response = await fetch("/api/messages/createchat", {
+        method: "POST",
+        body: JSON.stringify({ user1Id: user.id, user2Id: userId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to go to chat");
+      }
+      router.push("/petverse/messages");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {/* Hero Section */}
@@ -101,7 +117,7 @@ export default function Profile() {
                 <button
                   className="bg-customTeal/80 hover:bg-customTeal/70 text-textLighter dark:text-textLight font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md text-xs transition-all duration-150 ease-linear"
                   type="button"
-                  onClick={() => router.push("/petverse/messages")}
+                  onClick={HandleGoToChat}
                 >
                   Message
                 </button>
