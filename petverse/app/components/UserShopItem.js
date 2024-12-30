@@ -33,35 +33,38 @@ export default function UserShopItem(item) {
     <>
       <div className="relative max-w-[384px] mx-auto rounded-xl hover:shadow-sm dark:hover:shadow-mid3">
         {/* Product image */}
-        <div className="relative w-full max-w-sm aspect-square">
+        <div className="relative w-full aspect-square rounded-xl overflow-hidden">
           <Image
-            src={item.images ? item.images[0] : default_item}
+            src={"images" in item ? item.images[0] : default_item}
             alt={item.title}
-            className="relative w-full h-full rounded-xl object-cover"
+            className="absolute top-0 left-0 w-full h-full object-cover"
             width={384}
             height={384}
           />
         </div>
-        <div className="mt-5 flex px-2 pb-2 items-center justify-between">
+
+        {/* Details Section */}
+        <div className="relative p-2 mt-4 flex items-center justify-between">
           <div>
             {/* Product name */}
-            <h6 className="font-medium leading-8 text-textDarker dark:text-textLight mb-2">
+            <p className="w-16 md:w-32 font-medium text-sm md:text-base text-textDarker dark:text-textLight mb-1 truncate">
               {item.title}
-            </h6>
+            </p>
             {/* Product price */}
-            <h6 className="font-semibold text-xl leading-8 text-customTeal">
+            <h6 className="font-semibold text-sm md:text-base text-customTeal">
               {item.price}
             </h6>
           </div>
-        </div>
-        {/* Delete button */}
-        <button
-          onClick={handleDelete}
-          className="absolute bottom-2 right-2 p-2 bg-mid4 rounded-full hover:bg-red-600 focus:outline-none shadow-md 
+
+          {/* Delete button */}
+          <button
+            onClick={handleDelete}
+            className="absolute bottom-2 right-2 p-2 bg-mid4 rounded-full hover:bg-red-600 focus:outline-none shadow-md 
                      sm:p-2 md:p-3 lg:p-4"
-        >
-          <TrashIcon className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-white" />
-        </button>
+          >
+            <TrashIcon className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 lg:h-7 lg:w-7 text-white" />
+          </button>
+        </div>
       </div>
       <Modal onClose={() => SetIsModalOpen(false)} isOpen={isModalOpen}>
         <div className="p-4 mx-auto bg-light1 dark:bg-dark2 rounded-lg shadow-md">
