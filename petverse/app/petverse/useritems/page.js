@@ -150,16 +150,17 @@ export default function UserItems() {
           </form>
         </div>
 
-        <section className="py-12">
+        <section className="py-12 px-8">
           <div className="w-full text-center -mt-9 mb-4 font-semibold ">
             My items
           </div>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {userItems.map((shopItem) => (
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 auto-rows-auto">
+            {userItems.map((shopItem) => (
+              <div key={shopItem._id} className="w-full">
                 <UserShopItem key={shopItem._id} {...shopItem} />
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </section>
       </div>
