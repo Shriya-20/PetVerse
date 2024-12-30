@@ -9,15 +9,14 @@ export async function POST(req) {
     const items = await db
       .collection("marketplaceitems")
       .aggregate([
-        {
-          $sample: { size: 30 },
-          $skip: { sellerId: new ObjectId(userId) },
-        },
+        { $match: { sellerId: { $ne: new ObjectId(userId) } } },
+        { $sample: { size: 30 } },
       ])
       .toArray();
     return NextResponse.json(items, { status: 200 });
   } catch (error) {
     console.log("Error in fetching items");
-    return NextResponse("Error in fetching items", { status: 404 });
+    console.log(error);
+    return NextResponse.json("Error in fetching items", { status: 404 });
   }
 }
