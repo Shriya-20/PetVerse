@@ -1,11 +1,14 @@
 import LoginDoggy from "@/public/logindoggy.jpg";
 import LoginDoggy2 from "@/public/loginDoggies.jpg";
 import loginDoggy3 from "@/public/profile_bg.jpg";
+import loading from "@/public/loading2.gif";
+import def from "@/public/default_item.png";
+import paw from "@/public/paw.png";
 
 const posts = [
   {
     user_id: 1,
-    image: LoginDoggy,
+    image: loading,
     url: "",
   },
   {
@@ -25,12 +28,12 @@ const posts = [
   },
   {
     user_id: 5,
-    image: LoginDoggy,
+    image: def,
     url: "",
   },
   {
     user_id: 6,
-    image: LoginDoggy,
+    image: paw,
     url: "",
   },
   {

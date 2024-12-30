@@ -7,7 +7,7 @@ import profile_bg2 from "@/public/default_pet_profile_pic3.png";
 const chats = [
   {
     id: 199,
-    name: "Sathvik Chonga",
+    name: "Sathvik Chonga yooooooooooooooooooooooooooooooooooooooooooooo",
     profile_pic: loginDoggy,
     lastMessage:
       "Hey man!  lfksdlfhl lskhfklsdl alsdfhaslkdfklsd afklsdhfkl asdflasdk flkasdfl kasdfkasdfh sdkfhklsdhflasl fsdlhk hljl ",

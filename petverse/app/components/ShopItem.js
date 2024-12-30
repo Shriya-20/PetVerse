@@ -14,39 +14,46 @@ export default function ShopItem(item) {
 
   return (
     <>
-      <div className="max-w-[384px] mx-auto rounded-xl hover:shadow-sm  dark:hover:shadow-mid3">
+      <div className="relative max-w-[384px] mx-auto rounded-xl hover:shadow-sm dark:hover:shadow-mid3">
         {/* Product image */}
-        <div className="relative w-full max-w-sm aspect-square">
+        <div className="relative w-full aspect-square rounded-xl overflow-hidden">
           <Image
             src={"images" in item ? item.images[0] : default_item}
             alt={item.title}
-            className="relative w-full h-full rounded-xl object-cover"
+            className="absolute top-0 left-0 w-full h-full object-cover"
             width={384}
             height={384}
           />
         </div>
-        <div className="mt-5 flex px-2 pb-2 items-center justify-between">
-          <div className="">
+
+        {/* Details Section */}
+        <div className="relative p-2 mt-4 flex items-center justify-between">
+          <div>
             {/* Product name */}
-            <p className="w-32 font-medium text-xl leading-8 text-textDarker dark:text-textLight mb-2 overflow-hidden text-ellipsis whitespace-nowrap">
+            <p className="w-16 md:w-32 font-medium text-sm md:text-base text-textDarker dark:text-textLight mb-1 truncate">
               {item.title}
             </p>
             {/* Product price */}
-            <h6 className="font-semibold text-xl leading-8 text-customTeal">
+            <h6 className="font-semibold text-sm md:text-base text-customTeal">
               {item.price}
             </h6>
           </div>
+
           {/* Seller profile */}
-          <Link
-            href={`/petverse/profile/${item.sellerId}`}
-            className="p-1 min-[400px]:p-1 rounded-full bg-light1 border dark:bg-dark1 border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-light2  hover:border-mid1 hover:bg-gray-50 dark:hover:bg-dark2 hover:scale-90"
-          >
-            <ProfileIcon
-              profile_pic={
-                item.sellerPic ? item.sellerPic : default_profile_pic
-              }
-            />
-          </Link>
+          <div>
+            <Link
+              href={`/petverse/profile/${item.sellerId}`}
+              className="flex items-center justify-center rounded-full bg-light1 border dark:bg-dark1 border-customTeal shadow-sm transition-all duration-300 hover:scale-95"
+            >
+              <ProfileIcon
+                profile_pic={
+                  item.sellerPic ? item.sellerPic : default_profile_pic
+                }
+                height="h-8 md:h-12"
+                width="w-8 md:w-12"
+              />
+            </Link>
+          </div>
         </div>
       </div>
     </>
