@@ -39,7 +39,9 @@ export async function POST(req) {
 
     return response;
   } catch (error) {
-    console.log(`Error Code: ${error.code}  Error message: ${error.message}`);
-    return NextResponse.json("Error in loggin in", { status: 500 });
+    if (error.code == "auth/invalid-credential") {
+      return NextResponse.json({ error: error.code }, { status: 401 });
+    }
+    return NextResponse.json({ error: error.code }, { status: 500 });
   }
 }

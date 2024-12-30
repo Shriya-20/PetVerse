@@ -15,6 +15,7 @@
     "@material-tailwind/react": "^2.1.10",
     "@mui/icons-material": "^6.3.0",
     "@mui/material": "^6.3.0",
+    "async_hooks": "^1.0.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "firebase": "^11.1.0",
