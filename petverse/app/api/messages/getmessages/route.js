@@ -1,15 +1,22 @@
 import { database } from "@/app/_backend/firebaseConfig";
+import { ref, onValue, update, child, get } from "firebase/database";
 import { NextResponse } from "next/server";
-import { ref, child, get } from "firebase/database";
+
+export async function updateChatData() {
+  return;
+}
 
 export async function POST(req) {
   try {
-    const { userId } = await req.json();
+    const { userId, activeChat } = await req.json();
     const dbRef = ref(database);
-    const snapshot = await get(child(dbRef, `chats/${userId}`));
+    const snapshot = await get(
+      child(dbRef, `messages/${[userId, activeChat].sort().join("_")}`)
+    );
 
     if (snapshot.exists()) {
       const data = snapshot.val();
+      console.log(data);
       return NextResponse.json(data, { status: 200 });
     } else {
       console.log("No data available");
@@ -18,7 +25,7 @@ export async function POST(req) {
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Error in fetching chats" },
+      { error: "Failed to fetch chat" },
       { status: 401 }
     );
   }
