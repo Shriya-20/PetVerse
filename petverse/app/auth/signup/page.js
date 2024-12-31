@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { getAuth, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,13 +12,16 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState(null);
 
   const router = useRouter();
 
   async function handleSignup(e) {
     e.preventDefault();
     try {
-      console.log("Signup started . handle Signup called.");
+      if (password != confirmPassword) {
+        throw new Error("password and confirm password do not match");
+      }
       const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
@@ -29,15 +33,34 @@ export default function Signup() {
           password: password,
         }),
       });
-      console.log(response.status);
+
+      const errorData = await response.json();
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to Sign Up");
+        throw new Error(errorData.error);
       }
       router.push("/auth/login");
-      console.log("Sign up Successful");
     } catch (error) {
-      console.log(`Error with Sign Up: ${error.message}`);
+      if (error.message == "auth/email-already-in-use") {
+        setError("Email address already in use");
+      } else if (error.message == "auth/weak-password") {
+        setError("Password should be atleast 6 characters");
+      } else {
+        setError(error.message);
+      }
+    }
+  }
+
+  async function handleSignUpWithGoogle() {
+    try {
+      const auth = getAuth(); // Initialize Firebase Auth
+      const provider = new GoogleAuthProvider();
+      await signInWithRedirect(auth, provider); // Redirect for Google Sign-In
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+      router.push("/auth/login");
+    } catch (error) {
+      setError(error.message);
     }
   }
 
@@ -45,8 +68,8 @@ export default function Signup() {
     <>
       <div className="mt-4 space-y-3 sm:flex sm:items-center sm:space-x-4 sm:space-y-0">
         {/* Sign Up with Google */}
-        <Link
-          href="/petverse"
+        <button
+          onClick={handleSignUpWithGoogle}
           className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
@@ -81,7 +104,7 @@ export default function Signup() {
           <span className="text-sm text-textDarker dark:text-textLight">
             Sign Up with Google
           </span>
-        </Link>{" "}
+        </button>{" "}
         {/* SignUp with Facebook */}
         <Link
           href="/petverse"
@@ -202,6 +225,11 @@ export default function Signup() {
             </button>
           </div>
         </div>
+        {error && (
+          <div>
+            <p className="text-red-700 text-right">{error}</p>
+          </div>
+        )}
 
         {/* Register button */}
         <div className="mt-8">
