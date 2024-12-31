@@ -17,6 +17,7 @@ export async function POST(req) {
     return NextResponse.json(items, { status: 200 });
   } catch (error) {
     console.log("Error in fetching items");
-    return NextResponse("Error in fetching items", { status: 404 });
+    console.log(error);
+    return NextResponse.json("Error in fetching items", { status: 404 });
   }
 }
