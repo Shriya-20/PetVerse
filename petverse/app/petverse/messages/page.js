@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import useScreenSize from "@/app/components/Screensize";
-import chats from "@/test_data/chats";
 import ChatWindow from "@/app/components/ChatWindow";
 import ChatList from "@/app/components/ChatList";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
+import chats from "@/test_data/chats";
 
 export default function Messages() {
   const [activeChat, setActiveChat] = useState(1);
@@ -42,7 +42,6 @@ export default function Messages() {
           {/* User List */}
           <div className="md:w-2/6 bg-light1 dark:bg-dark1  flex flex-col">
             <ChatList
-              chats={chats}
               activeChat={activeChat}
               setActiveChat={setActiveChat}
               setChatOpen={setChatOpen}
