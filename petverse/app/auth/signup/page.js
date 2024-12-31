@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { handleSignUpWithEmail } from "@/app/_backend/auth";
 import { useRouter } from "next/navigation";
 
 export default function Signup() {

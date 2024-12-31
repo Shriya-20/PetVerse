@@ -11,6 +11,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   const router = useRouter();
 
@@ -21,13 +22,19 @@ export default function Login() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
+
+      const res = await response.json();
       if (!response.ok) {
-        throw new Error("Invalid email or password");
+        throw new Error(res.error);
       }
 
       router.push("/petverse/messages");
     } catch (error) {
-      console.log(`Error while Logging In${error}`);
+      if (error.message == "auth/invalid-credential") {
+        setError("invalid email or password");
+      } else {
+        setError(error.message);
+      }
     }
   }
 
@@ -168,6 +175,11 @@ export default function Login() {
             </button>
           </div>
         </div>{" "}
+        {error && (
+          <div>
+            <p className="text-red-700 text-right">{error}</p>
+          </div>
+        )}
         {/* Remember me */}
         <div className="flex justify-between mt-4">
           <div className="col-md-6 offset-md-4">
