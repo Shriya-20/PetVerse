@@ -3,45 +3,18 @@
 import ProfileIcon from "./ProfileIcon";
 import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
-import { CornerDownLeft } from "react-feather";
-import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
 import defaultImage from "@/public/default_user_profile_pic.jpeg";
 
-export default function ChatList({ activeChat, setActiveChat, setChatOpen }) {
-  const [chats, setChats] = useState([]);
+export default function ChatList({
+  chats,
+  activeChat,
+  setActiveChatData = () => {},
+  setActiveChat,
+  setChatOpen,
+}) {
   const { user } = useUser();
   const userId = user.id;
-
-  useEffect(() => {
-    async function HandleGetChats() {
-      try {
-        const response = await fetch("/api/messages/list", {
-          method: "POST",
-          body: JSON.stringify({ userId }),
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch chats");
-        }
-        console.log(response);
-        const data = await response.json();
-        const chatArray = data
-          ? Object.entries(data).map(([id, value]) => ({ id, ...value }))
-          : [];
-
-        setChats(chatArray);
-        console.log(chatArray);
-        console.log("Successfully fetched chats");
-      } catch (error) {
-        console.log("failed to get chats");
-        console.log(error);
-      }
-    }
-    HandleGetChats();
-  }, []);
-
-  console.log("CHATSSS");
-  console.log(chats);
 
   return (
     <>
@@ -74,6 +47,8 @@ export default function ChatList({ activeChat, setActiveChat, setChatOpen }) {
               }`}
               onClick={() => {
                 setActiveChat(chat.id);
+                console.log(chat);
+                setActiveChatData({ ...chat });
                 setChatOpen(true);
               }}
             >
