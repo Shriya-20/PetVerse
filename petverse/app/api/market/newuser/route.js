@@ -13,6 +13,7 @@ export async function POST(req) {
         { $sample: { size: 30 } },
       ])
       .toArray();
+
     return NextResponse.json(items, { status: 200 });
   } catch (error) {
     console.log("Error in fetching items");
