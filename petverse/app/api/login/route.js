@@ -19,8 +19,6 @@ export async function POST(req) {
     const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, {
       expiresIn: "1h",
     });
-    console.log("sucessfully created jwt");
-    console.log(token);
 
     const response = NextResponse.json(
       { message: "Logged in successfully" },
@@ -34,8 +32,6 @@ export async function POST(req) {
       maxAge: 60 * 60,
       path: "/",
     });
-
-    console.log(response);
 
     return response;
   } catch (error) {
