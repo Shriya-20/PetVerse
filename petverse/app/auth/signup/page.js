@@ -3,7 +3,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { getAuth, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "@/app/_backend/firebaseConfig";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -52,12 +53,25 @@ export default function Signup() {
 
   async function handleSignUpWithGoogle() {
     try {
-      const auth = getAuth(); // Initialize Firebase Auth
       const provider = new GoogleAuthProvider();
-      await signInWithRedirect(auth, provider); // Redirect for Google Sign-In
+      const result = await signInWithPopup(auth, provider);
+      const email = result._tokenResponse.email;
+      const name = result._tokenResponse.firstName;
+      const dateJoined = new Date().toISOString();
+      const newUser = {
+        username: name,
+        email: email,
+        dateJoined: dateJoined,
+      };
+      const response = await fetch("/api/signup/google", {
+        method: "POST",
+        body: JSON.stringify({ newUser }),
+      });
+      const errorData = await response.json();
       if (!response.ok) {
-        throw new Error(data.error);
+        throw new Error(errorData.error);
       }
+
       router.push("/auth/login");
     } catch (error) {
       setError(error.message);
