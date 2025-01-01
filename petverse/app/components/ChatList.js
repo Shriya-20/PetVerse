@@ -16,6 +16,15 @@ export default function ChatList({
   const { user } = useUser();
   const userId = user.id;
 
+  const convertTimeStampToTime = (serverTimestamp) => {
+    const date = new Date(serverTimestamp);
+
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${hours}:${minutes}`;
+  };
+
   return (
     <>
       <div className="flex items-center justify-center p-4 pt-5 sticky top-0 bg-light1 dark:bg-dark2 shadow-md dark:shadow-mid3 dark:shadow-sm border-r ">
@@ -72,13 +81,15 @@ export default function ChatList({
                   {chat.name}
                 </h2>
                 <p className="block text-sm text-textDark dark:text-textMid">
-                  {chat.lastMessage ? chat.lastMessage : ""}
+                  {chat.last_message ? chat.last_message : ""}
                 </p>
               </div>
               {/* No of unread messages and timestamp */}
               <div className="text-right">
                 <p className="text-xs  text-textDark dark:text-textMid">
-                  {chat.timestamp ? chat.timestamp : "00.00"}
+                  {chat.timestamp
+                    ? convertTimeStampToTime(chat.timestamp)
+                    : "00.00"}
                 </p>
                 {chat.unread && chat.unread > 0 && (
                   <span className="text-xs bg-customTeal text-textLighter  rounded-full px-2 py-1">

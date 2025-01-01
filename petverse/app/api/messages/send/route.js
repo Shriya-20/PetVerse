@@ -1,5 +1,5 @@
 import { database } from "@/app/_backend/firebaseConfig";
-import { ref, push, serverTimestamp } from "firebase/database";
+import { ref, push, serverTimestamp, update } from "firebase/database";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -16,6 +16,15 @@ export async function POST(req) {
     push(messageRef, {
       sender: userId,
       content: message,
+      timestamp: serverTimestamp(),
+    });
+
+    update(ref(database, `chats/${userId}/${activeChat}`), {
+      last_message: message,
+      timestamp: serverTimestamp(),
+    });
+    update(ref(database, `chats/${activeChat}/${userId}`), {
+      last_message: message,
       timestamp: serverTimestamp(),
     });
 
