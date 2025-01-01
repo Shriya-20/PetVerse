@@ -6,6 +6,7 @@ import ProfileIcon from "./ProfileIcon";
 import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
 import { useUser } from "@/context/UserContext";
 import { useState, useEffect } from "react";
+import { serverTimestamp } from "firebase/database";
 
 export default function ChatWindow({
   activeChat,
@@ -16,22 +17,18 @@ export default function ChatWindow({
   setChatOpen,
 }) {
   const [message, setMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState([]); // Initialize as an array
+  const [chatMessages, setChatMessages] = useState([]);
   const { user } = useUser();
   const userId = user.id;
 
   console.log(activeChat);
 
-  // Fetch messages on component load or activeChat change
   useEffect(() => {
     async function GetMessages() {
       try {
         const response = await fetch("/api/messages/getmessages", {
           method: "POST",
           body: JSON.stringify({ userId, activeChat }),
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
 
         if (!response.ok) {
@@ -44,7 +41,7 @@ export default function ChatWindow({
           ...message,
         }));
         console.log(messages);
-        setChatMessages(messages); // Set the messages to state
+        setChatMessages(messages);
         console.log("Successfully fetched chats");
       } catch (error) {
         console.log("Failed to fetch messages");
@@ -52,11 +49,10 @@ export default function ChatWindow({
       }
     }
     GetMessages();
-  }, [activeChat, userId]); // Re-run when activeChat or userId changes
+  }, [activeChat, userId]);
 
-  // Handle sending messages
   async function HandleSendMessage() {
-    if (!message.trim()) return; // Ignore empty messages
+    if (!message.trim()) return;
     try {
       const response = await fetch("/api/messages/send", {
         method: "POST",
@@ -71,13 +67,13 @@ export default function ChatWindow({
       }
 
       const newMessage = {
-        id: Date.now().toString(), // Temporary unique ID
+        id: Date.now().toString(),
         sender: userId,
         content: message,
         timestamp: new Date().toLocaleTimeString(),
       };
 
-      setChatMessages((prev) => [...prev, newMessage]); // Optimistic UI update
+      setChatMessages((prev) => [...prev, newMessage]);
       setMessage(""); // Clear input
       console.log("Message sent successfully");
     } catch (error) {
@@ -85,6 +81,15 @@ export default function ChatWindow({
       console.log(error);
     }
   }
+
+  const convertTimeStampToTime = (serverTimestamp) => {
+    const date = new Date(serverTimestamp);
+
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${hours}:${minutes}`;
+  };
 
   return (
     <>
@@ -130,7 +135,7 @@ export default function ChatWindow({
           <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-dark2">
             {chatMessages.map((msg, index) => (
               <div
-                key={msg.id || index} // Use msg.id if available, else fallback to index
+                key={msg.id || index}
                 className={`mb-4 ${
                   msg.sender === userId ? "text-right" : "text-left"
                 }`}
@@ -145,7 +150,9 @@ export default function ChatWindow({
                 >
                   {msg.content}
                 </div>
-                <p className="text-xs text-textDark mt-1">{msg.timestamp}</p>
+                <p className="text-xs text-textDark mt-1">
+                  {convertTimeStampToTime(msg.timestamp)}
+                </p>
               </div>
             ))}
           </div>
