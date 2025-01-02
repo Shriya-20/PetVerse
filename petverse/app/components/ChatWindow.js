@@ -5,8 +5,15 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProfileIcon from "./ProfileIcon";
 import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
 import { useUser } from "@/context/UserContext";
-import { useState, useEffect } from "react";
-import { serverTimestamp } from "firebase/database";
+import { useState, useEffect, useRef } from "react";
+import {
+  serverTimestamp,
+  ref,
+  onValue,
+  getDatabase,
+  off,
+} from "firebase/database";
+import { database } from "../_backend/firebaseConfig";
 
 export default function ChatWindow({
   activeChat,
@@ -20,36 +27,40 @@ export default function ChatWindow({
   const [chatMessages, setChatMessages] = useState([]);
   const { user } = useUser();
   const userId = user.id;
+  const chatEndRef = useRef(null);
 
   console.log(activeChat);
 
   useEffect(() => {
-    async function GetMessages() {
-      try {
-        const response = await fetch("/api/messages/getmessages", {
-          method: "POST",
-          body: JSON.stringify({ userId, activeChat }),
-        });
+    const messagesRef = ref(
+      database,
+      `messages/${[activeChat, userId].sort().join("_")}`
+    );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch messages");
-        }
-
-        const data = await response.json();
-        const messages = Object.entries(data).map(([id, message]) => ({
-          id,
-          ...message,
-        }));
-        console.log(messages);
-        setChatMessages(messages);
-        console.log("Successfully fetched chats");
-      } catch (error) {
-        console.log("Failed to fetch messages");
-        console.log(error);
+    onValue(messagesRef, (snapshot) => {
+      console.log(snapshot.val());
+      const data = snapshot.val();
+      if (!data) {
+        setChatMessages([]);
+        return;
       }
-    }
-    GetMessages();
+
+      const messages = Object.entries(data).map(([id, message]) => ({
+        id,
+        ...message,
+      }));
+      setChatMessages(messages);
+    });
+    return () => {
+      off(messagesRef);
+    };
   }, [activeChat, userId]);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatMessages]);
 
   async function HandleSendMessage() {
     if (!message.trim()) return;
@@ -139,6 +150,7 @@ export default function ChatWindow({
                 className={`mb-4 ${
                   msg.sender === userId ? "text-right" : "text-left"
                 }`}
+                ref={chatEndRef}
               >
                 <div
                   className={`inline-block p-3 rounded-lg break-words ${
