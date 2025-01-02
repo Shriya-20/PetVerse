@@ -1,9 +1,14 @@
 import { database } from "@/app/_backend/firebaseConfig";
 import { ref, push, serverTimestamp, update } from "firebase/database";
 import { NextResponse } from "next/server";
+import { Server } from "socket.io";
+import { ObjectId } from "mongodb";
+import defaultImage from "@/public/default_user_profile_pic.jpeg";
+import { connectToDatabase } from "@/app/utils/db";
 
 export async function POST(req) {
   try {
+    const db = await connectToDatabase();
     const { userId, activeChat, message } = await req.json();
     if (!message.trim()) {
       return NextResponse.json("No Message to send", { status: 200 });
@@ -18,15 +23,24 @@ export async function POST(req) {
       content: message,
       timestamp: serverTimestamp(),
     });
+    const user2 = await db
+      .collection("users")
+      .findOne({ _id: new ObjectId(userId) });
 
     update(ref(database, `chats/${userId}/${activeChat}`), {
       last_message: message,
       timestamp: serverTimestamp(),
     });
-    update(ref(database, `chats/${activeChat}/${userId}`), {
+
+    const chatUpdateData = {
       last_message: message,
+      name: user2.username,
       timestamp: serverTimestamp(),
-    });
+    };
+    if (user2.profilePicture) {
+      chatUpdateData.profile_picture = user2.profilePicture;
+    }
+    update(ref(database, `chats/${activeChat}/${userId}`), chatUpdateData);
 
     console.log("MESSAGE SENT");
     return NextResponse.json("Successfully send message", { status: 200 });

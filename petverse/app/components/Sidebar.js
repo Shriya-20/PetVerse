@@ -41,7 +41,7 @@ export default function Sidebar() {
   return (
     <div
       className="h-full sticky flex flex-col bg-light1 dark:bg-dark2 
-                  w-[52] lg:w-[240] shadow-xl dark:shadow-sm dark:shadow-mid3"
+                  w-[52] lg:w-[240] shadow-xl dark:shadow-sm dark:shadow-mid3 sm:pb-0 pb-12"
     >
       <div className="flex items-center p-4">
         <Image src={logo} alt="app logo" width={40} className="rounded-full" />
