@@ -6,6 +6,10 @@ import ChatWindow from "@/app/components/ChatWindow";
 import ChatList from "@/app/components/ChatList";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
+import loadingGIF from "@/public/loading.gif";
+import darkLoadingGIF from "@/public/runningcat.gif";
+import Image from "next/image";
+import { useTheme } from "@/app/components/Theme";
 
 export default function Messages() {
   const [activeChat, setActiveChat] = useState(1);
@@ -17,10 +21,23 @@ export default function Messages() {
   const { user } = useUser();
   const router = useRouter();
 
+  const { theme } = useTheme();
+  const [currentTheme, setCurrentTheme] = useState("system");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SystemDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      const resolvedTheme =
+        theme === "system" ? (SystemDark ? "dark" : "light") : theme;
+      setCurrentTheme(resolvedTheme);
+    }
+  }, [theme]);
+
   useEffect(() => {
     async function initialize() {
       if (user === undefined) {
-        console.log("WAITING FOR USER");
         return;
       }
       if (!user) {
@@ -43,7 +60,6 @@ export default function Messages() {
           ? Object.entries(data).map(([id, value]) => ({ id, ...value }))
           : [];
         setChats(chatArray);
-        console.log("Chats fetched:", chatArray);
       } catch (error) {
         console.error("Error fetching chats:", error);
       } finally {
@@ -55,10 +71,18 @@ export default function Messages() {
   }, [user, router]);
 
   if (isLoading || user === undefined) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <div className="flex items-center justify-center dark:bg-black h-full">
+          <Image
+            src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
+            alt="loading gif"
+            priority={true}
+          />
+        </div>
+      </div>
+    );
   }
-
-  console.log(chats);
 
   const activeMessages =
     chats.find((chat) => chat.id === activeChat)?.messages || [];

@@ -17,7 +17,7 @@ export async function POST(req) {
     console.log(user2);
     update(ref(database, `chats/${user1Id}/${user2Id}`), {
       name: user2.username,
-      unread_messages: 0,
+      unread_messages: null,
       profile_picture: user2.profilePicture
         ? user2.profilePicture
         : defaultImage,
