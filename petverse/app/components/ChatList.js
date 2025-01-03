@@ -4,10 +4,12 @@ import ProfileIcon from "./ProfileIcon";
 import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
 import { useUser } from "@/context/UserContext";
+import { useEffect, useState } from "react";
+import { ref, onValue, update } from "firebase/database";
+import { database } from "@/app/_backend/firebaseConfig";
 import defaultImage from "@/public/default_user_profile_pic.jpeg";
 
 export default function ChatList({
-  chats,
   activeChat,
   setActiveChatData = () => {},
   setActiveChat,
@@ -16,6 +18,30 @@ export default function ChatList({
   const { user } = useUser();
   const userId = user.id;
 
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const chatsRef = ref(database, `chats/${userId}`);
+
+    const unsubscribe = onValue(chatsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const chatData = Object.entries(snapshot.val()).map(([id, chat]) => ({
+          id,
+          ...chat,
+        }));
+        setChats(chatData);
+      } else {
+        setChats([]);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [userId]);
+
   const convertTimeStampToTime = (serverTimestamp) => {
     const date = new Date(serverTimestamp);
 
@@ -23,6 +49,22 @@ export default function ChatList({
     const minutes = date.getMinutes().toString().padStart(2, "0");
 
     return `${hours}:${minutes}`;
+  };
+
+  const handleResetUnreadMessages = async (id) => {
+    const unreadRef = ref(database, `chats/${userId}/${id}`);
+
+    update(unreadRef, {
+      unread_messages: null,
+    });
+  };
+
+  const sortchats = (chats) => {
+    return chats.sort((a, b) => {
+      const timeA = a.timestamp || 0;
+      const timeB = b.timestamp || 0;
+      return timeB - timeA;
+    });
   };
 
   return (
@@ -46,17 +88,17 @@ export default function ChatList({
       {/* User list */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden">
         <div className="">
-          {chats.map((chat) => (
+          {sortchats(chats).map((chat) => (
             <div
               key={chat.id}
-              className={`flex gap-2 md:gap-2  p-4 cursor-pointer ${
+              className={`flex gap-2 md:gap-2 p-4 cursor-pointer ${
                 chat.id === activeChat
                   ? "bg-blue-100 dark:bg-dark1"
                   : "hover:bg-light2 dark:hover:bg-mid4"
               }`}
               onClick={() => {
+                handleResetUnreadMessages(chat.id);
                 setActiveChat(chat.id);
-                console.log(chat);
                 setActiveChatData({ ...chat });
                 setChatOpen(true);
               }}
@@ -68,7 +110,7 @@ export default function ChatList({
                 width="w-11"
                 height="h-11"
               />
-              {/* User name and last unread message */}
+
               <div
                 className="flex-1"
                 style={{
@@ -84,16 +126,16 @@ export default function ChatList({
                   {chat.last_message ? chat.last_message : ""}
                 </p>
               </div>
-              {/* No of unread messages and timestamp */}
+
               <div className="text-right">
-                <p className="text-xs  text-textDark dark:text-textMid">
+                <p className="text-xs text-textDark dark:text-textMid">
                   {chat.timestamp
                     ? convertTimeStampToTime(chat.timestamp)
-                    : "00.00"}
+                    : "00:00"}
                 </p>
-                {chat.unread && chat.unread > 0 && (
-                  <span className="text-xs bg-customTeal text-textLighter  rounded-full px-2 py-1">
-                    {chat.unread}
+                {chat.unread_messages && chat.unread_messages > 0 && (
+                  <span className="text-xs bg-customTeal text-textLighter rounded-full px-2 py-1">
+                    {chat.unread_messages}
                   </span>
                 )}
               </div>
@@ -113,11 +155,8 @@ const Search = styled.div`
 `;
 const SearchInput = styled.input`
   outline-width: 0;
-  border: none; //use full page
+  border: none;
   flex: 1;
 `;
 
-// const Header=styled.div``;
 const IconsContainer = styled.div``;
-// const Container=styled.div``;
-// const IconButton=styled.div``;

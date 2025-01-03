@@ -64,7 +64,7 @@ export default function Messages() {
     chats.find((chat) => chat.id === activeChat)?.messages || [];
 
   return (
-    <div className="flex  h-screen bg-gray-50 dark:bg-dark1 overflow-y-hidden">
+    <div className="flex  h-screen bg-gray-50 dark:bg-dark1 overflow-y-hidden pb-12 sm:pb-0">
       {/* For larger screens */}
       {screenSize >= 768 && (
         <>

@@ -1,17 +1,16 @@
 "use client";
 
-import ChatMessage from "./ChatMessage";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import ProfileIcon from "./ProfileIcon";
 import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
 import { useUser } from "@/context/UserContext";
-import { useState, useEffect } from "react";
-import { serverTimestamp } from "firebase/database";
+import { useState, useEffect, useRef } from "react";
+import { ref, onValue, off, push } from "firebase/database";
+import { database } from "../_backend/firebaseConfig";
 
 export default function ChatWindow({
   activeChat,
   activeChatData,
-  activeMessages,
   chatOpen,
   isSmallScreen,
   setChatOpen,
@@ -20,39 +19,44 @@ export default function ChatWindow({
   const [chatMessages, setChatMessages] = useState([]);
   const { user } = useUser();
   const userId = user.id;
-
-  console.log(activeChat);
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
-    async function GetMessages() {
-      try {
-        const response = await fetch("/api/messages/getmessages", {
-          method: "POST",
-          body: JSON.stringify({ userId, activeChat }),
-        });
+    const messagesRef = ref(
+      database,
+      `messages/${[activeChat, userId].sort().join("_")}`
+    );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch messages");
-        }
+    onValue(messagesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {
+        setChatMessages([]);
+        return;
+      }
 
-        const data = await response.json();
-        const messages = Object.entries(data).map(([id, message]) => ({
+      const messages = Object.entries(data)
+        .map(([id, message]) => ({
           id,
           ...message,
-        }));
-        console.log(messages);
-        setChatMessages(messages);
-        console.log("Successfully fetched chats");
-      } catch (error) {
-        console.log("Failed to fetch messages");
-        console.log(error);
-      }
-    }
-    GetMessages();
+        }))
+        .filter((message) => message.timestamp);
+      setChatMessages(messages);
+    });
+
+    return () => {
+      off(messagesRef);
+    };
   }, [activeChat, userId]);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatMessages]);
 
   async function HandleSendMessage() {
     if (!message.trim()) return;
+
     try {
       const response = await fetch("/api/messages/send", {
         method: "POST",
@@ -66,29 +70,57 @@ export default function ChatWindow({
         throw new Error("Failed to send message");
       }
 
-      const newMessage = {
-        id: Date.now().toString(),
-        sender: userId,
-        content: message,
-        timestamp: new Date().toLocaleTimeString(),
-      };
-
-      setChatMessages((prev) => [...prev, newMessage]);
-      setMessage(""); // Clear input
-      console.log("Message sent successfully");
+      setMessage("");
     } catch (error) {
-      console.log("Failed to send message");
-      console.log(error);
+      console.error("Failed to send message:", error);
     }
   }
 
   const convertTimeStampToTime = (serverTimestamp) => {
+    if (!serverTimestamp) return "Invalid time";
     const date = new Date(serverTimestamp);
 
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
 
     return `${hours}:${minutes}`;
+  };
+
+  const formatDate = (timestamp) => {
+    const messageDate = new Date(timestamp);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    if (messageDate.toDateString() === today.toDateString()) {
+      return "Today";
+    }
+    if (messageDate.toDateString() === yesterday.toDateString()) {
+      return "Yesterday";
+    }
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return messageDate.toLocaleDateString("en-US", options);
+  };
+
+  const groupMessagesByDate = (messages) => {
+    let groupedMessages = [];
+    let currentDate = "";
+
+    messages.forEach((message, index) => {
+      const messageDate = formatDate(message.timestamp);
+
+      if (messageDate !== currentDate) {
+        currentDate = messageDate;
+        groupedMessages.push({
+          date: currentDate,
+          messages: [message],
+        });
+      } else {
+        groupedMessages[groupedMessages.length - 1].messages.push(message);
+      }
+    });
+
+    return groupedMessages;
   };
 
   return (
@@ -104,55 +136,53 @@ export default function ChatWindow({
               />
             )}
             <div className="flex items-center flex-grow overflow-hidden sm:ml-0 md:ml-2">
-              <div className="flex-shrink-0 w-12 h-12">
-                <ProfileIcon
-                  profile_pic={
-                    activeChatData.profile_picture
-                      ? activeChatData.profile_picture
-                      : default_profile_pic
-                  }
-                  width="w-12"
-                  height="h-12"
-                  custom_style="mx-2"
-                />
-              </div>
+              <ProfileIcon
+                profile_pic={
+                  activeChatData.profile_picture
+                    ? activeChatData.profile_picture
+                    : default_profile_pic
+                }
+                width="w-12"
+                height="h-12"
+                custom_style="mx-2"
+              />
               <p className="font-bold text-base md:text-lg text-textDarker dark:text-textLight truncate pl-5">
                 {activeChatData.name}
               </p>
             </div>
-            <p className="text-sm text-textDark dark:text-textLight text-right whitespace-nowrap pl-2 flex-shrink-0">
-              {isSmallScreen
-                ? activeChatData.lastseen
-                  ? activeChatData.lastseen
-                  : ""
-                : activeChatData.lastseen
-                ? "Last seen " + activeChatData.lastseen
-                : ""}
-            </p>
           </div>
 
           {/* Chat messages */}
           <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-dark2">
-            {chatMessages.map((msg, index) => (
-              <div
-                key={msg.id || index}
-                className={`mb-4 ${
-                  msg.sender === userId ? "text-right" : "text-left"
-                }`}
-              >
-                <div
-                  className={`inline-block p-3 rounded-lg break-words ${
-                    msg.sender === userId
-                      ? "bg-customTeal text-textLighter dark:bg-customTeal dark:text-textLighter"
-                      : "bg-light1 text-textDarker dark:bg-dark1 dark:text-textLight"
-                  }`}
-                  style={{ maxWidth: "75%" }}
-                >
-                  {msg.content}
-                </div>
-                <p className="text-xs text-textDark mt-1">
-                  {convertTimeStampToTime(msg.timestamp)}
+            {groupMessagesByDate(chatMessages).map((group, index) => (
+              <div key={index}>
+                <p className="text-center text-sm text-gray-500">
+                  {group.date}
                 </p>
+
+                {group.messages.map((msg, index) => (
+                  <div
+                    key={msg.id || index}
+                    className={`mb-4 ${
+                      msg.sender === userId ? "text-right" : "text-left"
+                    }`}
+                    ref={chatEndRef}
+                  >
+                    <div
+                      className={`inline-block p-3 rounded-lg break-words ${
+                        msg.sender === userId
+                          ? "bg-customTeal text-textLighter dark:bg-customTeal dark:text-textLighter"
+                          : "bg-light1 text-textDarker dark:bg-dark1 dark:text-textLight"
+                      }`}
+                      style={{ maxWidth: "75%" }}
+                    >
+                      {msg.content}
+                    </div>
+                    <p className="text-xs text-textDark mt-1">
+                      {convertTimeStampToTime(msg.timestamp)}
+                    </p>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -165,6 +195,11 @@ export default function ChatWindow({
                 placeholder="Type a message..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && message.trim()) {
+                    HandleSendMessage();
+                  }
+                }}
                 className="w-full p-3 pr-12 border rounded-2xl focus:outline-none focus:ring-2 focus:bg-light1 dark:bg-dark2 dark:focus:bg-mid4"
               />
               <button
