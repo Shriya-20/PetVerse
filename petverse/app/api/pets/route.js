@@ -9,7 +9,7 @@ export async function POST(req) {
     const db = await connectToDatabase();
     const petData = await db
       .collection("pet")
-      .findOne({ _id: new ObjectId(pet.id) });
+      .findOne({ _id: new ObjectId(pet) });
     console.log(petData);
     console.log("Successfully fetched pet data");
     return NextResponse.json(petData, { status: 200 });
