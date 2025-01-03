@@ -1,7 +1,6 @@
 import { database } from "@/app/_backend/firebaseConfig";
-import { ref, push, serverTimestamp, update } from "firebase/database";
+import { ref, push, serverTimestamp, update, get } from "firebase/database";
 import { NextResponse } from "next/server";
-import { Server } from "socket.io";
 import { ObjectId } from "mongodb";
 import defaultImage from "@/public/default_user_profile_pic.jpeg";
 import { connectToDatabase } from "@/app/utils/db";
@@ -32,6 +31,10 @@ export async function POST(req) {
       timestamp: serverTimestamp(),
     });
 
+    const snapshot = await get(ref(database, `chats/${activeChat}/${userId}`));
+    const chatdata = snapshot.val() || {};
+    console.log(chatdata);
+
     const chatUpdateData = {
       last_message: message,
       name: user2.username,
@@ -39,6 +42,11 @@ export async function POST(req) {
     };
     if (user2.profilePicture) {
       chatUpdateData.profile_picture = user2.profilePicture;
+    }
+    if (chatdata.unread_messages) {
+      chatUpdateData.unread_messages = chatdata.unread_messages + 1;
+    } else {
+      chatUpdateData.unread_messages = 1;
     }
     update(ref(database, `chats/${activeChat}/${userId}`), chatUpdateData);
 
