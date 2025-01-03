@@ -40,7 +40,7 @@ export default function PetProfile() {
       try {
         const response = await fetch("/api/pets", {
           method: "POST",
-          body: JSON.stringify(params),
+          body: JSON.stringify(params.id),
         });
         console.log(response);
         if (!response.ok) {
