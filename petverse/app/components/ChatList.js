@@ -5,7 +5,7 @@ import styled from "styled-components";
 import SearchIcon from "@mui/icons-material/Search";
 import { useUser } from "@/context/UserContext";
 import { useEffect, useState } from "react";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, update } from "firebase/database";
 import { database } from "@/app/_backend/firebaseConfig";
 import defaultImage from "@/public/default_user_profile_pic.jpeg";
 
@@ -51,6 +51,22 @@ export default function ChatList({
     return `${hours}:${minutes}`;
   };
 
+  const handleResetUnreadMessages = async (id) => {
+    const unreadRef = ref(database, `chats/${userId}/${id}`);
+
+    update(unreadRef, {
+      unread_messages: null,
+    });
+  };
+
+  const sortchats = (chats) => {
+    return chats.sort((a, b) => {
+      const timeA = a.timestamp || 0;
+      const timeB = b.timestamp || 0;
+      return timeB - timeA;
+    });
+  };
+
   return (
     <>
       <div className="flex items-center justify-center p-4 pt-5 sticky top-0 bg-light1 dark:bg-dark2 shadow-md dark:shadow-mid3 dark:shadow-sm border-r ">
@@ -72,7 +88,7 @@ export default function ChatList({
       {/* User list */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden">
         <div className="">
-          {chats.map((chat) => (
+          {sortchats(chats).map((chat) => (
             <div
               key={chat.id}
               className={`flex gap-2 md:gap-2 p-4 cursor-pointer ${
@@ -81,6 +97,7 @@ export default function ChatList({
                   : "hover:bg-light2 dark:hover:bg-mid4"
               }`}
               onClick={() => {
+                handleResetUnreadMessages(chat.id);
                 setActiveChat(chat.id);
                 setActiveChatData({ ...chat });
                 setChatOpen(true);
@@ -116,9 +133,9 @@ export default function ChatList({
                     ? convertTimeStampToTime(chat.timestamp)
                     : "00:00"}
                 </p>
-                {chat.unread && chat.unread > 0 && (
+                {chat.unread_messages && chat.unread_messages > 0 && (
                   <span className="text-xs bg-customTeal text-textLighter rounded-full px-2 py-1">
-                    {chat.unread}
+                    {chat.unread_messages}
                   </span>
                 )}
               </div>
