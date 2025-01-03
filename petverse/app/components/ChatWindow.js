@@ -7,6 +7,14 @@ import { useUser } from "@/context/UserContext";
 import { useState, useEffect, useRef } from "react";
 import { ref, onValue, off, push } from "firebase/database";
 import { database } from "../_backend/firebaseConfig";
+import { Picker } from "emoji-mart";
+import { Data } from "emoji-mart";
+import EmojiPicker from "emoji-picker-react";
+import {
+  Popover,
+  PopoverHandler,
+  PopoverContent,
+} from "@material-tailwind/react";
 
 export default function ChatWindow({
   activeChat,
@@ -18,8 +26,11 @@ export default function ChatWindow({
   const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const { user } = useUser();
+  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
   const userId = user.id;
   const chatEndRef = useRef(null);
+  const addImageRef = useRef();
+  const addFileRef = useRef();
 
   useEffect(() => {
     const messagesRef = ref(
@@ -55,6 +66,11 @@ export default function ChatWindow({
   }, [chatMessages]);
 
   async function HandleSendMessage() {
+    console.log(message);
+    console.log(typeof message);
+    if (typeof message !== "string") {
+      return;
+    }
     if (!message.trim()) return;
 
     try {
@@ -121,6 +137,25 @@ export default function ChatWindow({
     });
 
     return groupedMessages;
+  };
+
+  const handleOpenEmoji = () => {
+    try {
+      setIsEmojiPickerVisible((prev) => !prev);
+    } catch (error) {
+      console.log(error);
+      alert("This app dosent support emojis yet");
+    }
+  };
+
+  const handleUploadDocument = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      console.log("Selected file", file);
+      alert("App dosent support sending files and images yet");
+      return;
+      setMessage(file);
+    }
   };
 
   return (
@@ -200,7 +235,7 @@ export default function ChatWindow({
                     HandleSendMessage();
                   }
                 }}
-                className="w-full p-3 pr-12 border rounded-2xl focus:outline-none focus:ring-2 focus:bg-light1 dark:bg-dark2 dark:focus:bg-mid4"
+                className="w-full p-3 pr-12 pl-16 border rounded-2xl focus:outline-none focus:ring-2 focus:bg-light1 dark:bg-dark2 dark:focus:bg-mid4"
               />
               <button
                 className="absolute inset-y-0 right-3 flex items-center"
@@ -215,6 +250,79 @@ export default function ChatWindow({
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                 </svg>
               </button>
+
+              <Popover
+                placement="top"
+                className="absolute inset-y-0 left-3 fle items-center"
+              >
+                <PopoverHandler>
+                  <button className="absolute inset-y-0 left-3 fle items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      className="w-6 h-6 text-textLight hover:text-gray-400"
+                    >
+                      <path d="M16.5 6.75v7.25c0 3.04-2.46 5.5-5.5 5.5s-5.5-2.46-5.5-5.5V6.75a4.75 4.75 0 0 1 9.5 0v7.25a2.75 2.75 0 0 1-5.5 0V6.75h-1.5v7.25c0 2.47 2.02 4.5 4.5 4.5s4.5-2.03 4.5-4.5V6.75a6.25 6.25 0 0 0-12.5 0v7.25c0 3.87 3.13 7 7 7s7-3.13 7-7V6.75h-1.5z" />
+                    </svg>
+                  </button>
+                </PopoverHandler>
+                <PopoverContent className="bg-dark1 h-[76] w-28 mt-3 p-0">
+                  <button
+                    className="w-full block p-2 hover:bg-gray-700 hover:text-customTeal rounded-lg"
+                    onClick={() => addImageRef.current.click()}
+                  >
+                    Add Image
+                  </button>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleUploadDocument}
+                    ref={addImageRef}
+                  />
+                  <hr></hr>
+                  <button
+                    className="w-full block p-2 hover:bg-gray-700 rounded-lg hover:text-customTeal"
+                    onClick={() => addFileRef.current.click()}
+                  >
+                    Add File
+                  </button>
+                  <input
+                    type="file"
+                    className="hidden"
+                    ref={addFileRef}
+                    onChange={handleUploadDocument}
+                  />
+                </PopoverContent>
+              </Popover>
+              <button
+                className="absolute inset-y-0 left-9 fle items-center"
+                onClick={handleOpenEmoji}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="w-6 h-6 text-textLight hover:text-gray-400"
+                >
+                  <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm-3.5 8.25a1.25 1.25 0 1 1-1.25 1.25A1.26 1.26 0 0 1 8.5 10.25zm7 0a1.25 1.25 0 1 1-1.25 1.25A1.26 1.26 0 0 1 15.5 10.25zm-7.88 5.56a4.73 4.73 0 0 1 7.76 0l1.15-.8a6.23 6.23 0 0 0-10.06 0z" />
+                </svg>
+              </button>
+              {isEmojiPickerVisible && (
+                <div className="absolute bottom-12 left-0 z-50">
+                  <EmojiPicker
+                    onEmojiClick={(emoji) => {
+                      console.log(emoji);
+                      setMessage((prevMessage) => prevMessage + emoji.emoji);
+                      setIsEmojiPickerVisible(false);
+                    }}
+                    theme="auto"
+                    emojiStyle="apple"
+                    width="200"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </>

@@ -142,7 +142,7 @@ export default function Profile() {
                       <Link
                         key={pet._id}
                         className="flex flex-col items-center p-2 hover:bg-slate-100 dark:hover:bg-mid4 rounded-2xl transition-all duration-200"
-                        href={`/petverse/pets/${pet._id}`}
+                        href={`/petverse/profile/${userId}/${pet._id}`}
                       >
                         {/* Smaller Image */}
                         <div className="relative h-[80px] w-[80px]">
