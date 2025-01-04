@@ -5,8 +5,6 @@ import ShopItem from "@/app/components/ShopItem";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useUser } from "@/context/UserContext";
-import Modal from "@/app/components/Modal";
-import Image from "next/image";
 
 export default function Marketplace() {
   const [randomItems, setRandomItems] = useState([]);
@@ -14,32 +12,43 @@ export default function Marketplace() {
   const userId = user.id;
 
   useEffect(() => {
-    async function GetRandomItems() {
-      try {
-        const response = await fetch("/api/market/newuser", {
-          method: "POST",
-          body: JSON.stringify({ userId }),
-        });
-        if (!response.ok) {
-          throw new Error("Error in fetching items randomly");
-        }
-        const data = await response.json();
-        setRandomItems(data);
-        console.log(data);
-        console.log("FETCHED DATA S");
-      } catch (error) {
-        console.log("Error in fetching items randomly", error);
-      }
-    }
     GetRandomItems();
   }, []);
+
+  async function GetRandomItems() {
+    try {
+      const response = await fetch("/api/market/newuser", {
+        method: "POST",
+        body: JSON.stringify({ userId }),
+      });
+      if (!response.ok) {
+        throw new Error("Error in fetching items randomly");
+      }
+      const data = await response.json();
+      setRandomItems(data);
+      console.log(data);
+      console.log("FETCHED DATA S");
+    } catch (error) {
+      console.log("Error in fetching items randomly", error);
+    }
+  }
+
+  const handleSearchData = (data) => {
+    if (data.length === 0) {
+      GetRandomItems();
+    } else {
+      console.log("Received search data");
+      console.log(data);
+      setRandomItems(data);
+    }
+  };
 
   return (
     <>
       <div className="items-center">
         <div className="flex items-center">
           <div className="m-1 flex-grow">
-            <Searchbar className="" />
+            <Searchbar className="" sendDatatoParent={handleSearchData} />
           </div>
 
           <div className="m-1 mt-3 basis-1/5 md:basis-1/8 ">
