@@ -1,17 +1,16 @@
 "use client";
 
-import LoginDoggy from "@/public/logindoggy.jpg";
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "@/context/UserContext";
 import ProfileIcon from "./ProfileIcon";
 import { uploadImageToServer } from "../actions";
 import Popup from "./Popup";
+import default_profile_pic from "@/public/default_user_profile_pic.jpeg"
 
 export default function EditProfile() {
   const changeUserProfileRef = useRef();
   const [newUsername, setNewUserName] = useState("");
   const [newLocation, setNewLocation] = useState("");
-  const [profilepic, setProfilePic] = useState();
   const [userData, setUserData] = useState({});
   const [popUp, setPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
@@ -177,7 +176,7 @@ export default function EditProfile() {
                 profile_pic={
                   "profilePicture" in userData
                     ? userData.profilePicture
-                    : LoginDoggy
+                    : default_profile_pic
                 }
                 width="w-[150px]"
                 height="h-[150px]"

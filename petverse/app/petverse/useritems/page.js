@@ -14,6 +14,7 @@ export default function UserItems() {
   const [itemDescription, setItemDescription] = useState("");
   const [itemQuantity, setItemQuantity] = useState("");
   const [itemArrayBuffer, setItemArrayBuffer] = useState();
+  const [imageSrc, setImageSrc] = useState(defaultItemIcon)
   const { user } = useUser();
   const userId = user.id;
 
@@ -43,9 +44,12 @@ export default function UserItems() {
   const handleItemImage = async (e) => {
     try {
       const file = e.target.files[0];
-      console.log(file);
       const arrayBuffer = await file.arrayBuffer();
-      console.log(arrayBuffer);
+  
+      const blob = new Blob([arrayBuffer], { type: file.type });
+      const dataUrl = URL.createObjectURL(blob);
+      setImageSrc(dataUrl)
+
       setItemArrayBuffer(arrayBuffer);
     } catch (error) {
       console.error("Error reading file:", error);
@@ -60,7 +64,20 @@ export default function UserItems() {
       formData.append("itemDescription", itemDescription);
       formData.append("itemQuantity", itemQuantity);
       formData.append("userId", userId);
-
+      const seller = await fetch("/api/users", {
+        method: "POST",
+        body: JSON.stringify({userId})
+      })
+      const sellerData = await seller.json();
+      if(!seller.ok){
+        throw new Error("Failed to add new item");
+      }
+      if(sellerData.profilePicture){
+        console.log("sellet pic: " + sellerData.profilePicture)
+        formData.append("sellerPic", sellerData.profilePicture)
+      }
+      console.log("Form data " + formData )
+      
       const blob = new Blob([itemArrayBuffer], {
         type: "application/octet-stream",
       });
@@ -91,19 +108,23 @@ export default function UserItems() {
           </div>
 
           <form
-            className="flex flex-col justify-items-center md:grid md:grid-cols-3 md:col-start-1 md:col-span-3  md:px-20 py-2
+            className="flex flex-col justify-items-center md:grid md:grid-cols-3 md:col-start-1 md:col-span-3  md:px-10 lg:px-20 py-2
           "
             onSubmit={(e) => {
               e.preventDefault();
               handleCreateItem();
             }}
           >
-            <div className="justify-items-center mb-3 md:mb-0 md:col-start-1 md:col-span-1 md:mr-3">
+            <div className="flex justify-center items-center mx-auto md:mx-0 h-[220px] w-[220px] overflow-hidden mb-3 md:mb-0 md:col-start-1 md:col-span-1 md:mr-3">
               <Image
-                src={defaultItemIcon}
+                id="itemPic"
+                src={imageSrc}
                 alt="default item image"
                 onClick={ReferenceItemImage}
                 className="hover:opacity-75"
+                height={220}
+                width={220}
+
               />
               <input
                 type="file"

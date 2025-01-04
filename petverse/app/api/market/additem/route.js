@@ -12,6 +12,7 @@ export async function POST(req) {
     const itemQuantity = parseInt(formData.get("itemQuantity"), 10);
     const userId = formData.get("userId");
     const itemImage = formData.get("itemImage");
+    const sellerPic = formData.get("sellerPic");
 
     console.log("Form Data received:", {
       itemName,
@@ -28,6 +29,7 @@ export async function POST(req) {
       description: itemDescription,
       price: itemPrice,
       quantity: itemQuantity,
+      sellerPic: sellerPic
     });
 
     const path = `item/${response.insertedId}/pic.jpg`;
