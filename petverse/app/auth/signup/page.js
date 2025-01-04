@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/app/_backend/firebaseConfig";
 
 export default function Signup() {
@@ -78,6 +78,33 @@ export default function Signup() {
     }
   }
 
+  async function handleSignUpWithFacebook() {
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const email = result._tokenResponse.email;
+      const name = result._tokenResponse.firstName;
+      const dateJoined = new Date().toISOString();
+      const newUser = {
+        username: name,
+        email: email,
+        dateJoined: dateJoined,
+      };
+      const response = await fetch("/api/signup/google", {
+        method: "POST",
+        body: JSON.stringify({ newUser }),
+      });
+      const errorData = await response.json();
+      if (!response.ok) {
+        throw new Error(errorData.error);
+      }
+
+      router.push("/auth/login");
+    } catch (error) {
+      setError(error.message);
+    }
+  }
+
   return (
     <>
       <div className="mt-4 space-y-3 sm:flex sm:items-center sm:space-x-4 sm:space-y-0">
@@ -120,8 +147,8 @@ export default function Signup() {
           </span>
         </button>{" "}
         {/* SignUp with Facebook */}
-        <Link
-          href="/petverse"
+        <button
+          onClick={handleSignUpWithFacebook}
           className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
@@ -142,7 +169,7 @@ export default function Signup() {
           <span className="text-sm text-textDarker dark:text-textLight">
             SignUp with Facebook
           </span>
-        </Link>
+        </button>
       </div>{" "}
       {/* 'use email' text */}
       <div className="flex items-center justify-between mt-4">
