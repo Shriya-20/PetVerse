@@ -1,6 +1,5 @@
 "use client";
 
-import loginDoggy from "@/public/logindoggy.jpg";
 import Image from "next/image";
 import Modal from "@/app/components/Modal";
 import addImage from "@/public/add.png";
@@ -8,6 +7,7 @@ import ProfileIcon from "@/app/components/ProfileIcon";
 import { uploadImageToServer } from "@/app/actions";
 import { useState, useEffect, useRef } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
+import default_profile_pic from "@/public/default_user_profile_pic.jpeg"
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -161,7 +161,7 @@ export default function Profile() {
                     src={
                       "profilePicture" in userData
                         ? userData.profilePicture
-                        : loginDoggy
+                        : default_profile_pic
                     }
                     layout="fill"
                     objectFit="cover"

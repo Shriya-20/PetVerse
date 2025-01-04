@@ -6,11 +6,10 @@ import { deleteFolder } from "@/app/actions";
 
 export async function POST(req) {
   try {
-    console.log("User DELETE STARTED")
     const { userId } = await req.json();
     const db = await connectToDatabase();
-    console.log("connected to db")
 
+    // Delete pet data from firebase storage
     const userData = await db.collection("users").findOne({_id: new ObjectId(userId)});
     if(userData.pets){
       for (const pet of userData.pets) {
@@ -18,8 +17,8 @@ export async function POST(req) {
         await deleteFolder(`${petId}`);
       }
     }
-    console.log("Deleted pet data from firebase storage")
 
+    // Delete user items data from firebase storage
     const userItems = await db.collection("marketplaceitems").find({sellerId: new ObjectId(userId)}, { _id: 1}).toArray();
     if(userItems.len != 0){
       for (const userItem of userItems){
@@ -27,23 +26,19 @@ export async function POST(req) {
         await deleteFolder(`item/${itemId}`)
       }
     }
-    console.log("Deleted User item data from firebase storage")
-
+    
+    // Delete user profile data from firebase storage
     await deleteFolder(`users/${userId}`)
-    console.log("Deleted User data from firebase storage")
 
+    // Delete user, user pets and user items from db
     await db.collection("users").deleteOne({ _id: new ObjectId(userId) });
-    console.log("Successfully deleted user");
     await db.collection("pet").deleteMany({ owner: new ObjectId(userId) });
-    console.log("sucessfully deleted user pets");
     await db
       .collection("marketplaceitems")
       .deleteMany({ sellerId: new ObjectId(userId) });
-    console.log("Sucessfully deleted user items");
 
+    // Delete user from firebase auth
     await handleDeleteUser();
-    console.log("Deleted user from firebase auth")
-
 
     return NextResponse.json("Successfully deleted user", { status: 200 });
   } catch (error) {
