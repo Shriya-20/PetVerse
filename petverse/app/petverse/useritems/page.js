@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import defaultItemIcon from "@/public/default_item.png";
 import UserShopItem from "@/app/components/UserShopItem";
+import Loading from "@/app/components/Loading2";
 import { useUser } from "@/context/UserContext";
 
 export default function UserItems() {
@@ -13,8 +14,10 @@ export default function UserItems() {
   const [itemPrice, setItemPrice] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [itemQuantity, setItemQuantity] = useState("");
-  const [itemArrayBuffer, setItemArrayBuffer] = useState();
-  const [imageSrc, setImageSrc] = useState(defaultItemIcon)
+  const [itemArrayBuffer, setItemArrayBuffer] = useState(null);
+  const [imageSrc, setImageSrc] = useState(defaultItemIcon);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const userId = user.id;
 
@@ -45,10 +48,10 @@ export default function UserItems() {
     try {
       const file = e.target.files[0];
       const arrayBuffer = await file.arrayBuffer();
-  
+
       const blob = new Blob([arrayBuffer], { type: file.type });
       const dataUrl = URL.createObjectURL(blob);
-      setImageSrc(dataUrl)
+      setImageSrc(dataUrl);
 
       setItemArrayBuffer(arrayBuffer);
     } catch (error) {
@@ -57,27 +60,19 @@ export default function UserItems() {
   };
 
   async function handleCreateItem() {
+    setError(null);
+    setIsLoading(true);
     try {
+      if (!itemArrayBuffer) {
+        throw new Error("Please upload an image");
+      }
       const formData = new FormData();
       formData.append("itemName", itemName);
       formData.append("itemPrice", itemPrice);
       formData.append("itemDescription", itemDescription);
       formData.append("itemQuantity", itemQuantity);
       formData.append("userId", userId);
-      const seller = await fetch("/api/users", {
-        method: "POST",
-        body: JSON.stringify({userId})
-      })
-      const sellerData = await seller.json();
-      if(!seller.ok){
-        throw new Error("Failed to add new item");
-      }
-      if(sellerData.profilePicture){
-        console.log("sellet pic: " + sellerData.profilePicture)
-        formData.append("sellerPic", sellerData.profilePicture)
-      }
-      console.log("Form data " + formData )
-      
+
       const blob = new Blob([itemArrayBuffer], {
         type: "application/octet-stream",
       });
@@ -91,11 +86,11 @@ export default function UserItems() {
       if (!response.ok) {
         throw new Error("Failed to add new item");
       }
-      console.log("Added item successfully");
       location.reload();
     } catch (error) {
-      console.log("Failed to add item to market");
-      console.log(error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -124,13 +119,11 @@ export default function UserItems() {
                 className="hover:opacity-75"
                 height={220}
                 width={220}
-
               />
               <input
                 type="file"
                 accept="image/*"
                 ref={itemImageRef}
-                required
                 onChange={handleItemImage}
                 className="hidden"
               />
@@ -161,14 +154,29 @@ export default function UserItems() {
                 required
                 className="addItemInput "
               />
-              <button
-                className="bg-customTeal p-2 text-lg text-white hover:bg-teal-600 rounded-sm m-1"
-                type="submit"
-              >
-                Create item
-              </button>
+              {!isLoading && (
+                <button
+                  className="bg-customTeal p-2 text-lg text-white hover:bg-teal-600 rounded-sm m-1"
+                  type="submit"
+                >
+                  Create item
+                </button>
+              )}
+              {isLoading && (
+                <button
+                  className="bg-customTeal p-2 text-lg text-white hover:bg-teal-600 rounded-sm m-1 relative"
+                  type="submit"
+                >
+                  <Loading isLoading={isLoading} />
+                </button>
+              )}
             </div>
           </form>
+          {error && (
+            <div className="md:col-span-3">
+              <p className="text-red-500 text-center">{error}</p>
+            </div>
+          )}
         </div>
 
         <section className="py-12 px-8">

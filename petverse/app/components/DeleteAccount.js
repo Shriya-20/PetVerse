@@ -17,8 +17,8 @@ export default function DeleteAccount() {
   async function handleDeleteUser(e) {
     e.preventDefault();
     try {
-      if(confirm != "CONFIRM"){
-        throw new Error("Please Enter 'CONFIRM'")
+      if (confirm != "CONFIRM") {
+        throw new Error("Please Enter 'CONFIRM'");
       }
       const response = await fetch("/api/users/delete", {
         method: "POST",
@@ -33,7 +33,11 @@ export default function DeleteAccount() {
       console.log("user deleted successfully");
       router.push("/auth/login");
     } catch (error) {
-      setError(error.message)
+      if (error.message == "Please Enter 'CONFIRM'") {
+        setError(error.message);
+      } else {
+        setError("Something went wrong. Try again later");
+      }
     }
   }
   return (
@@ -57,10 +61,9 @@ export default function DeleteAccount() {
       </form>
       {error && (
         <div className="mx-4">
-        < p className="text-red-400">{error}</p>
+          <p className="text-red-400">{error}</p>
         </div>
       )}
-      
     </>
   );
 }

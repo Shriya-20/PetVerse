@@ -12,6 +12,9 @@ export async function POST(req) {
     const { userId } = await req.json();
     const db = await connectToDatabase();
 
+    // Delete user from firebase auth
+    await handleDeleteUser();
+
     // Delete pet data from firebase storage
     const userData = await db
       .collection("users")
@@ -76,9 +79,6 @@ export async function POST(req) {
       console.log("Failed to deleted stuff");
       console.log(error);
     }
-
-    // Delete user from firebase auth
-    await handleDeleteUser();
 
     return NextResponse.json("Successfully deleted user", { status: 200 });
   } catch (error) {

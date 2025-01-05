@@ -12,15 +12,6 @@ export async function POST(req) {
     const itemQuantity = parseInt(formData.get("itemQuantity"), 10);
     const userId = formData.get("userId");
     const itemImage = formData.get("itemImage");
-    const sellerPic = formData.get("sellerPic");
-
-    console.log("Form Data received:", {
-      itemName,
-      itemPrice,
-      itemDescription,
-      itemQuantity,
-      userId,
-    });
 
     const db = await connectToDatabase();
     const response = await db.collection("marketplaceitems").insertOne({
@@ -29,7 +20,6 @@ export async function POST(req) {
       description: itemDescription,
       price: itemPrice,
       quantity: itemQuantity,
-      sellerPic: sellerPic
     });
 
     const path = `item/${response.insertedId}/pic.jpg`;
