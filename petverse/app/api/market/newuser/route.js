@@ -11,6 +11,14 @@ export async function POST(req) {
       .aggregate([
         { $match: { sellerId: { $ne: new ObjectId(userId) } } },
         { $sample: { size: 30 } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "sellerId",
+            foreignField: "_id",
+            as: "sellerDetails",
+          },
+        },
       ])
       .toArray();
 
