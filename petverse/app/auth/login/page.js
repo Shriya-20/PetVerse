@@ -7,7 +7,7 @@ import logo from "@/public/paw.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { auth } from "@/app/_backend/firebaseConfig";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { FacebookAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -40,9 +40,30 @@ export default function Login() {
     }
   }
 
-  async function handleSignInwithGoogle() {
+  async function handleSignInWithGoogle() {
     try {
       const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+
+      const email = result._tokenResponse.email;
+      const response = await fetch("/api/login/google", {
+        method: "POST",
+        body: JSON.stringify({ email: email }),
+      });
+      const res = await response.json();
+      if (!response.ok) {
+        throw new Error(res.error);
+      }
+
+      router.push("/petverse/messages");
+    } catch (error) {
+      setError(error.message);
+    }
+  }
+
+  async function handleSignInWithFacebook() {
+    try {
+      const provider = new FacebookAuthProvider();
       const result = await signInWithPopup(auth, provider);
 
       const email = result._tokenResponse.email;
@@ -78,7 +99,7 @@ export default function Login() {
       <div className="mt-4 space-y-3 sm:flex sm:items-center sm:space-x-4 sm:space-y-0">
         {/* Login with Google */}
         <button
-          onClick={handleSignInwithGoogle}
+          onClick={handleSignInWithGoogle}
           className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
@@ -115,8 +136,8 @@ export default function Login() {
           </span>
         </button>{" "}
         {/* Login with facebook */}
-        <Link
-          href="/petverse"
+        <button
+          onClick={handleSignInWithFacebook}
           className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
@@ -137,7 +158,7 @@ export default function Login() {
           <span className="text-sm text-textDarker dark:text-textLight">
             Login with Facebook
           </span>
-        </Link>
+        </button>
       </div>{" "}
       {/* Use email  */}
       <div className="flex items-center justify-between mt-4">
