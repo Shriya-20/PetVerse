@@ -20,7 +20,7 @@ export async function POST(req) {
       unread_messages: null,
       profile_picture: user2.profilePicture
         ? user2.profilePicture
-        : defaultImage,
+        : "https://firebasestorage.googleapis.com/v0/b/petverse-3fa63.firebasestorage.app/o/default_user_profile_pic.jpeg?alt=media&token=8fc7a77a-e2d1-499c-b986-ade30125b8bc",
     });
     console.log("Successfully initialized chat");
     return NextResponse.json("Successfully initialized chat", { status: 200 });
