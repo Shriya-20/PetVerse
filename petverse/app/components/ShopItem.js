@@ -11,13 +11,14 @@ import { useState } from "react";
 
 export default function ShopItem(item) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  console.log(item);
 
   const router = useRouter();
 
   return (
     <>
       <div
-        className="relative max-w-[384px] mx-auto rounded-xl hover:shadow-sm dark:hover:shadow-mid3"
+        className="relative max-w-[384px] mx-auto rounded-xl hover:shadow-lg dark:shadow-md dark:hover:shadow-mid3"
         onClick={() => setIsModalOpen(true)}
       >
         <div className="relative w-full aspect-square rounded-xl overflow-hidden">
@@ -48,7 +49,9 @@ export default function ShopItem(item) {
             >
               <ProfileIcon
                 profile_pic={
-                  item.sellerPic ? item.sellerPic : default_profile_pic
+                  item.sellerDetails[0].profilePicture
+                    ? item.sellerDetails[0].profilePicture
+                    : default_profile_pic
                 }
                 height="h-8 md:h-12"
                 width="w-8 md:w-12"
