@@ -51,9 +51,15 @@ export async function handleSignOut() {
 
 export async function handleDeleteUser() {
   try {
-    await deleteUser(auth.currentUser);
+    const user = auth.currentUser;
+    console.log("auth.current user; " + user);
+    if (!user) {
+      throw new Error("Something went wrong. Try again later");
+    }
+
+    await deleteUser(user);
   } catch (error) {
-    console.log("Error while deleting user");
+    throw error;
   }
 }
 

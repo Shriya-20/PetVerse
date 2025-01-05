@@ -8,7 +8,21 @@ export async function POST(req) {
     if (type === "item") {
       const data = await db
         .collection("marketplaceitems")
-        .find({ title: { $regex: searchVal, $options: "i" } })
+        .aggregate([
+          {
+            $match: {
+              title: { $regex: searchVal, $options: "i" },
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "sellerId",
+              foreignField: "_id",
+              as: "sellerDetails",
+            },
+          },
+        ])
         .toArray();
 
       return NextResponse.json(data, { status: 200 });
