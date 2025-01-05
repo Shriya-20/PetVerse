@@ -5,12 +5,11 @@ export default function Searchbar({ sendDatatoParent }) {
   const [searchedData, setSearchedData] = useState([]);
   const [isChatSearched, setIsChatSearched] = useState(false);
 
-  const handleSendData = () => {
-    sendDatatoParent(searchedData);
+  const handleSendData = (data) => {
+    sendDatatoParent(data.length > 0 ? data : searchedData);
   };
 
   const handleSearch = async (type, searchVal) => {
-    console.log("SEARCHVAL", searchVal);
     if (!searchVal.trim() || searchVal === "") {
       setIsChatSearched(false);
       setSearchedData([]);
@@ -27,9 +26,7 @@ export default function Searchbar({ sendDatatoParent }) {
       const data = await response.json();
       setIsChatSearched(true);
       setSearchedData(data);
-      console.log(data);
     } catch (error) {
-      console.log(error);
       return;
     }
   };
@@ -46,7 +43,7 @@ export default function Searchbar({ sendDatatoParent }) {
             onChange={(e) => handleSearch("item", e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleSendData();
+                handleSendData([]);
                 setIsChatSearched(false);
               }
             }}
@@ -61,8 +58,9 @@ export default function Searchbar({ sendDatatoParent }) {
                 key={index}
                 className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-dark1 cursor-pointer"
                 onClick={() => {
-                  console.log(`Selected: ${data.title}`);
-                  handleSendData();
+                  setSearchedData([data]);
+
+                  handleSendData([data]);
                   setIsChatSearched(false);
                 }}
               >
