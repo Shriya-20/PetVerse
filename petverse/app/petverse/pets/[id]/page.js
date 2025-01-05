@@ -146,10 +146,13 @@ export default function PetProfile() {
               {petData.age && <p className="text-lg">{petData.age} years</p>}
             </div>
           </div>
-          <Popover placement="left" className="absolute bg-dark2">
+          <Popover
+            placement="left"
+            className="absolute  dark:bg-dark2 bg-light2"
+          >
             <PopoverHandler>
               <button
-                className="absolute top-5 -right-1 hover:bg-gray-700 rounded-full  hover:text-customTeal transform scale-125"
+                className="absolute top-5 -right-1 hover:dark:bg-gray-700 hover:bg-slate-200 rounded-full  hover:text-customTeal transform scale-125"
                 type="button"
               >
                 <svg
@@ -168,15 +171,15 @@ export default function PetProfile() {
                 </svg>
               </button>
             </PopoverHandler>
-            <PopoverContent className="bg-dark1 h-[112] w-28 mt-3 p-0">
+            <PopoverContent className="dark:bg-dark1 bg-light2 h-[112] w-28 mt-3 p-0">
               <button
-                className="w-full block p-2 hover:bg-gray-700 hover:text-customTeal rounded-lg"
+                className="w-full block p-2 hover:dark:bg-gray-700 hover:bg-gray-300 hover:text-customTeal rounded-lg"
                 onClick={() => setIsModalOpen(true)}
               >
                 Edit profile
               </button>
               <hr></hr>
-              <button className="w-full block p-2 hover:bg-gray-700 rounded-lg hover:text-customTeal">
+              <button className="w-full block p-2 hover:dark:bg-gray-700 hover:bg-gray-300 rounded-lg hover:text-customTeal">
                 New post
               </button>
               <hr></hr>

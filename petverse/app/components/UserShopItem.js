@@ -59,10 +59,10 @@ export default function UserShopItem(item) {
           {/* Delete button */}
           <button
             onClick={handleDelete}
-            className="absolute bottom-2 right-2 p-3 bg-mid4 rounded-full hover:bg-red-600 focus:outline-none shadow-md 
+            className="absolute bottom-2 right-2 p-3 dark:bg-mid4 bg-textLighter rounded-full hover:bg-red-600 focus:outline-none shadow-md 
                       md:p-3 lg:p-4"
           >
-            <TrashIcon className="h-4 w-4  text-white" />
+            <TrashIcon className="h-4 w-4  dark:text-white text-mid4 hover:text-white" />
           </button>
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function UserShopItem(item) {
           </p>
           <div className="flex justify-end space-x-3">
             <button
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
+              className="bg-gray-300 text-gray-700  px-4 py-2 rounded-md hover:bg-gray-400"
               onClick={() => SetIsModalOpen(false)}
             >
               Cancel

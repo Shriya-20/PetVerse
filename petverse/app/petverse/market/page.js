@@ -37,8 +37,6 @@ export default function Marketplace() {
     if (data.length === 0) {
       GetRandomItems();
     } else {
-      console.log("Received search data");
-      console.log(data);
       setRandomItems(data);
     }
   };
