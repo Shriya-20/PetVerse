@@ -5,7 +5,7 @@ import { useUser } from "@/context/UserContext";
 import ProfileIcon from "./ProfileIcon";
 import { uploadImageToServer } from "../actions";
 import Popup from "./Popup";
-import default_profile_pic from "@/public/default_user_profile_pic.jpeg"
+import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
 
 export default function EditProfile() {
   const changeUserProfileRef = useRef();
@@ -133,6 +133,8 @@ export default function EditProfile() {
     } catch (error) {
       handlePopUp("error", "Failed change to your location");
       console.log("Failed to update user data");
+    } finally {
+      setNewLocation("");
     }
   };
 
@@ -154,6 +156,8 @@ export default function EditProfile() {
     } catch (error) {
       handlePopUp("error", "Failed change to your username");
       console.log(error);
+    } finally {
+      setNewUserName("");
     }
   };
 
@@ -215,6 +219,7 @@ export default function EditProfile() {
               placeholder="Enter new name"
               className="edit-profile-input"
               required
+              value={newUsername}
               onChange={handleNameInput}
             />
             <button
@@ -267,6 +272,7 @@ export default function EditProfile() {
               name="location"
               type="text"
               placeholder="Enter Location"
+              value={newLocation}
               onChange={handleLocationInput}
               className="edit-profile-input"
               required
