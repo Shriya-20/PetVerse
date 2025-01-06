@@ -90,7 +90,7 @@ export default function EditProfile() {
         return;
       }
       const path = `users/${userId}/profilePic.jpg`;
-      const imageUrl = await uploadImageToServer(imageBuffer, path);
+      const imageUrl = await uploadImageToServer(imageBuffer, path, "image");
       const response = await fetch("/api/update_profile_pic", {
         method: "POST",
         body: JSON.stringify({ imageUrl, userId }),
