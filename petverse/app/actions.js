@@ -11,10 +11,15 @@ import {
 {
   /* To upload image taken from imput */
 }
-export async function uploadImageToServer(imageBuffer, path) {
+export async function uploadImageToServer(imageBuffer, path, type) {
   try {
     const storageRef = ref(storage, path);
-    const metadata = { contentType: "image/jpeg" };
+    let metadata;
+    if (type === "image") {
+      metadata = { contentType: "image/jpeg" };
+    } else {
+      metadata = { contentType: "video/mp4" };
+    }
     const snapshot = await uploadBytes(storageRef, imageBuffer, metadata);
     const url = await getDownloadURL(storageRef);
     return url;
