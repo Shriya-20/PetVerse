@@ -11,9 +11,8 @@ export async function GET(req) {
     }
     const userData = jwt.verify(token, SECRET_KEY);
 
-    return NextResponse.json(userData);
+    return NextResponse.json(userData, { status: 200 });
   } catch (error) {
-    console.error("Token verification failed:", error.message);
-    return NextResponse.json("Invalid or expired token", { status: 403 });
+    return NextResponse.json({ error: error }, { status: 403 });
   }
 }

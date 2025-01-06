@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useState, useEffect, useContext } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import loadingGIF from "../public/loading.gif";
 import darkLoadingGIF from "../public/runningcat.gif";
 import Image from "next/image";
@@ -15,6 +15,7 @@ export function Userprovider({ children }) {
   const router = useRouter();
   const { theme } = useTheme();
   const [currentTheme, setCurrentTheme] = useState("system");
+  const path = usePathname();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -34,14 +35,12 @@ export function Userprovider({ children }) {
         const response = await fetch("/api/session", {
           credentials: "include",
         });
-        if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
-        } else {
-          setUser(null);
+        const userData = await response.json();
+        if (!response.ok) {
+          throw error;
         }
+        setUser(userData);
       } catch (error) {
-        console.error("Session has expired", error);
         setUser(null);
       } finally {
         setLoading(false);
@@ -61,7 +60,7 @@ export function Userprovider({ children }) {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading) {
+  if ((isLoading || user === null) && !path.includes("/auth")) {
     return (
       <>
         <div className="flex items-center justify-center dark:bg-black h-full">
