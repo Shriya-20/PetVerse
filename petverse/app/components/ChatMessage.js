@@ -1,15 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ChatMessage({
-  id,
-  sender,
-  content,
-  timestamp,
-  type,
-  url,
-  link,
-}) {
+export default function ChatMessage({ content, type }) {
   switch (type) {
     case "video":
       return (
@@ -18,7 +10,7 @@ export default function ChatMessage({
             controls
             className="rounded-md border border-light2 w-full max-w-xs"
           >
-            <source src={url} type="video/mp4" />
+            <source src={content} type="video/mp4" />
             Your browser does not support videos.
           </video>
         </div>
@@ -27,7 +19,7 @@ export default function ChatMessage({
       return (
         <div>
           <Image
-            src={url}
+            src={content}
             alt="Message image"
             height={150}
             width={150}
@@ -38,7 +30,7 @@ export default function ChatMessage({
     case "link":
       return (
         <a
-          href={link}
+          href={message}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-300 underline"

@@ -5,11 +5,12 @@ import ProfileIcon from "./ProfileIcon";
 import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
 import { useUser } from "@/context/UserContext";
 import { useState, useEffect, useRef } from "react";
-import { ref, onValue, off, push } from "firebase/database";
+import { ref, onValue, off } from "firebase/database";
 import { database } from "../_backend/firebaseConfig";
-import { Picker } from "emoji-mart";
-import { Data } from "emoji-mart";
+import ChatMessage from "./ChatMessage";
 import EmojiPicker from "emoji-picker-react";
+import { uploadImageToServer } from "../actions";
+import Image from "next/image";
 import {
   Popover,
   PopoverHandler,
@@ -27,6 +28,8 @@ export default function ChatWindow({
   const [chatMessages, setChatMessages] = useState([]);
   const { user } = useUser();
   const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
+  const [file, setFile] = useState("");
+  const [isFileOpen, setIsFileOpen] = useState(false);
   const userId = user.id;
   const chatEndRef = useRef(null);
   const addImageRef = useRef();
@@ -65,18 +68,37 @@ export default function ChatWindow({
     }
   }, [chatMessages]);
 
-  async function HandleSendMessage() {
+  async function HandleSendMessage(type) {
     console.log(message);
     console.log(typeof message);
-    if (typeof message !== "string") {
-      return;
+    console.log(typeof file);
+    console.log(file);
+    if (type !== "") {
+      try {
+        const response = await fetch("/api/messages/send", {
+          method: "POST",
+          body: JSON.stringify({ userId, activeChat, message: file, type }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to send image");
+        }
+
+        console.log("Sent successfully");
+        setIsFileOpen(false);
+        setFile(null);
+        return;
+      } catch (error) {
+        console.log(error);
+        console.log("Failed to send file");
+        return;
+      }
     }
     if (!message.trim()) return;
 
     try {
       const response = await fetch("/api/messages/send", {
         method: "POST",
-        body: JSON.stringify({ userId, activeChat, message }),
+        body: JSON.stringify({ userId, activeChat, message, type }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -148,13 +170,23 @@ export default function ChatWindow({
     }
   };
 
-  const handleUploadDocument = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      console.log("Selected file", file);
-      alert("App dosent support sending files and images yet");
+  const handleUploadDocument = async (e) => {
+    try {
+      const filer = e.target.files[0];
+      const timestamp = new Date();
+      const arrayBuffer = await filer.arrayBuffer();
+      const path = `messages/${[activeChat, userId]
+        .sort()
+        .join("_")}/file_${timestamp}.jpg`;
+      const imageUrl = await uploadImageToServer(arrayBuffer, path);
+      setFile(imageUrl);
+      console.log(file);
+      setIsFileOpen(true);
       return;
-      setMessage(file);
+    } catch (error) {
+      console.log(error);
+      console.log("Error in selecting image");
+      return;
     }
   };
 
@@ -186,145 +218,197 @@ export default function ChatWindow({
               </p>
             </div>
           </div>
-
-          {/* Chat messages */}
-          <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-dark2">
-            {groupMessagesByDate(chatMessages).map((group, index) => (
-              <div key={index}>
-                <p className="text-center text-sm text-gray-500">
-                  {group.date}
-                </p>
-
-                {group.messages.map((msg, index) => (
-                  <div
-                    key={msg.id || index}
-                    className={`mb-4 ${
-                      msg.sender === userId ? "text-right" : "text-left"
-                    }`}
-                    ref={chatEndRef}
-                  >
-                    <div
-                      className={`inline-block p-3 rounded-lg break-words ${
-                        msg.sender === userId
-                          ? "bg-customTeal text-textLighter dark:bg-customTeal dark:text-textLighter"
-                          : "bg-light1 text-textDarker dark:bg-dark1 dark:text-textLight"
-                      }`}
-                      style={{ maxWidth: "75%" }}
-                    >
-                      {msg.content}
-                    </div>
-                    <p className="text-xs text-textDark mt-1">
-                      {convertTimeStampToTime(msg.timestamp)}
+          {!isFileOpen && (
+            <>
+              {/* Chat messages */}
+              <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-dark2">
+                {groupMessagesByDate(chatMessages).map((group, index) => (
+                  <div key={index}>
+                    <p className="text-center text-sm text-gray-500">
+                      {group.date}
                     </p>
+
+                    {group.messages.map((msg, index) => (
+                      <div
+                        key={msg.id || index}
+                        className={`mb-4 ${
+                          msg.sender === userId ? "text-right" : "text-left"
+                        }`}
+                        ref={chatEndRef}
+                      >
+                        <div
+                          className={`inline-block p-3 rounded-lg break-words ${
+                            msg.sender === userId
+                              ? "bg-customTeal text-textLighter dark:bg-customTeal dark:text-textLighter"
+                              : "bg-light1 text-textDarker dark:bg-dark1 dark:text-textLight"
+                          }`}
+                          style={{ maxWidth: "75%" }}
+                        >
+                          <ChatMessage content={msg.content} type={msg.type} />
+                        </div>
+                        <p className="text-xs text-textDark mt-1">
+                          {convertTimeStampToTime(msg.timestamp)}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
-            ))}
-          </div>
 
-          {/* Send Message */}
-          <div className="mx-4 mb-3 bg-light1 dark:bg-dark1 z-50 sticky bottom-0">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Type a message..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && message.trim()) {
-                    HandleSendMessage();
-                  }
-                }}
-                className="w-full p-3 pr-12 pl-16 border rounded-2xl focus:outline-none focus:ring-2 focus:bg-light1 dark:bg-dark2 dark:focus:bg-mid4"
-              />
-              <button
-                className="absolute inset-y-0 right-3 flex items-center"
-                onClick={HandleSendMessage}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6 text-customTeal hover:text-teal-700"
-                >
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                </svg>
-              </button>
+              {/* Send Message */}
 
-              <Popover
-                placement="top"
-                className="absolute inset-y-0 left-3 fle items-center"
-              >
-                <PopoverHandler>
-                  <button className="absolute inset-y-0 left-3 fle items-center">
+              <div className="mx-4 mb-3 bg-light1 dark:bg-dark1 z-50 sticky bottom-0">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Type a message..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && message.trim()) {
+                        HandleSendMessage("");
+                      }
+                    }}
+                    className="w-full p-3 pr-12 pl-16 border rounded-2xl focus:outline-none focus:ring-2 focus:bg-light1 dark:bg-dark2 dark:focus:bg-mid4"
+                  />
+                  <button
+                    className="absolute inset-y-0 right-3 flex items-center"
+                    onClick={() => {
+                      HandleSendMessage("");
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      className="w-6 h-6 text-customTeal hover:text-teal-700"
+                    >
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                  </button>
+
+                  <Popover
+                    placement="top"
+                    className="absolute inset-y-0 left-3 fle items-center"
+                  >
+                    <PopoverHandler>
+                      <button className="absolute inset-y-0 left-3 fle items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          className="w-6 h-6 text-textLight hover:text-gray-400"
+                        >
+                          <path d="M16.5 6.75v7.25c0 3.04-2.46 5.5-5.5 5.5s-5.5-2.46-5.5-5.5V6.75a4.75 4.75 0 0 1 9.5 0v7.25a2.75 2.75 0 0 1-5.5 0V6.75h-1.5v7.25c0 2.47 2.02 4.5 4.5 4.5s4.5-2.03 4.5-4.5V6.75a6.25 6.25 0 0 0-12.5 0v7.25c0 3.87 3.13 7 7 7s7-3.13 7-7V6.75h-1.5z" />
+                        </svg>
+                      </button>
+                    </PopoverHandler>
+                    <PopoverContent className="bg-dark1 h-[76] w-28 mt-3 p-0">
+                      <button
+                        className="w-full block p-2 hover:bg-gray-700 hover:text-customTeal rounded-lg"
+                        onClick={() => addImageRef.current.click()}
+                      >
+                        Add Image
+                      </button>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          if (
+                            e.target.files[0] &&
+                            e.target.files[0].type.startsWith("image/")
+                          ) {
+                            handleUploadDocument(e);
+                          } else {
+                            alert("Please select a valid image file.");
+                          }
+                        }}
+                        ref={addImageRef}
+                      />
+                      <hr></hr>
+                      <button
+                        className="w-full block p-2 hover:bg-gray-700 rounded-lg hover:text-customTeal"
+                        onClick={() => addFileRef.current.click()}
+                      >
+                        Add File
+                      </button>
+                      <input
+                        type="file"
+                        className="hidden"
+                        ref={addFileRef}
+                        onChange={handleUploadDocument}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <button
+                    className="absolute inset-y-0 left-9 fle items-center"
+                    onClick={handleOpenEmoji}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                       className="w-6 h-6 text-textLight hover:text-gray-400"
                     >
-                      <path d="M16.5 6.75v7.25c0 3.04-2.46 5.5-5.5 5.5s-5.5-2.46-5.5-5.5V6.75a4.75 4.75 0 0 1 9.5 0v7.25a2.75 2.75 0 0 1-5.5 0V6.75h-1.5v7.25c0 2.47 2.02 4.5 4.5 4.5s4.5-2.03 4.5-4.5V6.75a6.25 6.25 0 0 0-12.5 0v7.25c0 3.87 3.13 7 7 7s7-3.13 7-7V6.75h-1.5z" />
+                      <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm-3.5 8.25a1.25 1.25 0 1 1-1.25 1.25A1.26 1.26 0 0 1 8.5 10.25zm7 0a1.25 1.25 0 1 1-1.25 1.25A1.26 1.26 0 0 1 15.5 10.25zm-7.88 5.56a4.73 4.73 0 0 1 7.76 0l1.15-.8a6.23 6.23 0 0 0-10.06 0z" />
                     </svg>
                   </button>
-                </PopoverHandler>
-                <PopoverContent className="bg-dark1 h-[76] w-28 mt-3 p-0">
-                  <button
-                    className="w-full block p-2 hover:bg-gray-700 hover:text-customTeal rounded-lg"
-                    onClick={() => addImageRef.current.click()}
-                  >
-                    Add Image
-                  </button>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleUploadDocument}
-                    ref={addImageRef}
-                  />
-                  <hr></hr>
-                  <button
-                    className="w-full block p-2 hover:bg-gray-700 rounded-lg hover:text-customTeal"
-                    onClick={() => addFileRef.current.click()}
-                  >
-                    Add File
-                  </button>
-                  <input
-                    type="file"
-                    className="hidden"
-                    ref={addFileRef}
-                    onChange={handleUploadDocument}
-                  />
-                </PopoverContent>
-              </Popover>
+                  {isEmojiPickerVisible && (
+                    <div className="absolute bottom-12 left-0 z-50">
+                      <EmojiPicker
+                        onEmojiClick={(emoji) => {
+                          console.log(emoji);
+                          setMessage(
+                            (prevMessage) => prevMessage + emoji.emoji
+                          );
+                          setIsEmojiPickerVisible(false);
+                        }}
+                        theme="auto"
+                        emojiStyle="apple"
+                        width="200"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+
+          {isFileOpen && (
+            <div className="relative mt-16 w-full  h-auto z-50 bg-dark2 p-4 rounded-lg">
+              <div
+                className="absolute -top-10 right-3 w-8 h-8 flex items-center justify-center bg-gray-700 text-textLight rounded-full cursor-pointer hover:bg-gray-600"
+                onClick={() => setIsFileOpen(false)}
+              >
+                X
+              </div>
+              <div className="relative w-full h-72">
+                <Image
+                  src={file}
+                  alt="selected file"
+                  layout="fill"
+                  objectFit="contain"
+                  className="rounded-lg"
+                />
+              </div>
               <button
-                className="absolute inset-y-0 left-9 fle items-center"
-                onClick={handleOpenEmoji}
+                className="absolute -bottom-20 right-3 w-10 h-10 flex items-center bg-customTeal text-white py-2 px-2 rounded-full hover:bg-teal-600"
+                onClick={() => {
+                  HandleSendMessage("image");
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 24 24"
-                  className="w-6 h-6 text-textLight hover:text-gray-400"
+                  className="w-6 h-6"
                 >
-                  <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm-3.5 8.25a1.25 1.25 0 1 1-1.25 1.25A1.26 1.26 0 0 1 8.5 10.25zm7 0a1.25 1.25 0 1 1-1.25 1.25A1.26 1.26 0 0 1 15.5 10.25zm-7.88 5.56a4.73 4.73 0 0 1 7.76 0l1.15-.8a6.23 6.23 0 0 0-10.06 0z" />
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                 </svg>
               </button>
-              {isEmojiPickerVisible && (
-                <div className="absolute bottom-12 left-0 z-50">
-                  <EmojiPicker
-                    onEmojiClick={(emoji) => {
-                      console.log(emoji);
-                      setMessage((prevMessage) => prevMessage + emoji.emoji);
-                      setIsEmojiPickerVisible(false);
-                    }}
-                    theme="auto"
-                    emojiStyle="apple"
-                    width="200"
-                  />
-                </div>
-              )}
             </div>
-          </div>
+          )}
         </>
       )}
     </>
