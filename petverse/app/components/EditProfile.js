@@ -15,6 +15,8 @@ export default function EditProfile() {
   const [popUp, setPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
   const [popUpType, setPopUpType] = useState("success");
+  const [imageBuffer, setImageBuffer] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null);
   const [passwordChangeData, setPasswordChangeData] = useState({
     password: "",
 
@@ -54,6 +56,7 @@ export default function EditProfile() {
         setUserData(() => ({
           ...userdata,
         }));
+
         console.log("fetched user");
       } catch (error) {
         console.log("Failed to get user profile", error);
@@ -63,23 +66,41 @@ export default function EditProfile() {
     handleUserProfile();
   }, [user]);
 
-  async function handleChangeProfilepic(event) {
+  const handleProfilePic = async (event) => {
     try {
+      if (!event.target.files[0]) {
+        return;
+      }
       const file = event.target.files[0];
       const arrayBuffer = await file.arrayBuffer();
 
+      const blob = new Blob([arrayBuffer], { type: file.type });
+      const dataUrl = URL.createObjectURL(blob);
+      setImageSrc(dataUrl);
+
+      setImageBuffer(arrayBuffer);
+    } catch (error) {
+      console.error("Error reading file:", error);
+    }
+  };
+
+  async function handleChangeProfilepic() {
+    try {
+      if (!imageBuffer) {
+        return;
+      }
       const path = `users/${userId}/profilePic.jpg`;
-      const imageUrl = await uploadImageToServer(arrayBuffer, path);
+      const imageUrl = await uploadImageToServer(imageBuffer, path);
       const response = await fetch("/api/update_profile_pic", {
         method: "POST",
         body: JSON.stringify({ imageUrl, userId }),
       });
       if (!response.ok) {
-        throw new Error("Something went wrong. Try again");
+        throw new Error("");
       }
-      console.log("profile pic updated");
+      handlePopUp("success", "Profile pic changed");
     } catch (error) {
-      console.error("Error: ", error);
+      handlePopUp("error", "Failed to changed Profile pic. Try again");
     }
   }
 
@@ -178,7 +199,9 @@ export default function EditProfile() {
             <div className="relative inline-block">
               <ProfileIcon
                 profile_pic={
-                  "profilePicture" in userData
+                  imageSrc
+                    ? imageSrc
+                    : userData.profilePicture
                     ? userData.profilePicture
                     : default_profile_pic
                 }
@@ -196,10 +219,18 @@ export default function EditProfile() {
               <input
                 type="file"
                 ref={changeUserProfileRef}
-                onChange={handleChangeProfilepic}
+                onChange={handleProfilePic}
                 accept="image/*"
                 className="hidden"
               />
+            </div>
+            <div>
+              <button
+                className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
+                onClick={handleChangeProfilepic}
+              >
+                Update profile pic
+              </button>
             </div>
           </div>
         </div>

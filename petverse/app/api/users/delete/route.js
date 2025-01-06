@@ -82,6 +82,6 @@ export async function POST(req) {
 
     return NextResponse.json("Successfully deleted user", { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: error.code }, { status: 401 });
+    return NextResponse.json({ error: error.message }, { status: 401 });
   }
 }
