@@ -8,7 +8,8 @@ import { connectToDatabase } from "@/app/utils/db";
 export async function POST(req) {
   try {
     const db = await connectToDatabase();
-    const { userId, activeChat, message } = await req.json();
+    const { userId, activeChat, message, type } = await req.json();
+    console.log(message);
     if (!message.trim()) {
       return NextResponse.json("No Message to send", { status: 200 });
     }
@@ -20,14 +21,21 @@ export async function POST(req) {
     push(messageRef, {
       sender: userId,
       content: message,
+      type: type,
       timestamp: serverTimestamp(),
     });
     const user2 = await db
       .collection("users")
       .findOne({ _id: new ObjectId(userId) });
 
+    const lastMessage = message.startsWith(
+      "https://firebasestorage.googleapis.com"
+    )
+      ? "image.jpg"
+      : message;
+
     update(ref(database, `chats/${userId}/${activeChat}`), {
-      last_message: message,
+      last_message: lastMessage,
       timestamp: serverTimestamp(),
     });
 
@@ -36,7 +44,7 @@ export async function POST(req) {
     console.log(chatdata);
 
     const chatUpdateData = {
-      last_message: message,
+      last_message: lastMessage,
       name: user2.username,
       timestamp: serverTimestamp(),
     };
