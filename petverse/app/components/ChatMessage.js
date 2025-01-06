@@ -27,24 +27,13 @@ export default function ChatMessage({ content, type }) {
           />
         </div>
       );
-    case "link":
-      return (
-        <a
-          href={message}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-300 underline"
-        >
-          {content}
-        </a>
-      );
     default: {
       const urlRegex =
         /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
 
       const parts = content.split(urlRegex);
       return (
-        <p className="w-full overflow-wrap break-words text-left">
+        <p className="w-full overflow-wrap break-words text-left p-3">
           {parts.map((part, index) =>
             urlRegex.test(part) ? (
               <Link
