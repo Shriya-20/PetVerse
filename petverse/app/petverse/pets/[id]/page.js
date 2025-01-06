@@ -10,6 +10,7 @@ import Modal from "@/app/components/Modal";
 import LoginDoggy from "@/public/logindoggy.jpg";
 import { uploadImageToServer } from "@/app/actions";
 import { useRouter } from "next/navigation";
+import defaultImage from "@/public/default_item.png";
 
 import {
   Popover,
@@ -23,16 +24,23 @@ export default function PetProfile() {
   const params = useParams();
   const changePetProfileRef = useRef();
   const petMedicalRef = useRef();
+  const addPostImageRef = useRef();
   const [petData, setPetData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModal2Open, setIsModel2Open] = useState(false);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [confirm, setConfirm] = useState("");
   const [newName, setNewName] = useState("");
   const [newBreed, setNewBreed] = useState("");
+  const [caption, setCaption] = useState("");
+  const [petPosts, setPetPosts] = useState([]);
   const [newLocation, setNewLocation] = useState("");
+  const [postImage, setPostImage] = useState("");
+  const [imageBuffer, setImageBuffer] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null);
   const { user } = useUser();
   const router = useRouter();
-
+  const petId = params.id;
   const userId = user.id;
 
   useEffect(() => {
@@ -55,7 +63,29 @@ export default function PetProfile() {
         console.log(error);
       }
     }
+
+    async function getPetPosts() {
+      try {
+        const response = await fetch("/api/pets/fetchposts", {
+          method: "POST",
+          body: JSON.stringify({ petId }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch posts");
+        }
+        console.log("Successfully fetched posts");
+        const data = await response.json();
+        console.log("PET DATAATATTAT");
+        console.log(data);
+
+        setPetPosts(() => data);
+        console.log(petPosts);
+      } catch (error) {
+        console.log("Failed to fetch posts", error);
+      }
+    }
     getPetData();
+    getPetPosts();
   }, []);
 
   const onClose = () => {
@@ -124,6 +154,51 @@ export default function PetProfile() {
     }
   }
 
+  // function to create post
+  async function handleCreateNewPost() {
+    try {
+      const identifier = new Date();
+      const path = `${petId}/posts/file_${identifier}.jpg`;
+      console.log(imageBuffer);
+      const imageUrl = await uploadImageToServer(imageBuffer, path);
+      console.log(imageUrl);
+
+      const response = await fetch("/api/pets/post", {
+        method: "POST",
+        body: JSON.stringify({ imageUrl, petId, caption }),
+      });
+      setImageSrc(null);
+      setImageBuffer(null);
+      setCaption(null);
+      if (!response.ok) {
+        throw new Error("Failed to create post");
+      }
+      console.log("Successfully created post");
+    } catch (error) {
+      console.log(error);
+      console.log("Failed to create post");
+    }
+  }
+
+  // function to set post image
+  const handleSelectImage = async (event) => {
+    try {
+      if (!event.target.files[0]) {
+        return;
+      }
+      const file = await event.target.files[0];
+      const arrayBuffer = await file.arrayBuffer();
+      const blob = new Blob([arrayBuffer], { type: file.type });
+      const dataUrl = URL.createObjectURL(blob);
+      setImageSrc(dataUrl);
+      setImageBuffer(arrayBuffer);
+      console.log(imageBuffer);
+      console.log(imageSrc);
+    } catch (error) {
+      console.error("Error reading file:", error);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col my-0 mx-2 md:mx-8 lg:mx-16 relative">
@@ -179,7 +254,10 @@ export default function PetProfile() {
                 Edit profile
               </button>
               <hr></hr>
-              <button className="w-full block p-2 hover:dark:bg-gray-700 hover:bg-gray-300 rounded-lg hover:text-customTeal">
+              <button
+                className="w-full block p-2 hover:dark:bg-gray-700 hover:bg-gray-300 rounded-lg hover:text-customTeal"
+                onClick={() => setIsPostModalOpen(true)}
+              >
                 New post
               </button>
               <hr></hr>
@@ -196,17 +274,18 @@ export default function PetProfile() {
         <hr></hr>
         <br></br>
         <div className="grid grid-cols-3 gap-1">
-          {posts.map((post, index) => (
+          {petPosts.map((post, index) => (
             <div key={index} className="relative w-full h-0 pb-[100%]">
               <Image
-                src={post.image}
+                src={post.imageUrl ? post.imageUrl : defaultImage}
                 alt="user post"
-                width={300} //
-                height={300} //
+                width={300}
+                height={300}
                 className="absolute top-0 left-0 w-full h-full object-cover  shadow-lg transition-all duration-300 hover:scale-95"
                 style={{
                   objectFit: "cover",
                 }}
+                unoptimized
               />
             </div>
           ))}
@@ -396,6 +475,69 @@ export default function PetProfile() {
             Delete
           </button>
         </form>
+      </Modal>
+      <Modal
+        onClose={() => {
+          setImageSrc(null);
+          setImageBuffer(null);
+          setCaption(null);
+          setIsPostModalOpen(false);
+        }}
+        isOpen={isPostModalOpen}
+      >
+        <div>
+          <div className="text-center mb-2 font-semibold">
+            Create a new post!
+          </div>
+          <div className="w-full flex justify-center">
+            <Image
+              src={imageSrc ? imageSrc : defaultImage}
+              alt="post image"
+              className="object-cover rounded-sm"
+              layout="intrinsic"
+              width={200}
+              height={160}
+              onClick={() => addPostImageRef.current.click()}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              ref={addPostImageRef}
+              onChange={(e) => {
+                if (
+                  e.target.files[0] &&
+                  e.target.files[0].type.startsWith("image/")
+                ) {
+                  handleSelectImage(e);
+                } else {
+                  alert("Please select a valid image");
+                }
+              }}
+            />
+          </div>
+
+          <div className="mt-2">
+            <textarea
+              placeholder="Enter caption"
+              className="w-full p-2 border border-gray-300 rounded-sm h-20 resize-none"
+              onChange={(e) => setCaption(e.target.value)}
+            />
+            <button
+              className="bg-customTeal text-white rounded-sm p-2 mt-2 hover:bg-teal-600 w-full"
+              onClick={() => {
+                if (imageBuffer === null) {
+                  alert("Add an image");
+                } else {
+                  handleCreateNewPost();
+                  setIsPostModalOpen(false);
+                }
+              }}
+            >
+              Create Post
+            </button>
+          </div>
+        </div>
       </Modal>
     </>
   );
