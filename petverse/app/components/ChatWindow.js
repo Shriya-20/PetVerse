@@ -5,12 +5,13 @@ import ProfileIcon from "./ProfileIcon";
 import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
 import { useUser } from "@/context/UserContext";
 import { useState, useEffect, useRef } from "react";
-import { ref, onValue, off } from "firebase/database";
+import { ref, onValue, off, update } from "firebase/database";
 import { database } from "../_backend/firebaseConfig";
 import ChatMessage from "./ChatMessage";
 import EmojiPicker from "emoji-picker-react";
 import { uploadImageToServer } from "../actions";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function ChatWindow({
   activeChat,
@@ -28,12 +29,22 @@ export default function ChatWindow({
   const [mediaBuffer, setMediaBuffer] = useState(null);
   const [openedMedia, setOpenedMedia] = useState(null);
   const [openedMediaType, setOpenedMediaType] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(true);
   const { user } = useUser();
   const userId = user.id;
   const chatEndRef = useRef(null);
   const addImageRef = useRef();
+  const router = useRouter();
 
   // Retrieve user chats
+
+  // to make sure that unread message dosent increase when user is
+  // viewing the chat
+
+  update(ref(database, `chats/${userId}/${activeChat}`), {
+    unread_messages: null,
+  });
+
   useEffect(() => {
     const messagesRef = ref(
       database,
