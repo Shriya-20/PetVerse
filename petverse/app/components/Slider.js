@@ -4,8 +4,14 @@ import { useState, useEffect } from "react";
 import SlideImage from "./ImageComponent";
 import NavigationButtons from "./NavigationButtons";
 import SlideIndicators from "./SlideIndicators";
+import defaultImage from "@/public/default_item.png";
+import Image from "next/image";
 
-export default function Slider({ autoSlide = false, autoSlideInterval = 3000, slides }) {
+export default function Slider({
+  autoSlide = false,
+  autoSlideInterval = 3000,
+  slides,
+}) {
   const [curr, setCurr] = useState(0);
   const [visibleImages, setVisibleImages] = useState(5); // Default: Show 5 images
 
@@ -51,6 +57,8 @@ export default function Slider({ autoSlide = false, autoSlideInterval = 3000, sl
     };
   }, []); // Empty dependency array to set up the listener only once
 
+  console.log(slides);
+
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="relative w-full h-full p-4 rounded-2xl overflow-hidden">
@@ -58,6 +66,7 @@ export default function Slider({ autoSlide = false, autoSlideInterval = 3000, sl
           {Array.from({ length: visibleImages }).map((_, index) => {
             const position = curr + index - Math.floor(visibleImages / 2);
             const slideIndex = (position + slides.length) % slides.length;
+            const currentWidth = window.innerWidth;
 
             // Calculate opacity and width based on the index position
             const isCurrent = index === Math.floor(visibleImages / 2);
@@ -69,7 +78,8 @@ export default function Slider({ autoSlide = false, autoSlideInterval = 3000, sl
 
             if (isCurrent) {
               opacity = "100"; // Active image is fully visible
-              width = 30; // Active image is larger
+              width =
+                currentWidth >= 768 ? (currentWidth >= 1200 ? 30 : 40) : 80; // Active image is larger
             } else if (isPrevious || isNext) {
               opacity = "70"; // Previous and next images are less visible
               width = 20; // Previous and next images are smaller
@@ -77,9 +87,16 @@ export default function Slider({ autoSlide = false, autoSlideInterval = 3000, sl
 
             return (
               <SlideImage
-                key={slideIndex}
-                src={slides[slideIndex].src}
+                key={slides[slideIndex]._id}
+                src={
+                  slides[slideIndex]?.imageUrl === ""
+                    ? defaultImage
+                    : slides[slideIndex]?.imageUrl
+                }
                 alt={`Slide ${slideIndex}`}
+                name={slides[slideIndex]?.pet_name}
+                profileImage={slides[slideIndex]?.pet_profile_pic}
+                description={slides[slideIndex]?.caption}
                 opacity={opacity}
                 width={width}
               />
