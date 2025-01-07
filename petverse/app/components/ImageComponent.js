@@ -1,5 +1,5 @@
 import Image from "next/image";
-import defaultImage from "@/public/default_item.png";
+import defaultImage from "@/public/default_user_profile_pic.jpeg";
 
 const SlideImage = ({
   src,
@@ -42,7 +42,7 @@ const SlideImage = ({
         alt={alt}
         width={width}
         height={500}
-        className="w-full h-64 object-cover rounded-lg"
+        className="w-full h-64 object-cover"
         unoptimized
       />
     </div>

@@ -5,13 +5,12 @@ import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import posts from "@/test_data/posts";
 import Modal from "@/app/components/Modal";
 import LoginDoggy from "@/public/logindoggy.jpg";
 import { uploadImageToServer } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import defaultImage from "@/public/default_item.png";
-import Slider from "@/app/components/Slider";
+import Slider2 from "@/app/components/Slider2";
 
 import {
   Popover,
@@ -19,7 +18,6 @@ import {
   PopoverContent,
 } from "@material-tailwind/react";
 import { useUser } from "@/context/UserContext";
-import { userAgent } from "next/server";
 
 export default function PetProfile() {
   const params = useParams();
@@ -46,6 +44,7 @@ export default function PetProfile() {
   const userId = user.id;
 
   useEffect(() => {
+    // Fetch pet data
     async function getPetData() {
       try {
         const response = await fetch("/api/pets", {
@@ -66,6 +65,7 @@ export default function PetProfile() {
       }
     }
 
+    // Fetch posts
     async function getPetPosts() {
       try {
         const response = await fetch("/api/pets/fetchposts", {
@@ -94,6 +94,7 @@ export default function PetProfile() {
     setIsModalOpen(false);
   };
 
+  // Edit profile
   const handleChangeInfo = async (field, value) => {
     try {
       const response = await fetch("/api/pets/update", {
@@ -111,6 +112,7 @@ export default function PetProfile() {
     }
   };
 
+  // Delete profile
   async function handleDeleteProfile() {
     try {
       if (confirm !== "CONFIRM") {
@@ -132,6 +134,7 @@ export default function PetProfile() {
     }
   }
 
+  // Change profile pic
   const handleChangeProfilepicButton = () => {
     changePetProfileRef.current.click();
   };
@@ -284,6 +287,7 @@ export default function PetProfile() {
 
             <hr></hr>
             <br></br>
+            {/* Posts display grid */}
             <div className="grid grid-cols-3 gap-1">
               {petPosts.map((post, index) => (
                 <div key={index} className="relative w-full h-0 pb-[100%]">
@@ -298,7 +302,7 @@ export default function PetProfile() {
                     }}
                     unoptimized
                     onClick={() => {
-                      setOpenedPost(post._id);
+                      setOpenedPost(index);
                       setIsPostOpen(true);
                     }}
                   />
@@ -491,6 +495,7 @@ export default function PetProfile() {
               </button>
             </form>
           </Modal>
+          {/* Create New Post */}
           <Modal
             onClose={() => {
               setImageSrc(null);
@@ -556,12 +561,18 @@ export default function PetProfile() {
           </Modal>
         </>
       )}
+      {/* Show posts */}
       {isPostOpen && (
-        <div>
-          <div onClick={() => setIsPostOpen(false)}>x</div>
-          <div className="min-h-screen flex justify-center items-center">
-            <div className="relative w-full max-w-[1370px]">
-              <Slider slides={petPosts} />
+        <div className="relative h-full">
+          <div
+            onClick={() => setIsPostOpen(false)}
+            className="absolute top-4 right-4 px-4 py-2 text-xl hover:shadow-lg rounded-full  cursor-pointer z-10"
+          >
+            x
+          </div>
+          <div className="relative h-full flex justify-center items-center">
+            <div className="relative h-auto w-full max-w-[1370px]">
+              <Slider2 slides={petPosts} currSlide={openedPost} />
             </div>
           </div>
         </div>
