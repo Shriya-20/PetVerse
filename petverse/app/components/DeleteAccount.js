@@ -27,17 +27,13 @@ export default function DeleteAccount() {
 
       const responseData = await response.json();
       if (!response.ok) {
-        return new Error(responseData.error);
+        throw new Error(responseData.error);
       }
 
       console.log("user deleted successfully");
       router.push("/auth/login");
     } catch (error) {
-      if (error.message == "Please Enter 'CONFIRM'") {
-        setError(error.message);
-      } else {
-        setError("Something went wrong. Try again later");
-      }
+      setError(error.message);
     }
   }
   return (

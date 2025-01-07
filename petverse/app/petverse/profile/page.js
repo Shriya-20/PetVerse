@@ -7,7 +7,7 @@ import ProfileIcon from "@/app/components/ProfileIcon";
 import { uploadImageToServer } from "@/app/actions";
 import { useState, useEffect, useRef } from "react";
 import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
-import default_profile_pic from "@/public/default_user_profile_pic.jpeg"
+import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -118,7 +118,7 @@ export default function Profile() {
       const file = event.target.files[0];
       const imageBuffer = await file.arrayBuffer();
       const path = `${petId}/profilePicture.jpg`;
-      const imageUrl = await uploadImageToServer(imageBuffer, path);
+      const imageUrl = await uploadImageToServer(imageBuffer, path, "image");
       const response = await fetch("/api/update_pet_profile_pic", {
         method: "POST",
         body: JSON.stringify({ imageUrl, petId }),

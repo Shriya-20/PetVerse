@@ -27,7 +27,7 @@ export async function POST(req) {
     const arrayBuffer = await itemImage.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const imageUrl = await uploadImageToServer(buffer, path);
+    const imageUrl = await uploadImageToServer(buffer, path, "image");
 
     await db
       .collection("marketplaceitems")

@@ -140,7 +140,7 @@ export default function PetProfile() {
       const arrayBuffer = await file.arrayBuffer();
 
       const path = `${params.id}/profilePicture.jpg`;
-      const imageUrl = await uploadImageToServer(arrayBuffer, path);
+      const imageUrl = await uploadImageToServer(arrayBuffer, path, "image");
       const response = await fetch("/api/update_pet_profile_pic", {
         method: "POST",
         body: JSON.stringify({ imageUrl, userId }),
