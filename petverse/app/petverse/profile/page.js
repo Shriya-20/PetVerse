@@ -116,6 +116,11 @@ export default function Profile() {
     setIsLoading(true);
     try {
       const file = event.target.files[0];
+      if (!file || !file.type.startsWith("image/")) {
+        alert("Please select a valid image file");
+
+        return;
+      }
       const imageBuffer = await file.arrayBuffer();
       const path = `${petId}/profilePicture.jpg`;
       const imageUrl = await uploadImageToServer(imageBuffer, path, "image");
