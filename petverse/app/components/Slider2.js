@@ -5,16 +5,24 @@ import SlideImage from "./ImageComponent";
 import NavigationButtons from "./NavigationButtons";
 import SlideIndicators from "./SlideIndicators";
 import defaultImage from "@/public/default_item.png";
-import Image from "next/image";
+import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 
-export default function Slider({
+export default function Slider1({
   autoSlide = false,
   autoSlideInterval = 3000,
+  petData,
   slides,
   currSlide,
 }) {
   const [curr, setCurr] = useState(currSlide);
   const [visibleImages, setVisibleImages] = useState(5); // Default: Show 5 images
+  const [profilePicture, setProfilePicture] = useState(default_pet_profile_pic);
+
+  useEffect(() => {
+    if (petData.profilePicture) {
+      setProfilePicture(petData.profilePicture);
+    }
+  }, []);
 
   const prev = () => setCurr((curr) => (curr === 0 ? curr : curr - 1));
 
@@ -99,8 +107,8 @@ export default function Slider({
                     : slides[slideIndex]?.imageUrl
                 }
                 alt={`Slide ${slideIndex}`}
-                name={slides[slideIndex]?.pet_name}
-                profileImage={slides[slideIndex]?.pet_profile_pic}
+                name={petData.name}
+                profileImage={profilePicture}
                 description={slides[slideIndex]?.caption}
                 opacity={opacity}
                 width={width}

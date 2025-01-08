@@ -572,7 +572,11 @@ export default function PetProfile() {
           </div>
           <div className="relative h-full flex justify-center items-center">
             <div className="relative h-auto w-full max-w-[1370px]">
-              <Slider2 slides={petPosts} currSlide={openedPost} />
+              <Slider2
+                petData={petData}
+                slides={petPosts}
+                currSlide={openedPost}
+              />
             </div>
           </div>
         </div>
