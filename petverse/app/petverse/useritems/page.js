@@ -47,6 +47,10 @@ export default function UserItems() {
   const handleItemImage = async (e) => {
     try {
       const file = e.target.files[0];
+      if (!file || !file.type.startsWith("image/")) {
+        alert("Please select an valid image");
+        return;
+      }
       const arrayBuffer = await file.arrayBuffer();
 
       const blob = new Blob([arrayBuffer], { type: file.type });

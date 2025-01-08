@@ -11,7 +11,6 @@ export async function POST(req) {
       .find({ petId: new ObjectId(petId) })
       .toArray();
     return NextResponse.json(posts, { status: 200 });
-    return;
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch posts" },
