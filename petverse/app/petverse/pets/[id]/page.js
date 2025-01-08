@@ -11,6 +11,7 @@ import { uploadImageToServer } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import defaultImage from "@/public/default_item.png";
 import Slider2 from "@/app/components/Slider2";
+import Loading from "@/app/components/Loading2";
 
 import {
   Popover,
@@ -38,6 +39,8 @@ export default function PetProfile() {
   const [openedPost, setOpenedPost] = useState(null);
   const [imageBuffer, setImageBuffer] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const [profileImageSrc, setProfileImageSrc] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const router = useRouter();
   const petId = params.id;
@@ -141,20 +144,28 @@ export default function PetProfile() {
 
   async function handleChangeProfilepic(event) {
     try {
+      setIsLoading(true);
       const file = event.target.files[0];
+      if (!file || !file.type.startsWith("image/")) {
+        alert("Please select an valid image file");
+        return;
+      }
       const arrayBuffer = await file.arrayBuffer();
 
       const path = `${params.id}/profilePicture.jpg`;
       const imageUrl = await uploadImageToServer(arrayBuffer, path, "image");
       const response = await fetch("/api/update_pet_profile_pic", {
         method: "POST",
-        body: JSON.stringify({ imageUrl, userId }),
+        body: JSON.stringify({ imageUrl, petId }),
       });
       if (!response.ok) {
         throw new Error("Something went wrong. Try again");
       }
       console.log("profile pic updated");
+      petData.profilePicture = imageUrl;
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error("Error: ", error);
     }
   }
@@ -310,6 +321,7 @@ export default function PetProfile() {
               ))}
             </div>
           </div>
+          {/* Edit profile section*/}
           <Modal onClose={onClose} isOpen={isModalOpen}>
             <div className="md:grid md:grid-cols-3 gap-8 p-8">
               {/* Profile Picture Section */}
@@ -327,6 +339,7 @@ export default function PetProfile() {
                       height="h-[150px]"
                       className="border-2 border-light1 mb-4"
                     ></ProfileIcon>
+                    <Loading isLoading={isLoading} />
                     {/* Edit Button */}
                     <button
                       className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter rounded-full hover:bg-teal-600"

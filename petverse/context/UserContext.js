@@ -63,9 +63,10 @@ export function Userprovider({ children }) {
   if ((isLoading || user === null) && !path.includes("/auth")) {
     return (
       <>
-        <div className="flex items-center justify-center dark:bg-black h-full">
+        <div className="flex items-center justify-center bg-black h-full">
           <Image
-            src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
+            //src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
+            src={darkLoadingGIF}
             alt="loading gif"
             priority={true}
           />

@@ -12,6 +12,8 @@ import EmojiPicker from "emoji-picker-react";
 import { uploadImageToServer } from "../actions";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Loading from "./Loading2";
 
 export default function ChatWindow({
   activeChat,
@@ -30,6 +32,7 @@ export default function ChatWindow({
   const [openedMedia, setOpenedMedia] = useState(null);
   const [openedMediaType, setOpenedMediaType] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const userId = user.id;
   const chatEndRef = useRef(null);
@@ -81,6 +84,7 @@ export default function ChatWindow({
   // Send Message
   async function HandleSendMessage(type) {
     if (type !== "") {
+      setIsLoading(true);
       try {
         // Upload to firebase storeage
         const timestamp = new Date();
@@ -98,6 +102,7 @@ export default function ChatWindow({
         }
 
         console.log("Sent successfully");
+        setIsLoading(false);
         setIsFileOpen(false);
         return;
       } catch (error) {
@@ -222,7 +227,9 @@ export default function ChatWindow({
     <>
       {chatOpen && (
         <>
+          <Loading isLoading={isLoading} scale={150} />
           {/* Chat header */}
+
           <div className="sticky p-2 top-0 flex items-center bg-light1 dark:bg-dark1 shadow-md dark:border-0 z-50">
             {chatOpen && isSmallScreen && (
               <ArrowLeftIcon
@@ -232,16 +239,18 @@ export default function ChatWindow({
             )}
             {/* Name and profile pic */}
             <div className="flex items-center flex-grow overflow-hidden sm:ml-0 md:ml-2">
-              <ProfileIcon
-                profile_pic={
-                  activeChatData.profile_picture
-                    ? activeChatData.profile_picture
-                    : default_profile_pic
-                }
-                width="w-12"
-                height="h-12"
-                custom_style="mx-2"
-              />
+              <Link href={`/petverse/profile/${activeChat}`}>
+                <ProfileIcon
+                  profile_pic={
+                    activeChatData.profile_picture
+                      ? activeChatData.profile_picture
+                      : default_profile_pic
+                  }
+                  width="w-12"
+                  height="h-12"
+                  custom_style="mx-2"
+                />
+              </Link>
               <p className="font-bold text-base md:text-lg text-textDarker dark:text-textLight truncate pl-5">
                 {activeChatData.name}
               </p>
@@ -400,84 +409,88 @@ export default function ChatWindow({
 
           {/* Show image/video before sending */}
           {isFileOpen && (
-            <div className="relative mt-16 w-full  h-auto z-50 bg-light2 dark:bg-dark2 p-4 rounded-lg">
-              <div
-                className="absolute -top-10 right-3 w-8 h-8 flex items-center justify-center bg-gray-700 text-textLight rounded-full cursor-pointer hover:bg-gray-600"
-                onClick={() => setIsFileOpen(false)}
-              >
-                X
-              </div>
-              {/* Image */}
-              {mediaType === "image" && (
-                <div className="relative w-full h-96">
-                  <Image
-                    src={mediaSrc}
-                    alt="selected file"
-                    layout="fill"
-                    objectFit="contain"
-                    className="rounded-lg"
-                  />
-                </div>
-              )}
-              {/* Video */}
-              {mediaType === "video" && (
-                <div className="relative w-full h-96">
-                  <video controls width={700} height={700}>
-                    <source src={mediaSrc} type="video/mp4" />
-                    Your browser does not support videos.
-                  </video>
-                </div>
-              )}
-
-              {/* Send media button */}
-              <button
-                className="absolute -bottom-20 right-3 w-10 h-10 flex items-center bg-customTeal text-white py-2 px-2 rounded-full hover:bg-teal-600"
-                onClick={() => {
-                  HandleSendMessage(mediaType);
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6"
+            <>
+              <div className="relative mt-16 w-full  h-auto z-49 bg-light2 dark:bg-dark2 p-4 rounded-lg">
+                <div
+                  className="absolute -top-10 right-3 w-8 h-8 flex items-center justify-center bg-gray-700 text-textLight rounded-full cursor-pointer hover:bg-gray-600"
+                  onClick={() => setIsFileOpen(false)}
                 >
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                </svg>
-              </button>
-            </div>
+                  X
+                </div>
+                {/* Image */}
+                {mediaType === "image" && (
+                  <div className="relative w-full h-96">
+                    <Image
+                      src={mediaSrc}
+                      alt="selected file"
+                      layout="fill"
+                      objectFit="contain"
+                      className="rounded-lg"
+                    />
+                  </div>
+                )}
+                {/* Video */}
+                {mediaType === "video" && (
+                  <div className="relative w-full h-96">
+                    <video controls width={700} height={700}>
+                      <source src={mediaSrc} type="video/mp4" />
+                      Your browser does not support videos.
+                    </video>
+                  </div>
+                )}
+
+                {/* Send media button */}
+                <button
+                  className="absolute -bottom-20 right-3 w-10 h-10 flex items-center bg-customTeal text-white py-2 px-2 rounded-full hover:bg-teal-600"
+                  onClick={() => {
+                    HandleSendMessage(mediaType);
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    className="w-6 h-6"
+                  >
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                  </svg>
+                </button>
+              </div>
+            </>
           )}
           {/* Open selected image */}
           {openedMedia && (
-            <div className="relative mt-16 w-full  h-auto z-50 bg-light1 dark:bg-dark2 p-4 rounded-lg">
-              <div
-                className="w-8 h-8 flex items-center justify-center bg-gray-700 text-textLight rounded-full cursor-pointer hover:bg-gray-600"
-                onClick={() => setOpenedMedia(null)}
-              >
-                X
+            <>
+              <div className="relative mt-16 w-full  h-auto z-49 bg-light1 dark:bg-dark2 p-4 rounded-lg">
+                <div
+                  className="w-8 h-8 flex items-center justify-center bg-gray-700 text-textLight rounded-full cursor-pointer hover:bg-gray-600"
+                  onClick={() => setOpenedMedia(null)}
+                >
+                  X
+                </div>
+                {/* Image */}
+                {openedMediaType === "image" && (
+                  <div className="relative w-full h-96">
+                    <Image
+                      src={openedMedia}
+                      alt="selected file"
+                      layout="fill"
+                      objectFit="contain"
+                      className="rounded-lg"
+                    />
+                  </div>
+                )}
+                {/* Video */}
+                {openedMediaType === "video" && (
+                  <div className="relative w-full h-96 m-2">
+                    <video controls width={700} height={700}>
+                      <source src={openedMedia} type="video/mp4" />
+                      Your browser does not support videos.
+                    </video>
+                  </div>
+                )}
               </div>
-              {/* Image */}
-              {openedMediaType === "image" && (
-                <div className="relative w-full h-96">
-                  <Image
-                    src={openedMedia}
-                    alt="selected file"
-                    layout="fill"
-                    objectFit="contain"
-                    className="rounded-lg"
-                  />
-                </div>
-              )}
-              {/* Video */}
-              {openedMediaType === "video" && (
-                <div className="relative w-full h-96 m-2">
-                  <video controls width={700} height={700}>
-                    <source src={openedMedia} type="video/mp4" />
-                    Your browser does not support videos.
-                  </video>
-                </div>
-              )}
-            </div>
+            </>
           )}
         </>
       )}
