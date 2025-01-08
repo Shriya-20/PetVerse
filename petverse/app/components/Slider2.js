@@ -17,6 +17,8 @@ export default function Slider1({
   const [curr, setCurr] = useState(currSlide);
   const [visibleImages, setVisibleImages] = useState(5); // Default: Show 5 images
   const [profilePicture, setProfilePicture] = useState(default_pet_profile_pic);
+  const [ifPrev, setIfPrev] = useState(true);
+  const [ifNext, setIfNext] = useState(true);
 
   useEffect(() => {
     if (petData.profilePicture) {
@@ -43,6 +45,7 @@ export default function Slider1({
     return () => window.removeEventListener("resize", updateVisibleImages);
   }, []);
 
+  // For auto scrolling
   useEffect(() => {
     if (!autoSlide) return;
     const slideInterval = setInterval(next, autoSlideInterval);
@@ -67,6 +70,12 @@ export default function Slider1({
   }, []); // Empty dependency array to set up the listener only once
 
   console.log(slides);
+
+  // Navigation keys for the first and last posts
+  useEffect(() => {
+    setIfPrev(curr === 0 ? false : true);
+    setIfNext(curr === slides.length - 1 ? false : true);
+  }, [curr]);
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
@@ -117,7 +126,12 @@ export default function Slider1({
           })}
         </div>
 
-        <NavigationButtons onPrev={prev} onNext={next} />
+        <NavigationButtons
+          onPrev={prev}
+          onNext={next}
+          ifPrev={ifPrev}
+          ifNext={ifNext}
+        />
         <SlideIndicators slides={slides} currentIndex={curr} />
       </div>
     </div>
