@@ -7,20 +7,13 @@ export async function POST(req) {
   try {
     const { imageUrl, petId, caption } = await req.json();
     const db = await connectToDatabase();
-    const petData = await db
-      .collection("pet")
-      .findOne({ _id: new ObjectId(petId) });
     const currentDate = new Date();
     const insert = {
-      pet_id: new ObjectId(petId),
-      pet_name: petData.name,
+      petId: new ObjectId(petId),
       imageUrl: imageUrl,
       timestamp: currentDate,
       likes: 0,
     };
-    if (petData.profilePicture) {
-      insert["pet_profile_pic"] = petData.profilePicture;
-    }
     if (caption !== null) {
       insert["caption"] = caption;
     }
