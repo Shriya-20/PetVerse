@@ -72,14 +72,13 @@ export default function Messages() {
 
   if (isLoading || user === undefined) {
     return (
-      <div>
-        <div className="flex items-center justify-center dark:bg-black h-full">
-          <Image
-            src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
-            alt="loading gif"
-            priority={true}
-          />
-        </div>
+      <div className="flex h-svh justify-center dark:bg-black items-center">
+        <Image
+          src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
+          alt="loading gif"
+          priority={true}
+          className="w-full "
+        />
       </div>
     );
   }
