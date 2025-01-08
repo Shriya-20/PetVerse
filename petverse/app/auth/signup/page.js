@@ -3,7 +3,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
+import Loading from "@/app/components/Loading2";
+import {
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth } from "@/app/_backend/firebaseConfig";
 
 export default function Signup() {
@@ -14,7 +19,7 @@ export default function Signup() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   async function handleSignup(e) {
@@ -23,6 +28,7 @@ export default function Signup() {
       if (password != confirmPassword) {
         throw new Error("password and confirm password do not match");
       }
+      setIsLoading(true);
       const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
@@ -39,8 +45,13 @@ export default function Signup() {
       if (!response.ok) {
         throw new Error(errorData.error);
       }
-      router.push("/auth/login");
+      setIsLoading(false);
+      setError("success");
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 1000);
     } catch (error) {
+      setIsLoading(false);
       if (error.message == "auth/email-already-in-use") {
         setError("Email address already in use");
       } else if (error.message == "auth/weak-password") {
@@ -213,6 +224,7 @@ export default function Signup() {
             className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
           />
         </div>
+        {/* Password */}
         <div className="mt-4">
           <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Password
@@ -226,6 +238,7 @@ export default function Signup() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
             />
+            {/* Show password */}
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
@@ -239,7 +252,7 @@ export default function Signup() {
             </button>
           </div>
         </div>
-
+        {/* Confirm password */}
         <div className="mt-4">
           <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Confirm Password
@@ -266,20 +279,37 @@ export default function Signup() {
             </button>
           </div>
         </div>
-        {error && (
+        {error && error !== "success" && (
           <div>
             <p className="text-red-700 text-right">{error}</p>
+          </div>
+        )}
+        {error && error === "success" && (
+          <div>
+            <p className="text-teal-500 text-right">
+              Created account successfully
+            </p>
           </div>
         )}
 
         {/* Register button */}
         <div className="mt-8">
-          <button
-            type="submit"
-            className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
-          >
-            Register
-          </button>
+          {!isLoading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
+            >
+              Register
+            </button>
+          )}
+          {isLoading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-4 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
+            >
+              <Loading isLoading={isLoading} />
+            </button>
+          )}
         </div>
       </form>
       {/* Link to Login page */}

@@ -7,19 +7,26 @@ import logo from "@/public/paw.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { auth } from "@/app/_backend/firebaseConfig";
-import { FacebookAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import Loading from "@/app/components/Loading2";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
   async function handleLogin(e) {
     e.preventDefault();
     try {
+      setIsLoading(true);
       const response = await fetch("/api/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
@@ -29,9 +36,10 @@ export default function Login() {
       if (!response.ok) {
         throw new Error(res.error);
       }
-
+      setIsLoading(false);
       router.push("/petverse/messages");
     } catch (error) {
+      setIsLoading(false);
       if (error.message == "auth/invalid-credential") {
         setError("invalid email or password");
       } else {
@@ -251,12 +259,22 @@ export default function Login() {
           </Link>
         </div>{" "}
         <div className="mt-8">
-          <button
-            type="submit"
-            className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/80 focus:outline-none focus:bg-customTeal/80"
-          >
-            Sign in
-          </button>
+          {!isLoading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/80 focus:outline-none focus:bg-customTeal/80"
+            >
+              Sign in
+            </button>
+          )}
+          {isLoading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-5 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/80 focus:outline-none focus:bg-customTeal/80"
+            >
+              <Loading isLoading={isLoading} />
+            </button>
+          )}
         </div>
       </form>{" "}
       {/* Create account */}
