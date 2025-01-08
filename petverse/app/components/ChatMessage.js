@@ -24,6 +24,7 @@ export default function ChatMessage({ content, type }) {
             height={150}
             width={150}
             className="rounded-md border border-light2 w-full max-w-sm"
+            unoptimized
           />
         </div>
       );
