@@ -6,6 +6,7 @@ import ProfileIcon from "./ProfileIcon";
 import { uploadImageToServer } from "../actions";
 import Popup from "./Popup";
 import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
+import Loading from "./Loading2";
 
 export default function EditProfile() {
   const changeUserProfileRef = useRef();
@@ -17,12 +18,7 @@ export default function EditProfile() {
   const [popUpType, setPopUpType] = useState("success");
   const [imageBuffer, setImageBuffer] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
-  const [passwordChangeData, setPasswordChangeData] = useState({
-    password: "",
-
-    newPassword: "",
-    confirmPassword: "",
-  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePopUp = (type, message) => {
     setPopUpType(type);
@@ -68,7 +64,11 @@ export default function EditProfile() {
 
   const handleProfilePic = async (event) => {
     try {
-      if (!event.target.files[0]) {
+      if (
+        !event.target.files[0] ||
+        !event.target.files[0].type.startsWith("image/")
+      ) {
+        alert("Please select an valid image");
         return;
       }
       const file = event.target.files[0];
@@ -86,6 +86,7 @@ export default function EditProfile() {
 
   async function handleChangeProfilepic() {
     try {
+      setIsLoading(true);
       if (!imageBuffer) {
         return;
       }
@@ -98,41 +99,13 @@ export default function EditProfile() {
       if (!response.ok) {
         throw new Error("");
       }
+      setIsLoading(false);
       handlePopUp("success", "Profile pic changed");
     } catch (error) {
+      setIsLoading(false);
       handlePopUp("error", "Failed to changed Profile pic. Try again");
     }
   }
-
-  const handleChangePasswordData = (event) => {
-    const { name, value } = event.target;
-    setPasswordChangeData({
-      ...passwordChangeData,
-      [name]: value,
-    });
-  };
-
-  const handleChangePassword = () => {
-    const isAnyEmpty = Object.values(passwordChangeData).some(
-      (value) => value.trim() === ""
-    );
-    if (isAnyEmpty) {
-      alert("All fields are required. Please fill out every field!");
-      return;
-    } else if (
-      passwordChangeData.confirmPassword !== passwordChangeData.newPassword
-    ) {
-      alert("New password and confirm password must be the same");
-      return;
-    } else if (passwordChangeData.password !== data.password) {
-      alert("Enter the current password correctly");
-      return;
-    } else {
-      data.password = passwordChangeData.newPassword;
-      alert("Password changed successfully!");
-      return;
-    }
-  };
 
   const handleLocationInput = (e) => {
     setNewLocation(e.target.value);
@@ -209,6 +182,7 @@ export default function EditProfile() {
                 height="h-[150px]"
                 className="border-2 border-light1 mb-4"
               ></ProfileIcon>
+              <Loading isLoading={isLoading} />
               {/* Edit Button */}
               <button
                 className="absolute bottom-0 right-0 mb-2 mr-2 p-2 bg-customTeal text-textLighter rounded-full hover:bg-teal-600"
@@ -260,37 +234,6 @@ export default function EditProfile() {
               Change Name
             </button>
           </form>
-
-          {/* Change Password Section */}
-          <div>
-            <input
-              name="password"
-              type="password"
-              placeholder="Enter old password"
-              onChange={handleChangePasswordData}
-              className="edit-profile-input"
-            />
-            <input
-              name="newPassword"
-              type="password"
-              placeholder="Enter new password"
-              onChange={handleChangePasswordData}
-              className="edit-profile-input"
-            />
-            <input
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm new password"
-              onChange={handleChangePasswordData}
-              className="edit-profile-input"
-            />
-            <button
-              onClick={handleChangePassword}
-              className="w-full p-2 text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-teal-600 focus:outline-none active:bg-customTeal"
-            >
-              Change Password
-            </button>
-          </div>
 
           {/* Change Location Section */}
           <form
