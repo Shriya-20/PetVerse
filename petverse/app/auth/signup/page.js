@@ -305,7 +305,7 @@ export default function Signup() {
           {isLoading && (
             <button
               type="submit"
-              className="w-full px-4 py-4 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
+              className="w-full px-4 py-5 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
             >
               <Loading isLoading={isLoading} />
             </button>
