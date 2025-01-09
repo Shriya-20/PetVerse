@@ -26,8 +26,8 @@ export default function Marketplace() {
       }
       const data = await response.json();
       setRandomItems(data);
-      console.log(data);
-      console.log("FETCHED DATA S");
+      //console.log(data);
+      //console.log("FETCHED DATA S");
     } catch (error) {
       console.log("Error in fetching items randomly", error);
     }
