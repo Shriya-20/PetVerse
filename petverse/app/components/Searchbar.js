@@ -1,12 +1,22 @@
+"use client";
+
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { useUser } from "@/context/UserContext";
 
 export default function Searchbar({ sendDatatoParent }) {
   const [searchedData, setSearchedData] = useState([]);
   const [isChatSearched, setIsChatSearched] = useState(false);
+  const [searchedTitle, setSearchedTitle] = useState("");
+  const [dataToSend, setDataToSend] = useState([]);
+  const { user } = useUser();
+  const userId = user.id;
 
-  const handleSendData = (data) => {
-    sendDatatoParent(data.length > 0 ? data : searchedData);
+  const handleSendData = (title) => {
+    const data = dataToSend.filter((item) =>
+      item.title.toLowerCase().startsWith(title)
+    );
+    sendDatatoParent(data);
   };
 
   const handleSearch = async (type, searchVal) => {
@@ -18,15 +28,29 @@ export default function Searchbar({ sendDatatoParent }) {
     try {
       const response = await fetch("/api/search/items", {
         method: "POST",
-        body: JSON.stringify({ type, searchVal }),
+        body: JSON.stringify({ type, searchVal, userId }),
       });
       if (!response.ok) {
         throw new Error("Error in fetching searched data");
       }
       const data = await response.json();
+      setDataToSend(data);
+      const uniqueItems = data.filter(
+        (item, index, self) =>
+          index ===
+          self.findIndex(
+            (t) => t.title.toLowerCase() === item.title.toLowerCase()
+          )
+      );
+
+      console.log("UNiQUE ITEMS");
+      console.log(uniqueItems);
+
+      setSearchedData(uniqueItems);
       setIsChatSearched(true);
-      setSearchedData(data);
     } catch (error) {
+      console.log(error);
+      console.log("error in searching");
       return;
     }
   };
@@ -58,9 +82,10 @@ export default function Searchbar({ sendDatatoParent }) {
                 key={index}
                 className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-dark1 cursor-pointer"
                 onClick={() => {
-                  setSearchedData([data]);
+                  //setSearchedData([data]);
+                  //setSearchedTitle(data.title)
 
-                  handleSendData([data]);
+                  handleSendData(data.title);
                   setIsChatSearched(false);
                 }}
               >

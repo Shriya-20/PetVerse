@@ -11,8 +11,6 @@ import { useState } from "react";
 
 export default function ShopItem(item) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log(item);
-
   const router = useRouter();
 
   return (

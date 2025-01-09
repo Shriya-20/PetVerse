@@ -1,14 +1,20 @@
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
+import { ObjectId } from "mongodb";
 
 export async function POST(req) {
   try {
-    const { type, searchVal } = await req.json();
+    const { type, searchVal, userId } = await req.json();
     const db = await connectToDatabase();
     if (type === "item") {
       const data = await db
         .collection("marketplaceitems")
         .aggregate([
+          {
+            $match: {
+              sellerId: { $ne: new ObjectId(userId) },
+            },
+          },
           {
             $match: {
               title: { $regex: searchVal, $options: "i" },

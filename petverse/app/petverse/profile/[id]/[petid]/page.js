@@ -5,10 +5,8 @@ import default_pet_profile_pic from "@/public/default_pet_profile_pic1.png";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import posts from "@/test_data/posts";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import Link from "next/link";
 import Slider2 from "@/app/components/Slider2";
 import defaultImage from "@/public/default_item.png";
 
@@ -72,6 +70,23 @@ export default function PetProfile() {
     getPetPosts();
   }, []);
 
+  async function HandleGoToChat() {
+    try {
+      const response = await fetch("/api/messages/createchat", {
+        method: "POST",
+        body: JSON.stringify({ user1Id: user.id, user2Id: ownerId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to go to chat");
+      }
+      console.log("LLLLLLLLL");
+      router.push("/petverse/messages");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {!isPostOpen && (
@@ -99,9 +114,9 @@ export default function PetProfile() {
             </div>
             {/* Message Owner Button */}
             <div className="absolute -bottom-4 right-0 bg-customTeal rounded-md p-2">
-              <Link href={"/petverse/messages"} className="text-white">
+              <button className="text-white" onClick={() => HandleGoToChat()}>
                 Message Owner
-              </Link>
+              </button>
             </div>
           </div>
 
