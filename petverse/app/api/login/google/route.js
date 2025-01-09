@@ -10,7 +10,7 @@ export async function POST(req) {
     const db = await connectToDatabase();
     const user = await db.collection("users").findOne({ email });
     const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
 
     const response = NextResponse.json(

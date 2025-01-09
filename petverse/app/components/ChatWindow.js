@@ -12,6 +12,7 @@ import EmojiPicker from "emoji-picker-react";
 import { uploadImageToServer } from "../actions";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { ChevronDown } from "react-feather";
 import Link from "next/link";
 import Loading from "./Loading2";
 
@@ -35,9 +36,10 @@ export default function ChatWindow({
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const userId = user.id;
-  const chatEndRef = useRef(null);
   const addImageRef = useRef();
-  const router = useRouter();
+  const scrollRef = useRef(null);
+  const prevScrollPosition = useRef(0);
+  const [scrollDown, setScrollDown] = useState(false);
 
   // Retrieve user chats
 
@@ -75,11 +77,32 @@ export default function ChatWindow({
   }, [activeChat, userId]);
 
   // For the view to be adjusted to show the latest messages
+
   useEffect(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: "auto",
+      });
+      // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [chatMessages, openedMedia]);
+  }, [chatMessages, scrollDown]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: prevScrollPosition.current,
+        behavior: "auto",
+      });
+      // scrollRef.current.scrollTop = prevScrollPosition.current;
+    }
+  }, [openedMedia]);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      prevScrollPosition.current = scrollRef.current.scrollTop;
+    }
+  };
 
   // Send Message
   async function HandleSendMessage(type) {
@@ -259,7 +282,11 @@ export default function ChatWindow({
           {!isFileOpen && !openedMedia && (
             <>
               {/* Chat messages */}
-              <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-dark2">
+              <div
+                ref={scrollRef}
+                onScroll={handleScroll}
+                className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-dark2"
+              >
                 {groupMessagesByDate(chatMessages).map((group, index) => (
                   <div key={index}>
                     <p className="text-center text-sm text-gray-500">
@@ -273,7 +300,6 @@ export default function ChatWindow({
                         className={`mb-4 ${
                           msg.sender === userId ? "text-right" : "text-left"
                         }`}
-                        ref={chatEndRef}
                       >
                         <div
                           className={`inline-block p-0.5 rounded-lg break-words ${
@@ -403,6 +429,14 @@ export default function ChatWindow({
                     </div>
                   )}
                 </div>
+              </div>
+              <div className="absolute right-6 bottom-28 md:bottom-16  ">
+                <button
+                  onClick={() => setScrollDown(!scrollDown)}
+                  className="p-2 bg-light1 dark:bg-dark1 shadow dark:shadow-sm rounded-full"
+                >
+                  <ChevronDown />{" "}
+                </button>
               </div>
             </>
           )}
