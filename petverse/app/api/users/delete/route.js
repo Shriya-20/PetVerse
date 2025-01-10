@@ -1,19 +1,38 @@
 import { connectToDatabase } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
-import { handleDeleteUser } from "@/app/_backend/auth";
 import { deleteFolder } from "@/app/actions";
 import { database } from "@/app/_backend/firebaseConfig";
 import { ref, remove, get, update } from "firebase/database";
-import { ContactsOutlined } from "@mui/icons-material";
+import { admin } from "@/app/_backend/firebaseAdminConfig";
 
 export async function POST(req) {
   try {
-    const { userId } = await req.json();
+    const { userId, uid } = await req.json();
     const db = await connectToDatabase();
 
-    // Delete user from firebase auth
-    await handleDeleteUser();
+    try {
+      await admin.auth().deleteUser(uid);
+    } catch (error) {
+      throw error;
+    }
+
+    const token = await req.cookies.get("token")?.value;
+
+    const response = NextResponse.json("Successfully deleted user", {
+      status: 200,
+    });
+
+    // user session should expire on account deletion
+    if (token) {
+      response.cookies.set("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+        maxAge: 0,
+        path: "/",
+      });
+    }
 
     // Delete pet data from firebase storage
     const userData = await db
@@ -41,8 +60,13 @@ export async function POST(req) {
     // Delete user profile data from firebase storage
     await deleteFolder(`users/${userId}`);
 
-    // Delete user, user pets and user items from db
+    // Delete user, pets and posts and user items from db
     await db.collection("users").deleteOne({ _id: new ObjectId(userId) });
+    if (userData.pets) {
+      await db
+        .collection("posts")
+        .deleteMany({ petId: { $in: userData.pets } });
+    }
     await db.collection("pet").deleteMany({ owner: new ObjectId(userId) });
     await db
       .collection("marketplaceitems")
@@ -56,15 +80,12 @@ export async function POST(req) {
 
     try {
       const snapshot = await get(userChatRef);
-      console.log(snapshot.val());
       if (!snapshot.exists()) {
-        console.log("No chats to delete");
-        return;
+        return response;
       }
 
       const otherUsers = Object.keys(snapshot.val());
       await remove(userChatRef);
-      console.log("Successfully deleted user chats");
 
       const updates = {};
       otherUsers.forEach((otherUserId) => {
@@ -74,13 +95,11 @@ export async function POST(req) {
       });
 
       await update(ref(database), updates);
-      console.log("Successfully updated other users chat data");
     } catch (error) {
-      console.log("Failed to deleted stuff");
-      console.log(error);
+      throw error;
     }
 
-    return NextResponse.json("Successfully deleted user", { status: 200 });
+    return response;
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 401 });
   }
