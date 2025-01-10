@@ -60,8 +60,13 @@ export async function POST(req) {
     // Delete user profile data from firebase storage
     await deleteFolder(`users/${userId}`);
 
-    // Delete user, user pets and user items from db
+    // Delete user, pets and posts and user items from db
     await db.collection("users").deleteOne({ _id: new ObjectId(userId) });
+    if (userData.pets) {
+      await db
+        .collection("posts")
+        .deleteMany({ petId: { $in: userData.pets } });
+    }
     await db.collection("pet").deleteMany({ owner: new ObjectId(userId) });
     await db
       .collection("marketplaceitems")
