@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import { auth } from "../_backend/firebaseConfig";
 
 export default function DeleteAccount() {
   const [confirm, setConfirm] = useState("");
@@ -17,12 +18,18 @@ export default function DeleteAccount() {
   async function handleDeleteUser(e) {
     e.preventDefault();
     try {
+      setError(null);
       if (confirm != "CONFIRM") {
         throw new Error("Please Enter 'CONFIRM'");
       }
+
       const response = await fetch("/api/users/delete", {
         method: "POST",
-        body: JSON.stringify({ userId: user.id }),
+        body: JSON.stringify({
+          userId: user.id,
+          uid: uid,
+        }),
+        credentials: "include",
       });
 
       const responseData = await response.json();
