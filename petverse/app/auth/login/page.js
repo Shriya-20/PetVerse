@@ -23,6 +23,7 @@ export default function Login() {
 
   const router = useRouter();
 
+  // Login with email and password
   async function handleLogin(e) {
     e.preventDefault();
     try {
@@ -48,15 +49,17 @@ export default function Login() {
     }
   }
 
+  // Sign in with google
   async function handleSignInWithGoogle() {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
+      const uid = auth.currentUser.uid;
 
       const email = result._tokenResponse.email;
       const response = await fetch("/api/login/google", {
         method: "POST",
-        body: JSON.stringify({ email: email }),
+        body: JSON.stringify({ email: email, uid: uid }),
       });
       const res = await response.json();
       if (!response.ok) {
@@ -69,15 +72,17 @@ export default function Login() {
     }
   }
 
+  // Sign in with facebook
   async function handleSignInWithFacebook() {
     try {
       const provider = new FacebookAuthProvider();
       const result = await signInWithPopup(auth, provider);
+      const uid = auth.currentUser.uid;
 
       const email = result._tokenResponse.email;
       const response = await fetch("/api/login/google", {
         method: "POST",
-        body: JSON.stringify({ email: email }),
+        body: JSON.stringify({ email: email, uid: uid }),
       });
       const res = await response.json();
       if (!response.ok) {
