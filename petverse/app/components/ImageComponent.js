@@ -10,6 +10,7 @@ function SlideImage({
   profileImage,
   description,
   OnClickImage,
+  type,
 }) {
   const handleSendImage = () => {
     console.log("Image sent to main");
@@ -46,15 +47,46 @@ function SlideImage({
 
       {/* Main Image */}
       <div className="w-full">
-        <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={500}
-          className="w-full h-64 object-cover"
-          unoptimized
-          onClick={handleSendImage}
-        />
+        {type === "image" && (
+          <Image
+            src={src}
+            alt={alt}
+            width={width}
+            height={500}
+            className="w-full h-64 object-cover"
+            unoptimized
+            onClick={handleSendImage}
+          />
+        )}
+
+        {/* {type === "video" && (
+          <div
+            className="relative w-full h-0 pb-[100%] overflow-hidden bg-light1"
+            onClick={handleSendImage}
+          >
+            <video
+              controls={true}
+              autoPlay={true}
+              preload="auto"
+              className="absolute top-0 left-0 w-full h-full object-cover"
+            >
+              <source src={src} type="video/mp4" />
+              Your browser does not support videos.
+            </video>
+          </div>
+        )} */}
+        {type === "video" && (
+          <div className="flex items-center bg-black dark:bg-dark2 justify-center w-full h-full  top-0 left-0 ">
+            <video
+              controls={true}
+              autoPlay={true}
+              className="max-w-full max-h-full object-contain"
+            >
+              <source src={src} type="video/mp4" />
+              Your browser does not support videos.
+            </video>
+          </div>
+        )}
       </div>
 
       {/* Footer */}

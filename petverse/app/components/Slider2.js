@@ -132,6 +132,7 @@ export default function Slider1({
                     description={slides[slideIndex]?.caption}
                     opacity={opacity}
                     width={width}
+                    type={slides[slideIndex]?.type}
                     OnClickImage={(data) => {
                       if (isCurrent) {
                         handleOnClickImage(data);
