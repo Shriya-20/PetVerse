@@ -3,7 +3,7 @@
 import Searchbar from "@/app/components/Searchbar";
 import Slider from "@/app/components/Slider";
 import posts from "@/app/data/posts";
-import Slider2 from "@/app/components/Slider2";
+import Slider2 from "@/app/components/Slider";
 import ProfileIcon from "@/app/components/ProfileIcon";
 import Image from "next/image";
 import { useUser } from "@/context/UserContext";

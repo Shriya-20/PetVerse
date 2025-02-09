@@ -5,13 +5,14 @@ import { ContactPage } from "@mui/icons-material";
 
 export async function POST(req) {
   try {
-    const { imageUrl, petId, caption } = await req.json();
+    const { imageUrl, petId, caption, type } = await req.json();
     const db = await connectToDatabase();
     const currentDate = new Date();
     const insert = {
       petId: new ObjectId(petId),
       imageUrl: imageUrl,
       timestamp: currentDate,
+      type: type,
       likes: 0,
     };
     if (caption !== null) {

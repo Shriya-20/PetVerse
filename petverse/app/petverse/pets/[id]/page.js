@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import defaultImage from "@/public/default_item.png";
 import Slider2 from "@/app/components/Slider2";
 import Loading from "@/app/components/Loading2";
+import { PlayIcon } from "@heroicons/react/24/solid";
 
 import {
   Popover,
@@ -19,6 +20,7 @@ import {
   PopoverContent,
 } from "@material-tailwind/react";
 import { useUser } from "@/context/UserContext";
+import { TrendingUp } from "@mui/icons-material";
 
 export default function PetProfile() {
   const params = useParams();
@@ -37,10 +39,13 @@ export default function PetProfile() {
   const [newLocation, setNewLocation] = useState("");
   const [isPostOpen, setIsPostOpen] = useState(false);
   const [openedPost, setOpenedPost] = useState(null);
-  const [imageBuffer, setImageBuffer] = useState(null);
-  const [imageSrc, setImageSrc] = useState(null);
-  const [profileImageSrc, setProfileImageSrc] = useState(null);
+  //const [mediaBuffer, setMediaBuffer] = useState(null);
+  //const [mediaSrc, setMediaSrc] = useState(null);
+  const [mediaType, setMediaType] = useState(null);
+  const [mediaSrc, setMediaSrc] = useState(null);
+  const [mediaBuffer, setMediaBuffer] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
   const { user } = useUser();
   const router = useRouter();
   const petId = params.id;
@@ -171,46 +176,59 @@ export default function PetProfile() {
   }
 
   // function to create post
-  async function handleCreateNewPost() {
+  async function handleCreateNewPost(type) {
     try {
+      setIsLoading(true);
       const identifier = new Date();
       const path = `${petId}/posts/file_${identifier}.jpg`;
-      console.log(imageBuffer);
-      const imageUrl = await uploadImageToServer(imageBuffer, path);
+      console.log(mediaBuffer);
+      const imageUrl = await uploadImageToServer(mediaBuffer, path, type);
       console.log(imageUrl);
 
       const response = await fetch("/api/pets/post", {
         method: "POST",
-        body: JSON.stringify({ imageUrl, petId, caption }),
+        body: JSON.stringify({ imageUrl, petId, caption, type }),
       });
-      setImageSrc(null);
-      setImageBuffer(null);
+      setMediaSrc(null);
+      setMediaBuffer(null);
       setCaption(null);
       if (!response.ok) {
         throw new Error("Failed to create post");
       }
       console.log("Successfully created post");
+      setIsLoading(false);
+      setIsPostModalOpen(false);
       window.location.reload();
     } catch (error) {
-      console.log(error);
-      console.log("Failed to create post");
+      setIsLoading(false);
+      setError(error);
     }
   }
 
   // function to set post image
-  const handleSelectImage = async (event) => {
+  const handlePostMedia = async (event) => {
     try {
       if (!event.target.files[0]) {
+        return;
+      }
+      if (event.target.files[0].type.startsWith("image/")) {
+        setMediaType("image");
+      } else if (event.target.files[0].type.startsWith("video/")) {
+        console.log("YTPE = " + event.target.files[0].type);
+        setMediaType("video");
+      } else {
+        alert("Choose only a image or video");
         return;
       }
       const file = await event.target.files[0];
       const arrayBuffer = await file.arrayBuffer();
       const blob = new Blob([arrayBuffer], { type: file.type });
       const dataUrl = URL.createObjectURL(blob);
-      setImageSrc(dataUrl);
-      setImageBuffer(arrayBuffer);
-      console.log(imageBuffer);
-      console.log(imageSrc);
+      console.log("dataurl = " + dataUrl);
+      setMediaSrc(dataUrl);
+      setMediaBuffer(arrayBuffer);
+      console.log(mediaBuffer);
+      console.log(mediaSrc);
     } catch (error) {
       console.error("Error reading file:", error);
     }
@@ -281,7 +299,12 @@ export default function PetProfile() {
                   <hr></hr>
                   <button
                     className="w-full block p-2 hover:dark:bg-gray-700 hover:bg-gray-300 rounded-lg hover:text-customTeal"
-                    onClick={() => setIsPostModalOpen(true)}
+                    onClick={() => {
+                      setMediaSrc(null);
+                      setMediaBuffer(null);
+                      setCaption(null);
+                      setIsPostModalOpen(true);
+                    }}
                   >
                     New post
                   </button>
@@ -299,24 +322,65 @@ export default function PetProfile() {
             <hr></hr>
             <br></br>
             {/* Posts display grid */}
-            <div className="grid grid-cols-3 gap-1">
+            <div className="grid grid-cols-3 gap-1 justify-center justify-items-center">
               {petPosts.map((post, index) => (
                 <div key={index} className="relative w-full h-0 pb-[100%]">
-                  <Image
-                    src={post.imageUrl ? post.imageUrl : defaultImage}
-                    alt="user post"
-                    width={300}
-                    height={300}
-                    className="absolute top-0 left-0 w-full h-full object-cover  shadow-lg transition-all duration-300 hover:scale-95"
-                    style={{
-                      objectFit: "cover",
-                    }}
-                    unoptimized
-                    onClick={() => {
-                      setOpenedPost(index);
-                      setIsPostOpen(true);
-                    }}
-                  />
+                  {post.type === "image" && (
+                    <Image
+                      src={post.imageUrl ? post.imageUrl : defaultImage}
+                      alt="user post"
+                      width={300}
+                      height={300}
+                      className="absolute top-0 left-0 w-full h-full object-cover  shadow-lg transition-all duration-300 hover:scale-95"
+                      style={{
+                        objectFit: "cover",
+                      }}
+                      unoptimized
+                      onClick={() => {
+                        setOpenedPost(index);
+                        setIsPostOpen(true);
+                      }}
+                    />
+                  )}
+                  {post.type === "video" && (
+                    <div
+                      className="relative w-full h-0 pb-[100%] overflow-hidden bg-light1 transition-all duration-300 hover:scale-95"
+                      onClick={() => {
+                        setOpenedPost(index);
+                        setIsPostOpen(true);
+                      }}
+                    >
+                      <video
+                        controls={false}
+                        autoPlay={false}
+                        preload="auto"
+                        className="absolute top-0 left-0 w-full h-full object-cover"
+                      >
+                        <source src={post.imageUrl} type="video/mp4" />
+                        Your browser does not support videos.
+                      </video>
+                      <div className="absolute top-1/2 left-1/2 w-8 h-8 flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2">
+                        <PlayIcon />
+                      </div>
+                    </div>
+                  )}
+                  {/* {post.type === "video" && (
+                    <div
+                      className="flex items-center bg-black dark:bg-dark2 justify-center w-full h-full absolute top-0 left-0 transition-all duration-300 hover:scale-95"
+                      onClick={() => {
+                        setOpenedPost(index);
+                        setIsPostOpen(true);
+                      }}
+                    >
+                      <video
+                        controls={false}
+                        className="max-w-full max-h-full object-contain"
+                      >
+                        <source src={post.imageUrl} type="video/mp4" />
+                        Your browser does not support videos.
+                      </video>
+                    </div>
+                  )} */}
                 </div>
               ))}
             </div>
@@ -511,8 +575,8 @@ export default function PetProfile() {
           {/* Create New Post */}
           <Modal
             onClose={() => {
-              setImageSrc(null);
-              setImageBuffer(null);
+              setMediaSrc(null);
+              setMediaBuffer(null);
               setCaption(null);
               setIsPostModalOpen(false);
             }}
@@ -523,29 +587,43 @@ export default function PetProfile() {
                 Create a new post!
               </div>
               <div className="w-full flex justify-center">
-                <Image
-                  src={imageSrc ? imageSrc : defaultImage}
-                  alt="post image"
-                  className="object-cover rounded-sm"
-                  layout="intrinsic"
-                  width={200}
-                  height={160}
-                  onClick={() => addPostImageRef.current.click()}
-                />
+                {!mediaType && (
+                  <Image
+                    src={defaultImage}
+                    alt="post image"
+                    className="object-cover rounded-sm"
+                    layout="intrinsic"
+                    width={200}
+                    height={160}
+                    onClick={() => addPostImageRef.current.click()}
+                  />
+                )}
+                {mediaType === "image" && (
+                  <Image
+                    src={mediaSrc ? mediaSrc : defaultImage}
+                    alt="post image"
+                    className="object-cover rounded-sm"
+                    layout="intrinsic"
+                    width={200}
+                    height={160}
+                    onClick={() => addPostImageRef.current.click()}
+                  />
+                )}
+                {/* Video */}
+                {mediaType === "video" && mediaSrc && (
+                  <video controls width={200} height={200}>
+                    <source src={mediaSrc} type="video/mp4" />
+                    Your browser does not support videos.
+                  </video>
+                )}
+
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/*, video/*"
                   className="hidden"
                   ref={addPostImageRef}
                   onChange={(e) => {
-                    if (
-                      e.target.files[0] &&
-                      e.target.files[0].type.startsWith("image/")
-                    ) {
-                      handleSelectImage(e);
-                    } else {
-                      alert("Please select a valid image");
-                    }
+                    handlePostMedia(e);
                   }}
                 />
               </div>
@@ -556,19 +634,30 @@ export default function PetProfile() {
                   className="w-full p-2 border border-gray-300 rounded-sm h-20 resize-none"
                   onChange={(e) => setCaption(e.target.value)}
                 />
-                <button
-                  className="bg-customTeal text-white rounded-sm p-2 mt-2 hover:bg-teal-600 w-full"
-                  onClick={() => {
-                    if (imageBuffer === null) {
-                      alert("Add an image");
-                    } else {
-                      handleCreateNewPost();
-                      setIsPostModalOpen(false);
-                    }
-                  }}
-                >
-                  Create Post
-                </button>
+                {error && (
+                  <div>
+                    <p className="text-red-500 text-center">{error}</p>
+                  </div>
+                )}
+                {!isLoading && (
+                  <button
+                    className="bg-customTeal text-white rounded-sm p-2 mt-2 hover:bg-teal-600 w-full"
+                    onClick={() => {
+                      if (mediaBuffer === null) {
+                        alert("Add an image");
+                      } else {
+                        handleCreateNewPost(mediaType);
+                      }
+                    }}
+                  >
+                    Create Post
+                  </button>
+                )}
+                {isLoading && (
+                  <button className="bg-customTeal text-white rounded-sm p-2 mt-2 hover:bg-teal-600 w-full">
+                    <Loading isLoading={isLoading} />
+                  </button>
+                )}
               </div>
             </div>
           </Modal>
