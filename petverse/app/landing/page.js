@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import happyDoggy from "@/public/labrador-retriever-removebg-preview.png";
-import confusedDoggy from "@/public/confuseddoggy-removebg-preview.png";
 import backgroundDoggy from "@/public/bg-doggy.jpg";
 import { useEffect } from "react";
 
