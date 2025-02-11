@@ -17,10 +17,8 @@ export async function POST(req) {
     const db = await connectToDatabase();
     const user = await db.collection("users").findOne({ email });
     const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
-    console.log("sucessfully created jwt");
-    console.log(token);
 
     const response = NextResponse.json(
       { message: "Logged in successfully" },
@@ -31,16 +29,16 @@ export async function POST(req) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      maxAge: 60 * 60,
+      maxAge: 24 * 60 * 60,
       path: "/",
     });
 
-    console.log(response);
-
     return response;
   } catch (error) {
-    console.log(`Error Code: ${error.code}  Error message: ${error.message}`);
-    return NextResponse.json("Error in loggin in", { status: 500 });
+    if (error.code == "auth/invalid-credential") {
+      return NextResponse.json({ error: error.code }, { status: 401 });
+    }
+    return NextResponse.json({ error: error.code }, { status: 500 });
   }
   
 }

@@ -3,6 +3,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   deleteUser,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "@/app/_backend/firebaseConfig";
 
@@ -21,7 +22,7 @@ export async function handleSignUpWithEmail(userName, email, password) {
     };
     return user;
   } catch (error) {
-    throw new Error("Failed to create user");
+    throw error;
   }
 }
 
@@ -50,8 +51,22 @@ export async function handleSignOut() {
 
 export async function handleDeleteUser() {
   try {
-    await deleteUser(auth.currentUser);
+    const user = auth.currentUser;
+    console.log("auth.current user; " + user);
+    if (!user) {
+      throw new Error("Something went wrong. Try again later");
+    }
+
+    await deleteUser(user);
   } catch (error) {
-    console.log("Error while deleting user");
+    throw error;
+  }
+}
+
+export async function resetPasswordWithEmail(email) {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error) {
+    throw error;
   }
 }

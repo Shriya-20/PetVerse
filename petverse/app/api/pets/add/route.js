@@ -5,10 +5,8 @@ import { ObjectId } from "mongodb";
 export async function POST(req) {
   try {
     const pet = await req.json();
-    console.log(pet);
-    console.log("successfully acquired the pet details from frontend");
     const db = await connectToDatabase();
-    console.log("successfully connected to database");
+    // Add pet to pets collection
     const result = await db.collection("pet").insertOne({
       name: pet.name,
       type: pet.type,
@@ -18,19 +16,17 @@ export async function POST(req) {
     });
 
     const petId = result.insertedId;
-    console.log("added pet successfully with id:", petId);
 
+    // Add pet Id to the user pets
     await db.collection("users").updateOne(
       { _id: new ObjectId(pet.userid) },
       {
         $push: { pets: petId },
       }
     );
-    console.log("successfully added pet to user profile");
 
-    return NextResponse.json("successfully added pet", { status: 200 });
+    return NextResponse.json(petId, { status: 200 });
   } catch (error) {
-    console.log("Failed to add pet", error);
     return NextResponse.json("Failed to add pet", { status: 400 });
   }
 }

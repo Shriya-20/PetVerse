@@ -3,47 +3,93 @@
 import ProfileIcon from "./ProfileIcon";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import default_item from "@/public/default_item.png";
+import Link from "next/link";
+import default_profile_pic from "@/public/default_user_profile_pic.jpeg";
+import Modal from "./Modal";
+import { useState } from "react";
 
-export default function ShopItem(props) {
+export default function ShopItem(item) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
-  // The fucntion should route the user to the chat of the product seller
-  function handleClick() {
-    router.push("/petverse/messages");
-  }
   return (
     <>
-      <div className="max-w-[384px] mx-auto rounded-xl hover:shadow-sm  dark:hover:shadow-mid3">
-        {/* Product image */}
-        <div className="relative w-full max-w-sm aspect-square">
+      <div
+        className="relative max-w-[384px] mx-auto rounded-xl hover:shadow-lg dark:shadow-md dark:hover:shadow-mid3"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <div className="relative w-full aspect-square rounded-xl overflow-hidden">
           <Image
-            src={props.item_image}
-            alt={props.item_alt}
-            className="relative w-full h-full rounded-xl object-cover"
+            src={"images" in item ? item.images[0] : default_item}
+            alt={item.title}
+            className="absolute top-0 left-0 w-full h-full object-cover"
             width={384}
             height={384}
           />
         </div>
-        <div className="mt-5 flex px-2 pb-2 items-center justify-between">
-          <div className="">
-            {/* Product name */}
-            <h6 className="font-medium text-xl leading-8 text-textDarker dark:text-textLight mb-2">
-              {props.item_name}
-            </h6>
-            {/* Product price */}
-            <h6 className="font-semibold text-xl leading-8 text-customTeal">
-              {props.item_price}
+
+        <div className="relative p-2 mt-4 flex items-center justify-between">
+          <div>
+            <p className="w-16 md:w-32 font-medium text-sm md:text-base text-textDarker dark:text-textLight mb-1 truncate">
+              {item.title}
+            </p>
+
+            <h6 className="font-semibold text-sm md:text-base text-customTeal">
+              {item.price}
             </h6>
           </div>
-          {/* Seller profile */}
-          <button
-            onClick={handleClick}
-            className="p-1 min-[400px]:p-1 rounded-full bg-light1 border dark:bg-dark1 border-customTeal flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-light2  hover:border-mid1 hover:bg-gray-50 dark:hover:bg-dark2 hover:scale-90"
-          >
-            <ProfileIcon profile_pic={props.user_profile_pic} />
-          </button>
+
+          <div onClick={(e) => e.stopPropagation()}>
+            <Link
+              href={`/petverse/profile/${item.sellerId}`}
+              className="flex items-center justify-center rounded-full bg-light1 border dark:bg-dark1 border-customTeal shadow-sm transition-all duration-300 hover:scale-95"
+            >
+              <ProfileIcon
+                profile_pic={
+                  item.sellerDetails[0].profilePicture
+                    ? item.sellerDetails[0].profilePicture
+                    : default_profile_pic
+                }
+                height="h-8 md:h-12"
+                width="w-8 md:w-12"
+              />
+            </Link>
+          </div>
         </div>
       </div>
+      {isModalOpen && (
+        <Modal
+          onClose={() => {
+            console.log("Modal closed successfully");
+            setIsModalOpen(false);
+          }}
+          isOpen={isModalOpen}
+        >
+          <div className="flex flex-col items-center space-y-4 p-4">
+            <div className="w-3/4">
+              <Image
+                src={item.images ? item.images[0] : default_item}
+                alt="item image"
+                width={300}
+                height={300}
+                className="object-cover rounded-md w-full h-[300px]"
+              />
+            </div>
+
+            <div className="w-full text-center bg-gray-100 dark:bg-gray-800 rounded-md p-4 space-y-2">
+              <h2 className="text-xl font-semibold">{item.title}</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {item.description}
+              </p>
+              <div className="flex justify-between text-lg font-medium mt-2">
+                <p>Price: ₹{item.price}</p>
+                <p>Quantity: {item.quantity}</p>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

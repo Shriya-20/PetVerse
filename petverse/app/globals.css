@@ -16,6 +16,7 @@ body {
   color: var(--foreground);
   background-color: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 @layer components {
@@ -74,5 +75,35 @@ body {
   .theme span {
     @apply ml-1 dark:text-textLight dark:bg-dark2;
   }
-}
 
+  .addItemInput {
+    @apply m-1 p-2 text-lg hover:bg-slate-200 focus:bg-slate-100 rounded-sm border-gray-600 border-[0.5px] dark:bg-mid4;
+  }
+
+  .landing-text {
+    @apply w-[600px] h-[280px];
+  }
+
+  .landing-text h1 {
+    @apply text-textLighter text-4xl font-bold;
+  }
+
+  .landing-text p {
+    @apply text-textLighter text-lg;
+  }
+
+  .landing-text-Link {
+    @apply inline-block bg-white text-customTeal text-lg px-[35px] py-[10px] rounded-full mt-[25px];
+  }
+
+  .line1,
+  .line2,
+  .line3,
+  .line4 {
+    @apply h-[80px] w-[10px] cursor-pointer translate-x-[-50%];
+  }
+
+  .active {
+    @apply w-[6px] h-[80px] rounded-full bg-white absolute top-0 translate-x-[-50%] transition-[1.6s] duration-[750ms];
+  }
+}

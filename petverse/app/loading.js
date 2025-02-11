@@ -10,24 +10,25 @@ export default function Loading() {
   const { theme } = useTheme();
   const [currentTheme, setCurrentTheme] = useState("system");
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const SystemDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      const resolvedTheme =
-        theme === "system" ? (SystemDark ? "dark" : "light") : theme;
-      setCurrentTheme(resolvedTheme);
-    }
-  }, [theme]);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const SystemDark = window.matchMedia(
+  //       "(prefers-color-scheme: dark)"
+  //     ).matches;
+  //     const resolvedTheme =
+  //       theme === "system" ? (SystemDark ? "dark" : "light") : theme;
+  //     setCurrentTheme(resolvedTheme);
+  //   }
+  // }, [theme]);
 
   return (
     <>
-      <div className="flex items-center justify-center dark:bg-black">
+      <div className="flex items-center justify-center bg-black h-full">
         <Image
-          src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
+          //src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
+          src={darkLoadingGIF}
           alt="loading gif"
-          priority={true}
+          //priority={true}
         />
       </div>
     </>

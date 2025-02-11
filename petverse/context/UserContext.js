@@ -1,7 +1,11 @@
 "use client";
 
 import { createContext, useState, useEffect, useContext } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import loadingGIF from "../public/loading.gif";
+import darkLoadingGIF from "../public/runningcat.gif";
+import Image from "next/image";
+import { useTheme } from "@/app/components/Theme";
 
 const UserContext = createContext();
 
@@ -9,6 +13,20 @@ export function Userprovider({ children }) {
   const [isLoading, setLoading] = useState(true);
   const [user, setUser] = useState();
   const router = useRouter();
+  const { theme } = useTheme();
+  const [currentTheme, setCurrentTheme] = useState("system");
+  const path = usePathname();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SystemDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      const resolvedTheme =
+        theme === "system" ? (SystemDark ? "dark" : "light") : theme;
+      setCurrentTheme(resolvedTheme);
+    }
+  }, [theme]);
 
   useEffect(() => {
     async function fetchSession() {
@@ -17,14 +35,12 @@ export function Userprovider({ children }) {
         const response = await fetch("/api/session", {
           credentials: "include",
         });
-        if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
-        } else {
-          setUser(null);
+        const userData = await response.json();
+        if (!response.ok) {
+          throw error;
         }
+        setUser(userData);
       } catch (error) {
-        console.error("Session has expired", error);
         setUser(null);
       } finally {
         setLoading(false);
@@ -32,7 +48,7 @@ export function Userprovider({ children }) {
     }
     fetchSession();
 
-    const interval = setInterval(fetchSession, 60000);
+    const interval = setInterval(fetchSession, 10000);
 
     return () => clearInterval(interval);
   }, []);
@@ -44,8 +60,19 @@ export function Userprovider({ children }) {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading) {
-    return <>Loading</>;
+  if ((isLoading || user === null) && !path.includes("/auth")) {
+    return (
+      <>
+        <div className="flex items-center justify-center bg-black h-full">
+          <Image
+            //src={currentTheme === "dark" ? darkLoadingGIF : loadingGIF}
+            src={darkLoadingGIF}
+            alt="loading gif"
+            priority={true}
+          />
+        </div>
+      </>
+    );
   }
 
   return (

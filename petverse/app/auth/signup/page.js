@@ -2,8 +2,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { handleSignUpWithEmail } from "@/app/_backend/auth";
 import { useRouter } from "next/navigation";
+import Loading from "@/app/components/Loading2";
+import {
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "@/app/_backend/firebaseConfig";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,13 +18,17 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
-
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   async function handleSignup(e) {
     e.preventDefault();
     try {
-      console.log("Signup started . handle Signup called.");
+      if (password != confirmPassword) {
+        throw new Error("password and confirm password do not match");
+      }
+      setIsLoading(true);
       const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
@@ -30,15 +40,79 @@ export default function Signup() {
           password: password,
         }),
       });
-      console.log(response.status);
+
+      const errorData = await response.json();
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to Sign Up");
+        throw new Error(errorData.error);
       }
-      router.push("/auth/login");
-      console.log("Sign up Successful");
+      setIsLoading(false);
+      setError("success");
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 1000);
     } catch (error) {
-      console.log(`Error with Sign Up: ${error.message}`);
+      setIsLoading(false);
+      if (error.message == "auth/email-already-in-use") {
+        setError("Email address already in use");
+      } else if (error.message == "auth/weak-password") {
+        setError("Password should be atleast 6 characters");
+      } else {
+        setError(error.message);
+      }
+    }
+  }
+
+  async function handleSignUpWithGoogle() {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const email = result._tokenResponse.email;
+      const name = result._tokenResponse.firstName;
+      const dateJoined = new Date().toISOString();
+      const newUser = {
+        username: name,
+        email: email,
+        dateJoined: dateJoined,
+      };
+      const response = await fetch("/api/signup/google", {
+        method: "POST",
+        body: JSON.stringify({ newUser }),
+      });
+      const errorData = await response.json();
+      if (!response.ok) {
+        throw new Error(errorData.error);
+      }
+
+      router.push("/auth/login");
+    } catch (error) {
+      setError(error.message);
+    }
+  }
+
+  async function handleSignUpWithFacebook() {
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const email = result._tokenResponse.email;
+      const name = result._tokenResponse.firstName;
+      const dateJoined = new Date().toISOString();
+      const newUser = {
+        username: name,
+        email: email,
+        dateJoined: dateJoined,
+      };
+      const response = await fetch("/api/signup/google", {
+        method: "POST",
+        body: JSON.stringify({ newUser }),
+      });
+      const errorData = await response.json();
+      if (!response.ok) {
+        throw new Error(errorData.error);
+      }
+
+      router.push("/auth/login");
+    } catch (error) {
+      setError(error.message);
     }
   }
 
@@ -46,8 +120,8 @@ export default function Signup() {
     <>
       <div className="mt-4 space-y-3 sm:flex sm:items-center sm:space-x-4 sm:space-y-0">
         {/* Sign Up with Google */}
-        <Link
-          href="/petverse"
+        <button
+          onClick={handleSignUpWithGoogle}
           className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
@@ -82,10 +156,10 @@ export default function Signup() {
           <span className="text-sm text-textDarker dark:text-textLight">
             Sign Up with Google
           </span>
-        </Link>{" "}
+        </button>{" "}
         {/* SignUp with Facebook */}
-        <Link
-          href="/petverse"
+        <button
+          onClick={handleSignUpWithFacebook}
           className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
@@ -106,7 +180,7 @@ export default function Signup() {
           <span className="text-sm text-textDarker dark:text-textLight">
             SignUp with Facebook
           </span>
-        </Link>
+        </button>
       </div>{" "}
       {/* 'use email' text */}
       <div className="flex items-center justify-between mt-4">
@@ -150,6 +224,7 @@ export default function Signup() {
             className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
           />
         </div>
+        {/* Password */}
         <div className="mt-4">
           <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Password
@@ -163,6 +238,7 @@ export default function Signup() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 text-textDark bg-light1 border border-light2 rounded-lg dark:bg-dark2 dark:text-textLight dark:border-mid2 focus:border-primary dark:focus:border-primary focus:outline-none focus:ring focus:ring-primary dark:placeholder-mid1 focus:ring-opacity-20"
             />
+            {/* Show password */}
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
@@ -176,7 +252,7 @@ export default function Signup() {
             </button>
           </div>
         </div>
-
+        {/* Confirm password */}
         <div className="mt-4">
           <label className="block mb-2 text-sm text-textDark dark:text-textLight">
             Confirm Password
@@ -203,15 +279,37 @@ export default function Signup() {
             </button>
           </div>
         </div>
+        {error && error !== "success" && (
+          <div>
+            <p className="text-red-700 text-right">{error}</p>
+          </div>
+        )}
+        {error && error === "success" && (
+          <div>
+            <p className="text-teal-500 text-right">
+              Created account successfully
+            </p>
+          </div>
+        )}
 
         {/* Register button */}
         <div className="mt-8">
-          <button
-            type="submit"
-            className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
-          >
-            Register
-          </button>
+          {!isLoading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
+            >
+              Register
+            </button>
+          )}
+          {isLoading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-5 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/70 focus:outline-none focus:bg-customTeal-300"
+            >
+              <Loading isLoading={isLoading} />
+            </button>
+          )}
         </div>
       </form>
       {/* Link to Login page */}

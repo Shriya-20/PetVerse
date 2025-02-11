@@ -6,28 +6,92 @@ import Link from "next/link";
 import logo from "@/public/paw.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { auth } from "@/app/_backend/firebaseConfig";
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import Loading from "@/app/components/Loading2";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
+  // Login with email and password
   async function handleLogin(e) {
     e.preventDefault();
     try {
+      setIsLoading(true);
       const response = await fetch("/api/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
+
+      const res = await response.json();
       if (!response.ok) {
-        throw new Error("Invalid email or password");
+        throw new Error(res.error);
+      }
+      setIsLoading(false);
+      router.push("/petverse/messages");
+    } catch (error) {
+      setIsLoading(false);
+      if (error.message == "auth/invalid-credential") {
+        setError("invalid email or password");
+      } else {
+        setError(error.message);
+      }
+    }
+  }
+
+  // Sign in with google
+  async function handleSignInWithGoogle() {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const uid = auth.currentUser.uid;
+
+      const email = result._tokenResponse.email;
+      const response = await fetch("/api/login/google", {
+        method: "POST",
+        body: JSON.stringify({ email: email, uid: uid }),
+      });
+      const res = await response.json();
+      if (!response.ok) {
+        throw new Error(res.error);
       }
 
       router.push("/petverse/messages");
     } catch (error) {
-      console.log(`Error while Logging In${error}`);
+      setError(error.message);
+    }
+  }
+
+  // Sign in with facebook
+  async function handleSignInWithFacebook() {
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const uid = auth.currentUser.uid;
+
+      const email = result._tokenResponse.email;
+      const response = await fetch("/api/login/google", {
+        method: "POST",
+        body: JSON.stringify({ email: email, uid: uid }),
+      });
+      const res = await response.json();
+      if (!response.ok) {
+        throw new Error(res.error);
+      }
+
+      router.push("/petverse/messages");
+    } catch (error) {
+      setError(error.message);
     }
   }
 
@@ -47,8 +111,8 @@ export default function Login() {
       </p>{" "}
       <div className="mt-4 space-y-3 sm:flex sm:items-center sm:space-x-4 sm:space-y-0">
         {/* Login with Google */}
-        <Link
-          href="/petverse"
+        <button
+          onClick={handleSignInWithGoogle}
           className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
@@ -83,10 +147,10 @@ export default function Login() {
           <span className="text-sm text-textDarker dark:text-textLight">
             Login with Google
           </span>
-        </Link>{" "}
+        </button>{" "}
         {/* Login with facebook */}
-        <Link
-          href="/petverse"
+        <button
+          onClick={handleSignInWithFacebook}
           className="flex items-center justify-center w-full px-4 py-2 space-x-3 text-sm text-center text-textDark transition-colors duration-300 transform border rounded-lg dark:text-textLight dark:border-light2 hover:bg-light2 dark:hover:bg-mid2"
         >
           <svg
@@ -107,7 +171,7 @@ export default function Login() {
           <span className="text-sm text-textDarker dark:text-textLight">
             Login with Facebook
           </span>
-        </Link>
+        </button>
       </div>{" "}
       {/* Use email  */}
       <div className="flex items-center justify-between mt-4">
@@ -168,6 +232,11 @@ export default function Login() {
             </button>
           </div>
         </div>{" "}
+        {error && (
+          <div>
+            <p className="text-red-700 text-right">{error}</p>
+          </div>
+        )}
         {/* Remember me */}
         <div className="flex justify-between mt-4">
           <div className="col-md-6 offset-md-4">
@@ -195,12 +264,22 @@ export default function Login() {
           </Link>
         </div>{" "}
         <div className="mt-8">
-          <button
-            type="submit"
-            className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/80 focus:outline-none focus:bg-customTeal/80"
-          >
-            Sign in
-          </button>
+          {!isLoading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-2 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/80 focus:outline-none focus:bg-customTeal/80"
+            >
+              Sign in
+            </button>
+          )}
+          {isLoading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-5 tracking-wide text-textLighter transition-colors duration-300 transform rounded-md bg-customTeal hover:bg-customTeal/80 focus:outline-none focus:bg-customTeal/80"
+            >
+              <Loading isLoading={isLoading} />
+            </button>
+          )}
         </div>
       </form>{" "}
       {/* Create account */}

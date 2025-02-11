@@ -1,17 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const tlds = ["com", "org", "net", "int", "edu", "gov", "in", "arpa"];
-
-export default function ChatMessage({
-  id,
-  sender,
-  content,
-  timestamp,
-  type,
-  url,
-  link,
-}) {
+export default function ChatMessage({ content, type }) {
   switch (type) {
     case "video":
       return (
@@ -20,7 +10,7 @@ export default function ChatMessage({
             controls
             className="rounded-md border border-light2 w-full max-w-xs"
           >
-            <source src={url} type="video/mp4" />
+            <source src={content} type="video/mp4" />
             Your browser does not support videos.
           </video>
         </div>
@@ -29,24 +19,14 @@ export default function ChatMessage({
       return (
         <div>
           <Image
-            src={url}
+            src={content}
             alt="Message image"
             height={150}
             width={150}
             className="rounded-md border border-light2 w-full max-w-sm"
+            unoptimized
           />
         </div>
-      );
-    case "link":
-      return (
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-300 underline"
-        >
-          {content}
-        </a>
       );
     default: {
       const urlRegex =
@@ -54,7 +34,7 @@ export default function ChatMessage({
 
       const parts = content.split(urlRegex);
       return (
-        <p className="w-full overflow-wrap break-words text-left">
+        <p className="w-full overflow-wrap break-words text-left p-3">
           {parts.map((part, index) =>
             urlRegex.test(part) ? (
               <Link
