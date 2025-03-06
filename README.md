@@ -22,4 +22,11 @@
 - **Deployment**: Vercel
 
 
+## 🚀 Deployed Application
+
+🔗 **Live Demo**: [PetVerse - Buy & Sell Pets](https://petverse-shriya-20-shriya-bhats-projects.vercel.app)
+
+
+
+
 
