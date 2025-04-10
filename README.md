@@ -10,6 +10,13 @@
 - **Messaging**: Chat with buyers, sellers, and pet enthusiasts.
 - **Authentication**: Secure login and signup.
 
+![ss1](petverse/images/11.png)
+![ss1](petverse/images/22.png)
+![ss1](petverse/images/33.png)
+![ss1](petverse/images/44.png)
+
+
+
 ## Project Structure
 
 
